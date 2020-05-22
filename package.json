@@ -1,0 +1,22 @@
+{
+  "name": "administrator-panel",
+  "version": "1.0.0",
+  "description": "MERN stack electronic voting project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakubmroczek/voting-app-administrator-panel.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jakubmroczek/voting-app-administrator-panel/issues"
+  },
+  "homepage": "https://github.com/jakubmroczek/voting-app-administrator-panel#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
