@@ -19,7 +19,7 @@
   "homepage": "https://github.com/jakubmroczek/voting-app-administrator-panel#readme",
   "dependencies": {
     "apollo-server-express": "^2.13.1",
-    "dotenv": "^8.2.0",
+    "dotenv": "^6.2.0",
     "express": "^4.17.1",
     "graphql": "^14.2.1",
     "mongodb": "^3.5.7",
