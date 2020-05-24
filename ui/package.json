@@ -1,0 +1,32 @@
+{
+  "name": "administrator-panel-ui",
+  "version": "1.0.0",
+  "description": "MERN stack electronic voting project UI",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -w uiserver.js uiserver.js",
+    "compile": "babel src --out-dir public",
+    "watch": "babel src --out-dir public --watch --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakubmroczek/voting-app-administrator-panel.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jakubmroczek/voting-app-administrator-panel/issues"
+  },
+  "homepage": "https://github.com/jakubmroczek/voting-app-administrator-panel#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^1.19.4",
+    "npm": "^6.14.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4"
+  }
+}

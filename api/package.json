@@ -1,12 +1,10 @@
 {
-  "name": "administrator-panel",
+  "name": "administrator-panel-api",
   "version": "1.0.0",
-  "description": "MERN stack electronic voting project",
+  "description": "MERN stack electronic voting project API",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -w server -e js,graphql server/server.js",
-    "compile": "babel src --out-dir public",
-    "watch": "babel src --out-dir public --watch --verbose",
+    "start": "nodemon -e js,graphql server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,11 +24,5 @@
     "mongodb": "^3.5.7",
     "nodemon": "^1.19.4",
     "npm": "^6.14.5"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
-    "@babel/preset-react": "^7.9.4"
   }
 }
