@@ -4,8 +4,10 @@ const { ApolloServer, UserInputError } = require('apollo-server-express');
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
 const { MongoClient } = require('mongodb');
+require('dotenv').config();
 
-const url = 'mongodb+srv://mroczekj:yWLGjb0U8U9OPJ3P@e-votingapp-rkzsc.mongodb.net/issuetracker?retryWrites=true';
+const url = process.env.DB_URL || 'mongodb://localhost/issuetracker';
+const port = process.env.API_SERVER_PORT || 3000;
 let db;
 
 const GraphQLDate = new GraphQLScalarType({
@@ -106,8 +108,8 @@ server.applyMiddleware({ app, path: '/graphql' });
 (async () => {
     try {
         await connectToDb();
-        app.listen(3000, function () {
-            console.log('API server started on port 3000');
+        app.listen(port, function () {
+            console.log(`API server started on port ${port}`);
         })
     } catch (err) {
         console.log('ERROR:', err);
