@@ -1,0 +1,10 @@
+{
+    "extends": "airbnb",
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        // Enable this in a final project
+        "react/prop-types": "off"
+    }
+}

@@ -26,6 +26,14 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+/* eslint "react/react-in-jsx-scope": "off" */
+
+/* globals React ReactDOM */
+
+/* eslint "react/jsx-no-undef": "off" */
+
+/* eslint "no-alert": "off" */
+// eslint-disable-next-line react/prefer-stateless-function
 var IssueFilter = /*#__PURE__*/function (_React$Component) {
   _inherits(IssueFilter, _React$Component);
 
@@ -97,7 +105,7 @@ function _graphQLFetch() {
             if (result.errors) {
               error = result.errors[0];
 
-              if (error.extensions.code == 'BAD_USER_INPUT') {
+              if (error.extensions.code === 'BAD_USER_INPUT') {
                 details = error.extensions.exception.errors.join('\n ');
                 alert("".concat(error.message, ":\n ").concat(details));
               } else {
@@ -113,6 +121,9 @@ function _graphQLFetch() {
             alert("Error in sending data to server: ".concat(_context3.t0.message));
 
           case 16:
+            return _context3.abrupt("return", null);
+
+          case 17:
           case "end":
             return _context3.stop();
         }
@@ -122,13 +133,14 @@ function _graphQLFetch() {
   return _graphQLFetch.apply(this, arguments);
 }
 
-function IssueRow(props) {
-  var issue = props.issue;
+function IssueRow(_ref) {
+  var issue = _ref.issue;
   return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, issue.id), /*#__PURE__*/React.createElement("td", null, issue.status), /*#__PURE__*/React.createElement("td", null, issue.owner), /*#__PURE__*/React.createElement("td", null, issue.created.toDateString()), /*#__PURE__*/React.createElement("td", null, issue.effort), /*#__PURE__*/React.createElement("td", null, issue.due ? issue.due.toDateString() : ''), /*#__PURE__*/React.createElement("td", null, issue.title));
 }
 
-function IssueTable(props) {
-  var issuesRow = props.issues.map(function (issue) {
+function IssueTable(_ref2) {
+  var issues = _ref2.issues;
+  var issuesRow = issues.map(function (issue) {
     return /*#__PURE__*/React.createElement(IssueRow, {
       key: issue.id,
       issue: issue
@@ -136,7 +148,7 @@ function IssueTable(props) {
   });
   return /*#__PURE__*/React.createElement("table", {
     style: {
-      borderCollapse: "collapse"
+      borderCollapse: 'collapse'
     }
   }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "ID"), /*#__PURE__*/React.createElement("th", null, "Status"), /*#__PURE__*/React.createElement("th", null, "Owner"), /*#__PURE__*/React.createElement("th", null, "Created"), /*#__PURE__*/React.createElement("th", null, "Effort"), /*#__PURE__*/React.createElement("th", null, "Due date"), /*#__PURE__*/React.createElement("th", null, "Title"))), /*#__PURE__*/React.createElement("tbody", null, issuesRow));
 }
@@ -166,7 +178,8 @@ var IssueAdd = /*#__PURE__*/function (_React$Component2) {
         title: form.title.value,
         due: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 10)
       };
-      this.props.createIssue(issue);
+      var createIssue = this.props.createIssue;
+      createIssue(issue);
       form.owner.value = '';
       form.title.value = '';
     }
@@ -184,7 +197,9 @@ var IssueAdd = /*#__PURE__*/function (_React$Component2) {
         type: "text",
         name: "title",
         placeholder: "Title"
-      }), /*#__PURE__*/React.createElement("button", null, "Add"));
+      }), /*#__PURE__*/React.createElement("button", {
+        type: "submit"
+      }, "Add"));
     }
   }]);
 
@@ -210,6 +225,11 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
   }
 
   _createClass(IssueList, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.loadData();
+    }
+  }, {
     key: "loadData",
     value: function () {
       var _loadData = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
@@ -245,11 +265,6 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
 
       return loadData;
     }()
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.loadData();
-    }
   }, {
     key: "createIssue",
     value: function () {
@@ -289,8 +304,9 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
   }, {
     key: "render",
     value: function render() {
+      var issues = this.state.issues;
       return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Issue Tracker"), /*#__PURE__*/React.createElement(IssueFilter, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueTable, {
-        issues: this.state.issues
+        issues: issues
       }), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueAdd, {
         createIssue: this.createIssue
       }));
