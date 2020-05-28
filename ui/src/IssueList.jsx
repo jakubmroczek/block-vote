@@ -1,5 +1,5 @@
-/* globals React */
-
+import React from 'react';
+/* eslint "react/jsx-no-undef": "off" */
 
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
