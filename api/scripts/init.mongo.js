@@ -32,6 +32,7 @@ const issuesDB = [
 /* global db print */
 /* eslint no-restricted-globals: "off" */
 db.issues.remove({});
+db.deleted_issues.remove({});
 db.issues.insertMany(issuesDB);
 const count = db.issues.count();
 print('Inserted', count, 'issues');
@@ -43,3 +44,5 @@ db.issues.createIndex({ id: 1 }, { unique: true });
 db.issues.createIndex({ status: 1 });
 db.issues.createIndex({ owner: 1 });
 db.issues.createIndex({ created: 1 });
+
+db.deleted_issues.createIndex({ id: 1 }, { unique: true });

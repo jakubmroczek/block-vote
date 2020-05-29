@@ -18,6 +18,7 @@ export default class IssueList extends
     };
     this.createIssue = this.createIssue.bind(this);
     this.closeIssue = this.closeIssue.bind(this);
+    this.deleteIssue = this.deleteIssue.bind(this);
   }
 
   componentDidMount() {
@@ -106,6 +107,30 @@ export default class IssueList extends
     }
   }
 
+  async deleteIssue(index) {
+    const query = `mutation issueDelete($id: Int!) {
+    issueDelete(id: $id)
+  }`;
+
+    const { issues } = this.state;
+    const { location: { pathname, search }, history } = this.props;
+    const { id } = issues[index];
+    const data = await graphQLFetch(query, { id });
+    if (data && data.issueDelete) {
+      this.setState((prevState) => {
+        const newList = [...prevState.issues];
+        if (pathname === `/issues/${id}`) {
+          history.push({ pathname: '/issues', search });
+        }
+        // TODO: What does splice do
+        newList.splice(index, 1);
+        return { issues: newList };
+      });
+    } else {
+      this.loadData();
+    }
+  }
+
   render() {
     const { issues } = this.state;
     const { match } = this.props;
@@ -114,7 +139,7 @@ export default class IssueList extends
         <h1>Issue Tracker</h1>
         <IssueFilter />
         <hr />
-        <IssueTable issues={issues} closeIssue={this.closeIssue} />
+        <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
         <hr />
         <IssueAdd createIssue={this.createIssue} />
         <hr />
