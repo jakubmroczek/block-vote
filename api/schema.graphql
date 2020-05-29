@@ -40,7 +40,21 @@ input IssueInputs {
     description: String
 }
 
+"""Inputs fro issueUpdate: all are optional. Whichever is 
+specifed will be set to the given value, undeinfed fields will remain m
+unmodified.
+"""
+input IssueUpdateInputs {
+    title: String
+    status: StatusType
+    owner: String
+    effort: Int
+    due: GraphQLDate
+    description: String
+}
+
 type Mutation {
     setAboutMessage(message: String!) : String
     issueAdd(issue: IssueInputs!) : Issue!
+    issueUpdate(id : Int!, changes: IssueUpdateInputs!): Issue!
 }
