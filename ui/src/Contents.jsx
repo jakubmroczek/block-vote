@@ -1,19 +1,18 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
-import IssueList from './IssueList.jsx';
-import IssueReport from './IssueReport.jsx';
-import IssueEdit from './IssueEdit.jsx';
+import VotingdApp from './VotingdApp.jsx';
+import AdminPanel from './AdminPanel.jsx';
+import Welcome from './Welcome.jsx';
 
 const NotFound = () => <h1>Page Not Found</h1>;
 
 export default function Contents() {
   return (
     <Switch>
-      <Redirect exact from="/" to="/issues" />
-      <Route path="/issues" component={IssueList} />
-      <Route path="/report" component={IssueReport} />
-      <Route path="/edit/:id" component={IssueEdit} />
+      <Route path="/vote" component={VotingdApp} />
+      <Route path="/panel" component={AdminPanel} />
+      <Route exact path="/" component={Welcome} />
       <Route component={NotFound} />
     </Switch>
   );
