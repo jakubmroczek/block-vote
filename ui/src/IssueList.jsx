@@ -2,12 +2,12 @@ import React from 'react';
 /* eslint "react/jsx-no-undef": "off" */
 import { Route } from 'react-router-dom';
 import URLSearchParams from 'url-search-params';
+import { Panel } from 'react-bootstrap';
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
 import IssueAdd from './IssueAdd.jsx';
 import IssueDetail from './IssueDetail.jsx';
 import graphQLFetch from './graphQLFetch.js';
-
 
 export default class IssueList extends
   React.Component {
@@ -136,13 +136,16 @@ export default class IssueList extends
     const { match } = this.props;
     return (
       <React.Fragment>
-        <h1>Issue Tracker</h1>
-        <IssueFilter />
-        <hr />
+        <Panel>
+          <Panel.Heading>
+            <Panel.Title toggle>Filter</Panel.Title>
+          </Panel.Heading>
+          <Panel.Body collapsible>
+            <IssueFilter />
+          </Panel.Body>
+        </Panel>
         <IssueTable issues={issues} closeIssue={this.closeIssue} deleteIssue={this.deleteIssue} />
-        <hr />
         <IssueAdd createIssue={this.createIssue} />
-        <hr />
         <Route path={`${match.path}/:id`} component={IssueDetail} />
       </React.Fragment>
     );
