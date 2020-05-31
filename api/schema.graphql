@@ -1,5 +1,34 @@
 scalar GraphQLDate
 
+type Candidate {
+    _id: ID!
+    name: String!
+    surname: String!
+}
+
+type Participant {
+    _id: ID!    
+    email: String!
+}
+
+input CandidateInputs {
+    name: String!
+    surname: String!
+}
+
+input CandidateUpdateInputs {
+    name: String
+    surname: String
+}
+
+input ParticipantInputs {
+    email: String!
+}
+
+input ParticipantUpdateInputs {
+    email: String!
+}
+
 enum StatusType {
     New
     Assigned
@@ -27,6 +56,10 @@ type Query {
         effortMax: Int
         ): [Issue!]!
     issue(id: Int!): Issue!
+    candidateList: [Candidate!]!
+    participantList: [Participant!]!
+    electionTitle: String!
+    sendRegisterPublicKeysMail: Boolean!
 }
 
 "Toned down Issue, used as inputs, without server generated values"
@@ -57,5 +90,12 @@ type Mutation {
     setAboutMessage(message: String!) : String
     issueAdd(issue: IssueInputs!) : Issue!
     issueUpdate(id : Int!, changes: IssueUpdateInputs!): Issue!
-    issueDelete(id: Int!): Boolean!
+    issueDelete(id : Int!): Boolean!
+    addCandiate(candidate: CandidateInputs!) : Candidate!
+    updateCandidate(_id : ID!, changes: CandidateUpdateInputs!) : Candidate!
+    removeCandidate(_id : ID!) : Boolean!
+    addParticipant(participant : ParticipantInputs!) : Participant!
+    removeParticipant(_id : ID!) : Boolean!
+    updateParticipant(_id : ID!, changes: ParticipantUpdateInputs!) : Participant!
+    updateElectionTitle(title: String!) : String!
 }
