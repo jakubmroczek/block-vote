@@ -23,13 +23,13 @@ export default function Welcome() {
       <Logo />
 
       <LinkContainer to="/vote">
-        <Button bsSize="xsmall">
+        <Button>
           Vote
         </Button>
       </LinkContainer>
       {' '}
       <LinkContainer to="/panel">
-        <Button bsSize="xsmall">
+        <Button>
           Log-in
         </Button>
       </LinkContainer>

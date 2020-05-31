@@ -1,4 +1,4 @@
-import { ElectionAPI } from '../services/electionAPI.js';
+import ElectionAPI from '../services/electionAPI.js';
 
 export const electionFetched = election => ({
   type: 'ELECTION_FETCHED_SUCCESSFULLY',

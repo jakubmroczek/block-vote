@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './App.css';
-
 // TODO: Fix this
 import Election from '../Election/Election/Election.jsx';
 import ElectionFetching from './ElectionFetching.jsx';
@@ -31,7 +29,7 @@ class App extends React.Component {
     // move the messages to the reducer
     const { appplicationState } = this.props;
     return (
-      <div className="App">
+      <div>
         {appplicationState === 'unregisteredUser' && (
           <ErrorMessage
             messageTitle={this.unregisterdVoterErrorTitle}
