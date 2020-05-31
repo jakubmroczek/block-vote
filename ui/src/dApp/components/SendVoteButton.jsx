@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 
 // TODO: Move this to reducer
-import { ElectionAPI } from '../services/electionAPI';
+import { ElectionAPI } from '../services/electionAPI.js';
 
 const MyButton = styled(Button)({
   background: '#ff884d',

@@ -1,9 +1,9 @@
 import React from 'react';
 
+import App from './dApp/containers/App/App.js';
+
 export default function VotingdApp() {
   return (
-    <div>
-      <h1>This is Voting dApp</h1>
-    </div>
+    <App />
   );
 }
