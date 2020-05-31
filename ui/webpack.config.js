@@ -23,4 +23,8 @@ module.exports = {
     },
   },
   devtool: 'source-map',
+  // Woraround for truffle not finding the fs
+  node: {
+    fs: 'empty',
+  },
 };

@@ -1,9 +1,15 @@
 import React from 'react';
 
+import { Provider } from 'react-redux';
+import App from './dApp/containers/App/App.js';
+
+// TODO: Move this directly to the voting app
+import store from './dApp/store.js';
+
 export default function VotingdApp() {
   return (
-    <div>
-      <h1>This is Voting dApp</h1>
-    </div>
+    <Provider store={store}>
+      <App />
+    </Provider>
   );
 }
