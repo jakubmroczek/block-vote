@@ -6,7 +6,6 @@ import ElectionTitleForm from './ElectionTitleForm.jsx';
 import CandidateList from './CandidateList.jsx';
 import ParticipantList from './ParticipantList.jsx';
 
-
 export default function ElectionSetUpPanel() {
   return (
     <>
@@ -17,7 +16,7 @@ export default function ElectionSetUpPanel() {
       <ParticipantList />
       <hr />
       <LinkContainer to="/panel/lobby">
-        <Button>Deploy the blockchain contract</Button>
+        <Button>Next (make your voters register public keys)</Button>
       </LinkContainer>
     </>
   );
