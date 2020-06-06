@@ -2,26 +2,20 @@ require('dotenv').config();
 const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
 
-const candidate = require('./candidate.js');
-const participant = require('./participant.js');
 const election = require('./election.js');
 const mailService = require('./mail_service.js');
 
 const resolvers = {
   Query: {
-    candidateList: candidate.list,
-    participantList: participant.list,
-    electionTitle: election.get,
+    getElection: election.get,
+    listElection: election.list,
+
     sendRegisterPublicKeysMail: mailService.sendRegisterKeyMail,
   },
   Mutation: {
-    addCandiate: candidate.add,
-    updateCandidate: candidate.update,
-    removeCandidate: candidate.remove,
-    addParticipant: participant.create,
-    removeParticipant: participant.remove,
-    updateParticipant: participant.update,
-    updateElectionTitle: election.update,
+    createElection: election.create,
+    updateElection: election.update,
+    removeElection: election.remove,
   },
 };
 

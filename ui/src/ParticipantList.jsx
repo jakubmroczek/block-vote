@@ -5,7 +5,7 @@ import {
 import graphQLFetch from './graphQLFetch.js';
 
 function ParticipantUpdateModal({
-  participant, visible, hide, update,
+  index, participant, visible, hide, update,
 }) {
   const { email } = participant;
   const [newEmail, setNewEmail] = useState(email);
@@ -20,8 +20,8 @@ function ParticipantUpdateModal({
     };
 
     const updatedParticipant = Object.assign(participant, changes);
-    
-    update(updatedParticipant);
+
+    update(index, updatedParticipant);
   };
 
   return (
@@ -65,12 +65,11 @@ function ParticipantUpdateModal({
 
 
 function ParticipantRemoveModal({
-  participant, visible, hide, remove,
+  index, participant, visible, hide, remove,
 }) {
   const onRemove = () => {
-    const { _id } = participant;
     hide();
-    remove(_id);
+    remove(index);
   };
 
   const { email } = participant;
@@ -134,7 +133,9 @@ class ParticipantRow extends React.Component {
 
   render() {
     const { participantRemoveVisible, participantUpdateModalVisible } = this.state;
-    const { update, remove, participant } = this.props;
+    const {
+      index, update, remove, participant,
+    } = this.props;
     const { email } = participant;
 
     return (
@@ -152,12 +153,14 @@ class ParticipantRow extends React.Component {
           </td>
         </tr>
         <ParticipantRemoveModal
+          index={index}
           participant={participant}
           visible={participantRemoveVisible}
           hide={this.hideParticipantRemoveModal}
           remove={remove}
         />
         <ParticipantUpdateModal
+          index={index}
           participant={participant}
           visible={participantUpdateModalVisible}
           hide={this.hideParticipantUpdateModal}
@@ -220,6 +223,7 @@ function ParticipantAddModal({ visible, hide, add }) {
 function ParticipantTable({ participants, update, remove }) {
   const rows = participants.map((participant, index) => (
     <ParticipantRow
+      index={index}
       key={index}
       participant={participant}
       update={update}
@@ -264,28 +268,46 @@ export default class ParticipantList extends React.Component {
   }
 
   async read() {
-    const query = `query {
-        participantList {
-          _id email
-        }
-      }`;
+    const query = `query 
+        getElection($owner: String! $id: ID!) {
+                getElection(owner: $owner, id: $id) {
+                    participants {
+                        email 
+                    }  
+                }
+    }`;
 
-    const data = await graphQLFetch(query);
-    if (data) {
-      this.setState({ participants: data.participantList });
+    const { owner, id } = this.props;
+    const vars = { owner, id };
+
+    const data = await graphQLFetch(query, vars);
+
+    const { getElection } = data;
+    const { participants } = getElection;
+    if (participants) {
+      this.setState({ participants });
     } else {
       alert('Could not fetch participant from the server');
     }
   }
 
   async create(participant) {
-    const query = `mutation addParticipant($participant: ParticipantInputs!) {
-        addParticipant(participant: $participant) {
-              _id email
-          }
-      }`;
+    const query = `mutation 
+    updateElection($owner: String! $id: ID!, $changes: ElectionUpdateInputs!) {
+      updateElection(owner: $owner, id: $id, changes: $changes) {
+        _id      
+      }
+}`;
 
-    const data = await graphQLFetch(query, { participant });
+    const { owner, id } = this.props;
+
+    const { participants } = this.state;
+    const updatedParticipants = Array.from(participants);
+    updatedParticipants.push(participant);
+    const changes = { participants: updatedParticipants };
+
+    const vars = { owner, id, changes };
+    const data = await graphQLFetch(query, vars);
     if (data) {
       this.read();
     } else {
@@ -293,18 +315,23 @@ export default class ParticipantList extends React.Component {
     }
   }
 
-  async update(participant) {
-    const query = `mutation updateParticipant($_id: ID!
-        $changes: ParticipantUpdateInputs!) {
-            updateParticipant(_id: $_id , changes: $changes) {
-            _id 
-        }
+  async update(index, participant) {
+    const query = `mutation 
+        updateElection($owner: String! $id: ID!, $changes: ElectionUpdateInputs!) {
+          updateElection(owner: $owner, id: $id, changes: $changes) {
+            _id      
+          }
     }`;
 
-    const { _id } = participant;
-    const changes = { email: participant.email };
-    const data = await graphQLFetch(query, { _id, changes });
+    const { owner, id } = this.props;
 
+    const { participants } = this.state;
+    const updatedParticipants = Array.from(participants);
+    updatedParticipants[index] = participant;
+    const changes = { participants: updatedParticipants };
+
+    const vars = { owner, id, changes };
+    const data = await graphQLFetch(query, vars);
     if (data) {
       this.read();
     } else {
@@ -312,17 +339,27 @@ export default class ParticipantList extends React.Component {
     }
   }
 
-  async remove(_id) {
-    const query = `mutation removeParticipant($_id: ID!) {
-        removeParticipant(_id: $_id) 
+  async remove(index) {
+    const query = `mutation 
+        updateElection($owner: String! $id: ID!, $changes: ElectionUpdateInputs!) {
+          updateElection(owner: $owner, id: $id, changes: $changes) {
+            _id      
+          }
     }`;
 
-    const data = await graphQLFetch(query, { _id });
+    const { owner, id } = this.props;
 
+    const { participants } = this.state;
+    const updatedParticipants = Array.from(participants);
+    updatedParticipants.splice(index, 1);
+    const changes = { participants: updatedParticipants };
+
+    const vars = { owner, id, changes };
+    const data = await graphQLFetch(query, vars);
     if (data) {
       this.read();
     } else {
-      alert(`Could not remove a participant of a ID: ${_id}`);
+      alert(`Could not remove a participant of a index ${index}`);
     }
   }
 

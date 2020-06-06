@@ -27,26 +27,39 @@ export default class ElectionTitleForm extends React.Component {
   }
 
   async read() {
-    const query = `query {
-        electionTitle 
+    const query = `query 
+        getElection($owner: String! $id: ID!) {
+                getElection(owner: $owner, id: $id) {
+                    title  
+                }
     }`;
 
-    const data = await graphQLFetch(query);
+    const { owner, id } = this.props;
+    const vars = { owner, id };
+    const data = await graphQLFetch(query, vars);
 
-    if (data) {
-      this.setState({ title: data.electionTitle });
+    const { getElection } = data;
+    const { title } = getElection;
+
+    if (title) {
+      this.setState({ title });
     } else {
       alert('Could not fetch election title');
     }
   }
 
   async update(title) {
-    const query = `mutation updateElectionTitle($title: String!) {
-        updateElectionTitle(title: $title)
+    const query = `mutation 
+        updateElection($owner: String! $id: ID!, $changes: ElectionUpdateInputs!) {
+          updateElection(owner: $owner, id: $id, changes: $changes) {
+                  title
+                }
     }`;
 
-    const data = await graphQLFetch(query, { title });
-
+    const { owner, id } = this.props;
+    const changes = { title };
+    const vars = { owner, id, changes };
+    const data = await graphQLFetch(query, vars);    
     if (data) {
       this.read();
     } else {

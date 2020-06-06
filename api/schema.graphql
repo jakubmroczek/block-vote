@@ -1,5 +1,3 @@
-scalar GraphQLDate
-
 type Candidate {
     _id: ID!
     name: String!
@@ -9,6 +7,27 @@ type Candidate {
 type Participant {
     _id: ID!    
     email: String!
+}
+
+enum Status {
+    New,
+    DeployedOnBlockchain,
+}
+
+input ElectionUpdateInputs {
+    status: Status
+    title: String
+    candidates: [CandidateInputs!]
+    participants: [ParticipantInputs!]
+}
+
+type Election { 
+    _id: ID!
+    owner: String!
+    status: Status!
+    title: String!
+    candidates: [Candidate!]!
+    participants: [Participant!]!
 }
 
 input CandidateInputs {
@@ -30,18 +49,14 @@ input ParticipantUpdateInputs {
 }
 
 type Query {
-    candidateList: [Candidate!]!
-    participantList: [Participant!]!
-    electionTitle: String!
+    getElection(owner: String!, id: ID!) : Election
+    listElection(owner: String!) : [Election!]!
+
     sendRegisterPublicKeysMail(to: [String!]!): Boolean!
 }
 
 type Mutation {
-    addCandiate(candidate: CandidateInputs!) : Candidate!
-    updateCandidate(_id : ID!, changes: CandidateUpdateInputs!) : Candidate!
-    removeCandidate(_id : ID!) : Boolean!
-    addParticipant(participant : ParticipantInputs!) : Participant!
-    removeParticipant(_id : ID!) : Boolean!
-    updateParticipant(_id : ID!, changes: ParticipantUpdateInputs!) : Participant!
-    updateElectionTitle(title: String!) : String!
+    createElection(owner: String!) : Election!
+    updateElection(owner: String!, id: ID!, changes: ElectionUpdateInputs!) : Election!
+    removeElection(owner: String!, id: ID!) : Boolean!
 }

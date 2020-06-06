@@ -39,7 +39,7 @@ function CandidateRemoveModal({
 }
 
 function CandidateEditModal({
-  candidate, visible, hideEdit, handleEdit,
+  index, candidate, visible, hideEdit, handleEdit,
 }) {
   const { name, surname } = candidate;
   const [newName, setNewName] = useState(name);
@@ -57,7 +57,7 @@ function CandidateEditModal({
 
     const updatedCandidate = Object.assign(candidate, changes);
     // TODO: Different name
-    handleEdit(updatedCandidate);
+    handleEdit(index, updatedCandidate);
   };
 
   return (
@@ -141,17 +141,14 @@ class CandidateRow extends React.Component {
     e.preventDefault();
     this.hideRemove();
 
-    const { candidate } = this.props;
-    const { _id } = candidate;
-    const { removeCandidate } = this.props;
-
-    removeCandidate(_id);
+    const { index, removeCandidate } = this.props;
+    removeCandidate(index);
   }
 
   render() {
     const { editVisible, removeVisible } = this.state;
 
-    const { candidate, updateCandidate } = this.props;
+    const { index, candidate, updateCandidate } = this.props;
     const { name, surname } = candidate;
     return (
       <>
@@ -169,6 +166,7 @@ class CandidateRow extends React.Component {
           </td>
         </tr>
         <CandidateEditModal
+          index={index}
           candidate={candidate}
           visible={editVisible}
           hideEdit={this.hideEdit}
@@ -241,8 +239,9 @@ function CandidateAddModal({ visible, hide, add }) {
 
 function CandidateTable({ candidates, update, remove }) {
   const rows = candidates
-    .map(candidate => (
+    .map((candidate, index) => (
       <CandidateRow
+        index={index}
         key={candidate.id}
         candidate={candidate}
         updateCandidate={update}
@@ -287,28 +286,47 @@ export default class CandidateList extends React.Component {
   }
 
   async read() {
-    const query = `query {
-      candidateList {
-        _id name surname
-      }
+    const query = `query 
+        getElection($owner: String! $id: ID!) {
+                getElection(owner: $owner, id: $id) {
+                    candidates {
+                      name surname
+                    }  
+                }
     }`;
 
-    const data = await graphQLFetch(query, []);
-    if (data) {
-      this.setState({ candidates: data.candidateList });
+    const { owner, id } = this.props;
+    const vars = { owner, id };
+
+    const data = await graphQLFetch(query, vars);
+
+    const { getElection } = data;
+    const { candidates } = getElection;
+
+    if (candidates) {
+      this.setState({ candidates });
     } else {
       alert('Could not fetch candidates from the server');
     }
   }
 
   async create(candidate) {
-    const query = `mutation addCandiate($candidate: CandidateInputs!) {
-      addCandiate(candidate: $candidate) {
-            _id name surname
-        }
-    }`;
+    const query = `mutation 
+    updateElection($owner: String! $id: ID!, $changes: ElectionUpdateInputs!) {
+      updateElection(owner: $owner, id: $id, changes: $changes) {
+        _id      
+      }
+}`;
 
-    const data = await graphQLFetch(query, { candidate });
+    const { owner, id } = this.props;
+
+    const { candidates } = this.state;
+    const updatedCandidates = Array.from(candidates);
+    updatedCandidates.push(candidate);
+    const changes = { candidates: updatedCandidates };
+
+    const vars = { owner, id, changes };
+    const data = await graphQLFetch(query, vars);
     if (data) {
       this.read();
     } else {
@@ -316,18 +334,23 @@ export default class CandidateList extends React.Component {
     }
   }
 
-  async update(candidate) {
-    const query = `mutation updateCandidate($_id: ID!
-        $changes: CandidateUpdateInputs!) {
-        updateCandidate(_id: $_id , changes: $changes) {
-            _id 
-        }
+  async update(index, candidate) {
+    const query = `mutation 
+        updateElection($owner: String! $id: ID!, $changes: ElectionUpdateInputs!) {
+          updateElection(owner: $owner, id: $id, changes: $changes) {
+            _id      
+          }
     }`;
 
-    const { _id } = candidate;
-    const changes = { name: candidate.name, surname: candidate.surname };
-    const data = await graphQLFetch(query, { _id, changes });
+    const { owner, id } = this.props;
 
+    const { candidates } = this.state;
+    const updatedCandidates = Array.from(candidates);
+    updatedCandidates[index] = candidate;
+    const changes = { candidates: updatedCandidates };
+
+    const vars = { owner, id, changes };
+    const data = await graphQLFetch(query, vars);
     if (data) {
       this.read();
     } else {
@@ -335,17 +358,27 @@ export default class CandidateList extends React.Component {
     }
   }
 
-  async remove(_id) {
-    const query = `mutation removeCandidate($_id: ID!) {
-        removeCandidate(_id: $_id) 
+  async remove(index) {
+    const query = `mutation 
+        updateElection($owner: String! $id: ID!, $changes: ElectionUpdateInputs!) {
+          updateElection(owner: $owner, id: $id, changes: $changes) {
+            _id      
+          }
     }`;
 
-    const data = await graphQLFetch(query, { _id });
+    const { owner, id } = this.props;
 
+    const { candidates } = this.state;
+    const updatedCandidates = Array.from(candidates);
+    updatedCandidates.splice(index, 1);
+    const changes = { candidates: updatedCandidates };
+
+    const vars = { owner, id, changes };
+    const data = await graphQLFetch(query, vars);
     if (data) {
       this.read();
     } else {
-      alert(`Could not remove a candidate of a ID: ${_id}`);
+      alert(`Could not remove a candidate of a index ${index}`);
     }
   }
 
