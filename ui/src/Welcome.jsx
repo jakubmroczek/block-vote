@@ -3,6 +3,7 @@ import {
   Button, Figure,
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import SignIn from './SignIn.jsx';
 
 function Logo() {
   return (
@@ -28,11 +29,7 @@ export default function Welcome() {
         </Button>
       </LinkContainer>
       {' '}
-      <LinkContainer to="/panel">
-        <Button>
-          Log-in
-        </Button>
-      </LinkContainer>
+      <SignIn />
     </div>
   );
 }
