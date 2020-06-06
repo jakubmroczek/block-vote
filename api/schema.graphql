@@ -59,7 +59,7 @@ type Query {
     candidateList: [Candidate!]!
     participantList: [Participant!]!
     electionTitle: String!
-    sendRegisterPublicKeysMail: Boolean!
+    sendRegisterPublicKeysMail(to: [String!]!): Boolean!
 }
 
 "Toned down Issue, used as inputs, without server generated values"

@@ -9,24 +9,29 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const mailOptions = {
+const registerKeyMailTemplate = to => ({
   from: process.env.GMAIL_USER,
-  to: 'jakubmroczek2@gmail.com',
+  to,
   subject: 'Register your public key',
-  html: '<p>Your html here</p>',
-};
+  html: '<p>Czy masz ochotę na ostre myszowanie? Tylko tutaj HOT zdęcia naked myszunia</p>',
+});
 
 // TODO: Each user should have a unique link?
 // TODO: Each user can only send email once
-function sendRegisterKeyMail() {
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      console.log(err);
+async function sendRegisterKeyMail(_, { to }) {
+  const receivers = to.join();
+  const mailOptions = registerKeyMailTemplate(receivers);
+  transporter.sendMail(mailOptions, (error /* info */) => {
+    if (error) {
+      // TOOD: Logging
       return false;
     }
-    console.log(info);
+    // TOOD: Logging
     return true;
   });
+
+  // TODO: Fix this, introducde better erorr handling
+  return true;
 }
 
 module.exports = {
