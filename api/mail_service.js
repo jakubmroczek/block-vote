@@ -9,11 +9,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// TODO: Take this from the UI server / graphql query parameter
+const htmlForm = '<p>Register your Ethereum public key here: <a href="http://localhost:8000/panel/key">Register your vote here mate</a></p>';
+
 const registerKeyMailTemplate = to => ({
   from: process.env.GMAIL_USER,
   to,
   subject: 'Register your public key',
-  html: '<p>Czy masz ochotę na ostre myszowanie? Tylko tutaj HOT zdęcia naked myszunia</p>',
+  html: htmlForm,
 });
 
 // TODO: Each user should have a unique link?
