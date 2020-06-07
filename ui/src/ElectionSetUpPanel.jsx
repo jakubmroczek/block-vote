@@ -6,25 +6,30 @@ import ElectionTitleForm from './ElectionTitleForm.jsx';
 import CandidateList from './CandidateList.jsx';
 import ParticipantList from './ParticipantList.jsx';
 
+// TODO: Make it fucntional
 export default class ElectionSetUpPanel extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    
+    const { match: { params: { electionID } } } = this.props;
+
+    // TODO: Get if from the props
     this.state = {
-      owner: 'jakubmroczek',
-      id: '5edbec45a687a9fa273deca6',
+      username: 'jakubmroczek',
+      id: electionID,
     };
   }
 
   render() {
-    const { owner, id } = this.state;
+    const { username, id } = this.state;
 
     return (
       <>
-        <ElectionTitleForm owner={owner} id={id} />
+        <ElectionTitleForm username={username} id={id} />
         <hr />
-        <CandidateList owner={owner} id={id} />
+        <CandidateList username={username} id={id} />
         <hr />
-        <ParticipantList owner={owner} id={id} />
+        <ParticipantList username={username} id={id} />
         <hr />
         <LinkContainer to="/panel/lobby">
           <Button>Next (make your voters register public keys)</Button>

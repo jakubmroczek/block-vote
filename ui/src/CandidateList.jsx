@@ -287,16 +287,16 @@ export default class CandidateList extends React.Component {
 
   async read() {
     const query = `query 
-        getElection($owner: String! $id: ID!) {
-                getElection(owner: $owner, id: $id) {
+        getElection($id: ID!) {
+                getElection(id: $id) {
                     candidates {
                       name surname
                     }  
                 }
     }`;
 
-    const { owner, id } = this.props;
-    const vars = { owner, id };
+    const { id } = this.props;
+    const vars = { id };
 
     const data = await graphQLFetch(query, vars);
 
@@ -312,20 +312,20 @@ export default class CandidateList extends React.Component {
 
   async create(candidate) {
     const query = `mutation 
-    updateElection($owner: String! $id: ID!, $changes: ElectionUpdateInputs!) {
-      updateElection(owner: $owner, id: $id, changes: $changes) {
+    updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
+      updateElection(id: $id, changes: $changes) {
         _id      
       }
 }`;
 
-    const { owner, id } = this.props;
+    const { id } = this.props;
 
     const { candidates } = this.state;
     const updatedCandidates = Array.from(candidates);
     updatedCandidates.push(candidate);
     const changes = { candidates: updatedCandidates };
 
-    const vars = { owner, id, changes };
+    const vars = { id, changes };
     const data = await graphQLFetch(query, vars);
     if (data) {
       this.read();
@@ -336,20 +336,20 @@ export default class CandidateList extends React.Component {
 
   async update(index, candidate) {
     const query = `mutation 
-        updateElection($owner: String! $id: ID!, $changes: ElectionUpdateInputs!) {
-          updateElection(owner: $owner, id: $id, changes: $changes) {
+        updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
+          updateElection(id: $id, changes: $changes) {
             _id      
           }
     }`;
 
-    const { owner, id } = this.props;
+    const { id } = this.props;
 
     const { candidates } = this.state;
     const updatedCandidates = Array.from(candidates);
     updatedCandidates[index] = candidate;
     const changes = { candidates: updatedCandidates };
 
-    const vars = { owner, id, changes };
+    const vars = { id, changes };
     const data = await graphQLFetch(query, vars);
     if (data) {
       this.read();
@@ -360,20 +360,20 @@ export default class CandidateList extends React.Component {
 
   async remove(index) {
     const query = `mutation 
-        updateElection($owner: String! $id: ID!, $changes: ElectionUpdateInputs!) {
-          updateElection(owner: $owner, id: $id, changes: $changes) {
+        updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
+          updateElection(id: $id, changes: $changes) {
             _id      
           }
     }`;
 
-    const { owner, id } = this.props;
+    const { id } = this.props;
 
     const { candidates } = this.state;
     const updatedCandidates = Array.from(candidates);
     updatedCandidates.splice(index, 1);
     const changes = { candidates: updatedCandidates };
 
-    const vars = { owner, id, changes };
+    const vars = { id, changes };
     const data = await graphQLFetch(query, vars);
     if (data) {
       this.read();

@@ -1,47 +1,63 @@
-const candidatesDB = [
+const usersDB = [
   {
-    name: 'Marek',
-    surname: 'Kraśko',
+    username: 'jakubmroczek2@gmail.com',
+    elections: [],
   },
   {
-    name: 'Michał',
-    surname: 'Kodłubański',
-  },
-  {
-    name: 'Krystian',
-    surname: 'Andrzejewski',
-  },
-  {
-    name: 'Maciek',
-    surname: 'Moszczyński',
-  },
-];
-
-const participantDB = [
-  {
-    email: 'small@gmail.com',
-  },
-  {
-    email: 'johny@yahoo.com',
-  },
-  {
-    email: 'tuesday@outlook.com',
+    username: 'blockvote.bot@gmail.com',
+    elections: [],
   },
 ];
 
 /* global db print */
 /* eslint no-restricted-globals: "off" */
-db.candidates.remove({});
-db.candidates.insertMany(candidatesDB);
-const candidateCount = db.issues.count();
-print('Inserted', candidateCount, 'candidates');
+db.users.remove({});
+db.users.insertMany(usersDB);
+const usersCount = db.users.count();
 
-db.candidates.createIndex({ name: 1 });
-db.candidates.createIndex({ surname: 1 });
+print('Inserted', usersCount, 'candidates');
 
-db.participants.remove({});
-db.participants.insertMany(participantDB);
-const participantCount = db.participants.count();
-print('Inserted', participantCount, 'participants');
+db.users.createIndex({ username: 1 });
 
-db.participants.createIndex({ email: 1 });
+const election = {
+  status: 'New',
+  title: 'Election to student government',
+  candidates: [
+    {
+      name: 'Marek',
+      surname: 'Kraśko',
+    },
+    {
+      name: 'Michał',
+      surname: 'Kodłubański',
+    },
+    {
+      name: 'Krystian',
+      surname: 'Andrzejewski',
+    },
+    {
+      name: 'Maciek',
+      surname: 'Moszczyński',
+    },
+  ],
+  participants: [
+    {
+      email: 'small@gmail.com',
+    },
+    {
+      email: 'johny@yahoo.com',
+    },
+    {
+      email: 'tuesday@outlook.com',
+    },
+  ],
+};
+
+db.elections.remove({});
+const insertedElection = db.elections.insertOne(election);
+const electionsCount = db.elections.count();
+print('Inserted', electionsCount, 'elections');
+
+// TODO: Index on election?
+
+db.users.updateOne({ username: 'jakubmroczek2@gmail.com' }, { $push: { elections: insertedElection.insertedId } });

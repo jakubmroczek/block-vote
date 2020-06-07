@@ -11,7 +11,9 @@ type Participant {
 
 enum Status {
     New,
-    DeployedOnBlockchain,
+    PublicKeyRegistration,
+    Under,
+    Finished
 }
 
 input ElectionUpdateInputs {
@@ -23,11 +25,15 @@ input ElectionUpdateInputs {
 
 type Election { 
     _id: ID!
-    owner: String!
     status: Status!
     title: String!
     candidates: [Candidate!]!
     participants: [Participant!]!
+}
+
+type User {
+    username: String!
+    elections: [ID!]!
 }
 
 input CandidateInputs {
@@ -49,14 +55,16 @@ input ParticipantUpdateInputs {
 }
 
 type Query {
-    getElection(owner: String!, id: ID!) : Election
-    listElection(owner: String!) : [Election!]!
+    getUser(username: String!) : User
+
+    getElection(id: ID!) : Election
+    listElection(username: String!) : [Election!]!
 
     sendRegisterPublicKeysMail(to: [String!]!): Boolean!
 }
 
 type Mutation {
-    createElection(owner: String!) : Election!
-    updateElection(owner: String!, id: ID!, changes: ElectionUpdateInputs!) : Election!
-    removeElection(owner: String!, id: ID!) : Boolean!
+    createElection(username: String!) : Election!
+    updateElection(id: ID!, changes: ElectionUpdateInputs!) : Election!
+    removeElection(username: String!, id: ID!) : Boolean!
 }
