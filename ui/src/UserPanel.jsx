@@ -1,4 +1,6 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import graphQLFetch from './graphQLFetch.js';
 
 export default class UserPanel extends React.Component {
@@ -6,8 +8,9 @@ export default class UserPanel extends React.Component {
     super();
     // TODO: Pass this from the SingIn compnent
     this.state = {
-      owner: 'jakubmroczek',
+      username: 'jakubmroczek2@gmail.com',
       elections: [],
+      election: undefined,
     };
   }
 
@@ -16,13 +19,14 @@ export default class UserPanel extends React.Component {
   }
 
   async read() {
-    const query = `query listElection($owner: String!) {
-            listElection(owner: $owner) {
+    const query = `query listElection($username: String!) {
+            listElection(username: $username) {
                 _id
                 status
                 title
                 candidates {
-                    name surname
+                    name 
+                    surname
                 }
                 participants {
                     email
@@ -30,22 +34,25 @@ export default class UserPanel extends React.Component {
             }
         }`;
 
-    const { owner } = this.state;
-    const vars = { owner };
+    const { username } = this.state;
+    const vars = { username };
 
     const response = await graphQLFetch(query, vars);
 
-    if (response) {
-      this.setState({ elections: response.listElection });
+    if (response && response.listElection.length >= 1) {
+      this.setState({
+        elections: response.listElection,
+        election: response.listElection[0],
+      });
     } else {
-      alert(`Could not fetch Elections for the user ${owner}`);
+      alert(`Could not fetch Elections for the user ${username}`);
     }
   }
 
   render() {
-    const { elections } = this.state;
+    const { election } = this.state;
 
-    if (elections.length === 0) {
+    if (election === undefined) {
       return (
         <div>
           <h1>You have no election here mate! Create one!</h1>
@@ -53,14 +60,14 @@ export default class UserPanel extends React.Component {
       );
     }
 
-    // TODO: Support for multiple elections
-    const election = elections[0];
-
     if (election.status === 'New') {
       return (
-        <div>
+        <>
           <h1>You created an election, but did not finish editing it! Edit!</h1>
-        </div>
+          <LinkContainer to="/panel/edit">
+            <Button>Edit!</Button>
+          </LinkContainer>
+        </>
       );
     }
 

@@ -34,7 +34,7 @@ async function get(_, { id }) {
   return election;
 }
 
-async function update(_, { id, changes }) {  
+async function update(_, { id, changes }) {
   const db = getDb();
   const filter = { _id: mongo.ObjectID(id) };
   if (changes.title || changes.candidates || changes.participants) {
@@ -46,10 +46,14 @@ async function update(_, { id, changes }) {
   return savedElection;
 }
 
-async function remove(_, { id }) {
+async function remove(_, { username, id }) {
   const db = getDb();
   const filter = { _id: mongo.ObjectID(id) };
   const result = await db.collection(COLLECTION).removeOne(filter);
+  await db.collection('users').updateOne(
+    { username },
+    { $pull: { elections: { id } } },
+  );
   return result.deletedCount === 1;
 }
 
