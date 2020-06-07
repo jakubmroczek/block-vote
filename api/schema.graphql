@@ -11,7 +11,9 @@ type Participant {
 
 enum Status {
     New,
-    DeployedOnBlockchain,
+    PublicKeyRegistration,
+    Under,
+    Finished
 }
 
 input ElectionUpdateInputs {
