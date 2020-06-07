@@ -2,11 +2,14 @@ require('dotenv').config();
 const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
 
+const user = require('./user.js');
 const election = require('./election.js');
 const mailService = require('./mail_service.js');
 
 const resolvers = {
   Query: {
+    getUser: user.get,
+
     getElection: election.get,
     listElection: election.list,
 
