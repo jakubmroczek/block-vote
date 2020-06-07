@@ -16,7 +16,7 @@ export default function Contents() {
     <Switch>
       <Route path="/vote" component={VotingdApp} />
       <Route exact path="/panel" component={UserPanel} />
-      <Route exact path="/panel/edit" component={ElectionSetUpPanel} />
+      <Route path="/panel/edit/:electionID" component={ElectionSetUpPanel} />
       <Route exact path="/panel/lobby" component={ElectionLobby} />
       <Route exact path="/panel/key" component={RegisterKeyView} />
       <Route exact path="/" component={Welcome} />

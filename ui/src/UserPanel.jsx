@@ -1,7 +1,22 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { withRouter } from 'react-router-dom';
 import graphQLFetch from './graphQLFetch.js';
+
+
+const EditElectionInfo = withRouter(({ id, location: { search } }) => {
+  const editLocation = { pathname: `/panel/edit/${id}`, search };
+
+  return (
+    <>
+      <h1>You created an election, but did not finish editing it! Edit!</h1>
+      <LinkContainer to={editLocation}>
+        <Button>Edit!</Button>
+      </LinkContainer>
+    </>
+  );
+});
 
 export default class UserPanel extends React.Component {
   constructor() {
@@ -60,14 +75,10 @@ export default class UserPanel extends React.Component {
       );
     }
 
+    const { _id: id } = election;
     if (election.status === 'New') {
       return (
-        <>
-          <h1>You created an election, but did not finish editing it! Edit!</h1>
-          <LinkContainer to="/panel/edit">
-            <Button>Edit!</Button>
-          </LinkContainer>
-        </>
+        <EditElectionInfo id={id} />
       );
     }
 
