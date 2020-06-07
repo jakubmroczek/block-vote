@@ -1,12 +1,8 @@
 import React from 'react';
-// import {
-// Navbar, Nav, NavItem, OverlayTrigger,
-// NavDropdown, MenuItem, Tooltip,
-// } from 'react-bootstrap';
 import {
-  Navbar, Nav, NavDropdown, Form, FormControl, Button,
+  Navbar, Nav, Button,
 } from 'react-bootstrap';
-import Contents from './Contents.jsx';
+import UserViewContents from './UserViewContents.jsx';
 
 function NavBar() {
   return (
@@ -26,7 +22,7 @@ export default function Page() {
   return (
     <div>
       <NavBar />
-      <Contents />
+      <UserViewContents />
     </div>
   );
 }
