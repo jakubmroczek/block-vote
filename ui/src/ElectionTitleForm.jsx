@@ -34,8 +34,8 @@ export default class ElectionTitleForm extends React.Component {
                 }
     }`;
 
-    const { username, id } = this.props;
-    const vars = { username, id };
+    const { id } = this.props;
+    const vars = { id };
     const data = await graphQLFetch(query, vars);
 
     const { getElection } = data;
@@ -56,10 +56,10 @@ export default class ElectionTitleForm extends React.Component {
                 }
     }`;
 
-    const { username, id } = this.props;
+    const { id } = this.props;
     const changes = { title };
-    const vars = { username, id, changes };
-    const data = await graphQLFetch(query, vars);    
+    const vars = { id, changes };
+    const data = await graphQLFetch(query, vars);
     if (data) {
       this.read();
     } else {
