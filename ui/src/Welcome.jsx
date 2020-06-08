@@ -3,7 +3,7 @@ import {
   Button, Figure,
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import SignIn from './SignIn.jsx';
+import SignInItem from './SignInItem.jsx';
 
 function Logo() {
   return (
@@ -29,7 +29,7 @@ export default function Welcome() {
         </Button>
       </LinkContainer>
       {' '}
-      <SignIn />
+      <SignInItem />
     </div>
   );
 }

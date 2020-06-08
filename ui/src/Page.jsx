@@ -6,7 +6,7 @@ import React from 'react';
 import {
   Navbar, Nav, NavDropdown, Form, FormControl, Button,
 } from 'react-bootstrap';
-import Contents from './Contents.jsx';
+import Contents from './AppContents.jsx';
 
 function NavBar() {
   return (

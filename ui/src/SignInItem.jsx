@@ -4,15 +4,13 @@ import {
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-export default class SigninNavItem extends React.Component {
+export default class SignInItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showing: false,
-      signedIn: false,
-      // TODO: Made this into a user
-      username: '',
-      disabled: true,
+      visible: false,
+      intialized: false,
+      user: { signedIn: false, username: undefined },
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -21,28 +19,27 @@ export default class SigninNavItem extends React.Component {
   }
 
   componentDidMount() {
-    // TODO: This should be called once.
-    // const clientId = window.ENV.GOOGLE_CLIENT_ID;
-    // TODO: Throw an excpetion here.
-    // if (!clientId) return;
-    // window.gapi.load('auth2', () => {
-    //   if (!window.gapi.auth2.getAuthInstance()) {
-    //     window.gapi.auth2.init({ client_id: clientId }).then(() => {
-    //       this.setState({ disabled: false });
-    //     });
-    //   }
-    // });
+    const clientId = window.ENV.GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      return;
+    }
+    window.gapi.load('auth2', () => {
+      if (!window.gapi.auth2.getAuthInstance()) {
+        window.gapi.auth2.init({ client_id: clientId }).then(() => {
+          this.setState({ intialized: true });
+        });
+      }
+    });
   }
 
   async signIn() {
     this.hideModal();
-    // const { showError } = this.props;
 
     let googleToken;
     try {
       const auth2 = window.gapi.auth2.getAuthInstance();
       const googleUser = await auth2.signIn();
-      googleToken = googleUser.getAuthResponse().id_token;
+      googleToken = googleUser.getAuthResponse.id_token;
     } catch (e) {
       alert(e);
       alert(`Error authenticating with Google: ${e}`);
@@ -58,8 +55,9 @@ export default class SigninNavItem extends React.Component {
       const body = await response.text();
 
       const result = JSON.parse(body);
-      const { signedIn, givenName } = result;
-      this.setState({ username: givenName, signIn: signedIn });
+      const { signedIn, givenName: username } = result;
+      
+      this.setState({ signedIn, username });
       alert(`Succesfull log in ${body}`);
     } catch (error) {
       alert(`Error signing into the app: ${error}`);
@@ -72,44 +70,36 @@ export default class SigninNavItem extends React.Component {
 
   showModal() {
     const clientId = window.ENV.GOOGLE_CLIENT_ID;
-    // const { showError} = this.props;
     if (!clientId) {
       alert('Missing environment variable GOOGLE_CLIENT_ID');
       return;
     }
-    this.setState({ showing: true });
+    this.setState({ visible: true });
   }
 
   hideModal() {
-    this.setState({ showing: false });
+    this.setState({ visible: false });
   }
 
   render() {
-    const { showing, disabled } = this.state;
+    const { visible } = this.state;
     return (
       <>
         <Button onClick={this.showModal}>
           Sign in
         </Button>
-        <Modal centered keyboard show={showing} style={{ opacity: 1 }} onHide={this.hideModal} bsSize="sm">
+        <Modal centered keyboard show={visible} style={{ opacity: 1 }} onHide={this.hideModal} bsSize="sm">
           <Modal.Header closeButton>
             <Modal.Title>Sign in</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/* <Button
+            <Button
               block
-              disable={disabled}
               bsStyle="primary"
               onClick={this.signIn}
             >
               <img src="https://goo.gl/4yjp6B" alt="Sign In" />
-            </Button> */}
-            {/* TODO: Remove me */}
-            <LinkContainer to="/panel">
-              <Button>
-                Continue
-              </Button>
-            </LinkContainer>
+            </Button>
           </Modal.Body>
           <Modal.Footer>
             <Button bsStyle="link" onClick={this.hideModal}>Cancel</Button>

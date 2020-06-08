@@ -5,6 +5,7 @@ const { OAuth2Client } = require('google-auth-library');
 const routes = new Router();
 
 routes.use(bodyParser.json());
+
 routes.post('/signin', async (req, res) => {
   const googleToken = req.body.google_token;
   if (!googleToken) {
@@ -19,9 +20,9 @@ routes.post('/signin', async (req, res) => {
   } catch (error) {
     res.status(403).send('Invalid credentials');
   }
-  const { given_name: givenName, name, email } = payload;
+  const { given_name: username, name, email } = payload;
   const credentials = {
-    signedIn: true, givenName, name, email,
+    signedIn: true, username, name, email,
   };
   res.json(credentials);
 });
