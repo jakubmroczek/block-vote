@@ -57,7 +57,7 @@ export default class SignInItem extends React.Component {
       const result = JSON.parse(body);
       const { signedIn, givenName: username } = result;
       
-      this.setState({ signedIn, username });
+      `this.setState({ signedIn, username });
       alert(`Succesfull log in ${body}`);
     } catch (error) {
       alert(`Error signing into the app: ${error}`);
