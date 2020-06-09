@@ -1,10 +1,27 @@
 const Router = require('express');
 const bodyParser = require('body-parser');
 const { OAuth2Client } = require('google-auth-library');
+const jwt = require('jsonwebtoken');
 
 const routes = new Router();
 
 routes.use(bodyParser.json());
+
+const { JWT_SECRET } = process.env;
+
+function getUser(req) {
+  const token = req.cookies.jwt;
+  if (!token) {
+    return { signedIn: false };
+  }
+
+  try {
+    const credentials = jwt.verify(token, JWT_SECRET);
+    return credentials;
+  } catch (error) {
+    return { signedIn: false };
+  }
+}
 
 routes.post('/signin', async (req, res) => {
   const googleToken = req.body.google_token;
@@ -24,6 +41,14 @@ routes.post('/signin', async (req, res) => {
   const credentials = {
     signedIn: true, username, name, email,
   };
+  const token = jwt.sign(credentials, JWT_SECRET);
+  res.cookie('jwt', token, { httpOnly: true });
+
   res.json(credentials);
 });
+
+routes.post('/user', (req, res) => {
+  res.send(getUser(req));
+});
+
 module.exports = { routes };
