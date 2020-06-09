@@ -18,7 +18,7 @@ export default class SignInItem extends React.Component {
     this.signIn = this.signIn.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const clientId = window.ENV.GOOGLE_CLIENT_ID;
     if (!clientId) {
       return;
@@ -30,6 +30,19 @@ export default class SignInItem extends React.Component {
         });
       }
     });
+    await this.read();
+  }
+
+  async read() {
+    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+    const response = await fetch(`${apiEndpoint}/user`, {
+      method: 'POST',
+    });
+    const body = await response.text();
+    const result = JSON.parse(body);
+    const { signedIn, username } = result;
+    this.setState({ user: { signedIn, username}});
+
   }
 
   async signIn() {
@@ -39,9 +52,8 @@ export default class SignInItem extends React.Component {
     try {
       const auth2 = window.gapi.auth2.getAuthInstance();
       const googleUser = await auth2.signIn();
-      googleToken = googleUser.getAuthResponse.id_token;
+      googleToken = googleUser.getAuthResponse().id_token;
     } catch (e) {
-      alert(e);
       alert(`Error authenticating with Google: ${e}`);
     }
 
@@ -52,12 +64,16 @@ export default class SignInItem extends React.Component {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ google_token: googleToken }),
       });
-      const body = await response.text();
 
+      const body = await response.text();
       const result = JSON.parse(body);
+
+      console.log('result');
+      console.log(result);
+      
       const { signedIn, givenName: username } = result;
       
-      `this.setState({ signedIn, username });
+      this.setState({ signedIn, username });
       alert(`Succesfull log in ${body}`);
     } catch (error) {
       alert(`Error signing into the app: ${error}`);
