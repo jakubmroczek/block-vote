@@ -42,7 +42,6 @@ export default class SignInItem extends React.Component {
     const result = JSON.parse(body);
     const { signedIn, username } = result;
     this.setState({ user: { signedIn, username}});
-
   }
 
   async signIn() {
@@ -80,8 +79,19 @@ export default class SignInItem extends React.Component {
     }
   }
 
-  signOut() {
-    this.setState({ signedIn: false });
+  async signOut() {
+    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
+
+    try { 
+      await fetch(`${apiEndpoint}/signout`, {
+        method: 'POST',
+      });
+      const auth2 = window.gapi.auth2.getAuthInstance();
+      await auth2.signOut();
+      this.setState({ user: { signedIn: false, usrename: ''}})
+    } catch (error) {
+      alert(`Error signing out ${error}`);
+    }
   }
 
   showModal() {

@@ -1,30 +1,39 @@
 require('dotenv').config();
 const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
+const { mustBeSignedIn } = require('./auth.js');
 
 const user = require('./user.js');
 const election = require('./election.js');
 const mailService = require('./mail_service.js');
+const auth = require('./auth.js');
+
+
+function getContext({ req }) {
+  const apiUser = auth.getUser(req);
+  return { apiUser };
+}
 
 const resolvers = {
   Query: {
-    getUser: user.get,
+    getUser: mustBeSignedIn(user.get),
 
-    getElection: election.get,
-    listElection: election.list,
+    getElection: mustBeSignedIn(election.get),
+    listElection: mustBeSignedIn(election.list),
 
-    sendRegisterPublicKeysMail: mailService.sendRegisterKeyMail,
+    sendRegisterPublicKeysMail: mustBeSignedIn(mailService.sendRegisterKeyMail),
   },
   Mutation: {
-    createElection: election.create,
-    updateElection: election.update,
-    removeElection: election.remove,
+    createElection: mustBeSignedIn(election.create),
+    updateElection: mustBeSignedIn(election.update),
+    removeElection: mustBeSignedIn(election.remove),
   },
 };
 
 const server = new ApolloServer({
   typeDefs: fs.readFileSync('./schema.graphql', 'utf-8'),
   resolvers,
+  context: getContext,
   formatError: (error) => {
     console.log(error);
     return error;
