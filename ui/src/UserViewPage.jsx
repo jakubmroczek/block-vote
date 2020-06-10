@@ -3,6 +3,7 @@ import {
   Navbar, Nav, Button,
 } from 'react-bootstrap';
 import UserViewContents from './UserViewContents.jsx';
+import UserContext from './UserContext.js';
 
 function NavBar({ user, onUserChange }) {
   return (
@@ -51,7 +52,9 @@ export default class UserViewPage extends React.Component {
     return (
       <div>
         <NavBar user={user} onUserChange={this.onUserChange} />
-        <UserViewContents />
+        <UserContext.Provider value={user}>
+          <UserViewContents />
+        </UserContext.Provider>
       </div>
     );
   }
