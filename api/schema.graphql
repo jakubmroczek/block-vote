@@ -61,5 +61,5 @@ type Mutation {
     updateElection(id: ID!, changes: ElectionUpdateInputs!) : Election!
     removeElection(id: ID!) : Boolean!
 
-    registerPublicKey(secretToken: String!, publicKey: String!) : Boolean!
+    registerPublicKey(electionID: ID!, secretToken: String!, publicKey: String!) : Boolean!
 }
