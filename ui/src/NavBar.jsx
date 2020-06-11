@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Navbar, Nav, Button,
 } from 'react-bootstrap';
+import UserContext from './UserContext.js';
 
 // TODO: Rename me
 class LogOutButton extends React.Component {
@@ -72,6 +73,8 @@ export default class NavBar extends React.Component {
   }
 
   render() {
+    const user = this.context;
+        
     return (
       <Navbar bg="light" expand="lg">
         <Navbar.Brand href="#home">BlockVote</Navbar.Brand>
@@ -80,7 +83,7 @@ export default class NavBar extends React.Component {
           <Navbar.Text>
             Signed in as:
             {' '}
-            {/* {user.username} */}
+            {user.username}
           </Navbar.Text>
           <Nav className="mr-auto">
             <LogOutButton onUserChange={this.onUserChange} />
@@ -90,3 +93,5 @@ export default class NavBar extends React.Component {
     );
   }
 }
+
+NavBar.contextType = UserContext;

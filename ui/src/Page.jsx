@@ -27,6 +27,9 @@ export default class Page extends React.Component {
 
   render() {
     const { user } = this.state;
+    
+    console.log('random user');
+    console.log(user);
 
     if (user.signedIn) {
       return (
