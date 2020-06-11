@@ -4,6 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { withRouter } from 'react-router-dom';
 import graphQLFetch from './graphQLFetch.js';
 
+import UserContext from './UserContext.js';
 
 const EditElectionInfo = withRouter(({ id, location: { search } }) => {
   const editLocation = { pathname: `/panel/edit/${id}`, search };
@@ -21,9 +22,8 @@ const EditElectionInfo = withRouter(({ id, location: { search } }) => {
 export default class UserPanel extends React.Component {
   constructor() {
     super();
-    // TODO: Pass this from the SingIn compnent
+  
     this.state = {
-      username: 'jakubmroczek2@gmail.com',
       elections: [],
       election: undefined,
     };
@@ -34,6 +34,9 @@ export default class UserPanel extends React.Component {
   }
 
   async read() {
+    const user = this.context;
+    const { username } = user;
+
     const query = `query listElection($username: String!) {
             listElection(username: $username) {
                 _id
@@ -49,7 +52,6 @@ export default class UserPanel extends React.Component {
             }
         }`;
 
-    const { username } = this.state;
     const vars = { username };
 
     const response = await graphQLFetch(query, vars);
@@ -116,3 +118,5 @@ export default class UserPanel extends React.Component {
     );
   }
 }
+
+UserPanel.contextType = UserContext;

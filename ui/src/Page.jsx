@@ -1,32 +1,48 @@
 import React from 'react';
-// import {
-// Navbar, Nav, NavItem, OverlayTrigger,
-// NavDropdown, MenuItem, Tooltip,
-// } from 'react-bootstrap';
-import {
-  Navbar, Nav, NavDropdown, Form, FormControl, Button,
-} from 'react-bootstrap';
+import { Switch, Route } from 'react-router-dom';
+import UserContext from './UserContext.js';
 import Contents from './Contents.jsx';
+import Welcome from './Welcome.jsx';
+import VotingdApp from './VotingdApp.jsx';
 
-function NavBar() {
+function NotFound() {
   return (
-    <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="#home">BlockVote</Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
-          <Button variant="outline-success">Log out</Button>
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
+    <h1>Page not found</h1>
   );
 }
 
-export default function Page() {
-  return (
-    <div>
-      <NavBar />
-      <Contents />
-    </div>
-  );
+export default class Page extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      user: { signedIn: false, username: '' },
+    };
+
+    this.onUserChange = this.onUserChange.bind(this);
+  }
+
+  onUserChange(user) {
+    this.setState({ user });
+  }
+
+  render() {
+    const { user } = this.state;
+
+    if (user.signedIn) {
+      return (
+        <>
+          <UserContext.Provider value={user}>
+            <Contents onUserChange={this.onUserChange} />
+          </UserContext.Provider>
+        </>
+      );
+    }
+    return (
+      <Switch>
+        <Route exact path="/" render={props => <Welcome {...props} onUserChange={this.onUserChange} />} />
+        <Route path="/vote" component={VotingdApp} />
+        <Route component={NotFound} />
+      </Switch>
+    );
+  }
 }
