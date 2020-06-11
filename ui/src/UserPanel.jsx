@@ -19,6 +19,31 @@ const EditElectionInfo = withRouter(({ id, location: { search } }) => {
   );
 });
 
+function CreateElectionItem({ onElectionCreated }) {
+  const createElection = async () => {
+    const query = `mutation {
+      createElection {
+        _id
+        status
+      }
+    }`;
+
+    const response = await graphQLFetch(query);
+    if (response) {
+      onElectionCreated();
+    } else {
+      alert('Could not create the Election');
+    }
+  };
+
+  return (
+    <>
+      <h1>You have no election here mate!</h1>
+      <Button onClick={createElection}>Create one!</Button>
+    </>
+  );
+}
+
 export default class UserPanel extends React.Component {
   constructor() {
     super();
@@ -26,6 +51,8 @@ export default class UserPanel extends React.Component {
     this.state = {
       election: undefined,
     };
+
+    this.read = this.read.bind(this);
   }
 
   componentDidMount() {
@@ -33,33 +60,30 @@ export default class UserPanel extends React.Component {
   }
 
   async read() {
-    const user = this.context;
-    const { username } = user;
+    const query = `query {
+      listElection {
+        _id
+        status
+        title
+        candidates {
+          name 
+            surname
+        }
+        participants {
+            email
+        }
+      }
+    }`;
 
-    const query = `query listElection($username: String!) {
-            listElection(username: $username) {
-                _id
-                status
-                title
-                candidates {
-                    name 
-                    surname
-                }
-                participants {
-                    email
-                }
-            }
-        }`;
-
-    const vars = { username };
-
-    const response = await graphQLFetch(query, vars);
+    const response = await graphQLFetch(query);
 
     if (response && response.listElection.length >= 1) {
       this.setState({
         election: response.listElection[0],
       });
     } else {
+      const user = this.context;
+      const { username } = user;
       alert(`Could not fetch Elections for the user ${username}`);
     }
   }
@@ -69,9 +93,7 @@ export default class UserPanel extends React.Component {
 
     if (election === undefined) {
       return (
-        <div>
-          <h1>You have no election here mate! Create one!</h1>
-        </div>
+        <CreateElectionItem onElectionCreated={this.read} />
       );
     }
 

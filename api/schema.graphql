@@ -31,11 +31,6 @@ type Election {
     participants: [Participant!]!
 }
 
-type User {
-    username: String!
-    elections: [ID!]!
-}
-
 input CandidateInputs {
     name: String!
     surname: String!
@@ -55,16 +50,14 @@ input ParticipantUpdateInputs {
 }
 
 type Query {
-    getUser(username: String!) : User
-
     getElection(id: ID!) : Election
-    listElection(username: String!) : [Election!]!
+    listElection : [Election!]!
 
     sendRegisterPublicKeysMail(to: [String!]!): Boolean!
 }
 
 type Mutation {
-    createElection(username: String!) : Election!
+    createElection : Election!
     updateElection(id: ID!, changes: ElectionUpdateInputs!) : Election!
-    removeElection(username: String!, id: ID!) : Boolean!
+    removeElection(id: ID!) : Boolean!
 }
