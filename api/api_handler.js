@@ -9,8 +9,8 @@ const mailService = require('./mail_service.js');
 const auth = require('./auth.js');
 
 function getContext({ req }) {
-  const apiUser = auth.getUser(req);
-  return { apiUser };
+  const user = auth.getUser(req);
+  return { user };
 }
 
 const resolvers = {
