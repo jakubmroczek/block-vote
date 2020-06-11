@@ -15,7 +15,7 @@ export default class ElectionTitleForm extends React.Component {
 
   componentDidMount() {
     this.read();
-  } 
+  }
 
   onChange(event) {
     this.setState({ title: event.target.value });

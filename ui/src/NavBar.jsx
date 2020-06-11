@@ -74,7 +74,7 @@ export default class NavBar extends React.Component {
 
   render() {
     const user = this.context;
-        
+
     return (
       <Navbar bg="light" expand="lg">
         <Navbar.Brand href="#home">BlockVote</Navbar.Brand>

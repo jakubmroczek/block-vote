@@ -23,7 +23,7 @@ export default class Welcome extends React.Component {
     super();
     this.onSucessfulSignIn = this.onSucessfulSignIn.bind(this);
   }
-  
+
   onSucessfulSignIn(user) {
     const { history, onUserChange } = this.props;
     onUserChange(user);

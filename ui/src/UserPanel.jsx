@@ -22,7 +22,7 @@ const EditElectionInfo = withRouter(({ id, location: { search } }) => {
 export default class UserPanel extends React.Component {
   constructor() {
     super();
-  
+
     this.state = {
       elections: [],
       election: undefined,

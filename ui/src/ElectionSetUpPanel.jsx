@@ -20,7 +20,7 @@ export default class ElectionSetUpPanel extends React.Component {
 
   render() {
     const { id } = this.state;
-    
+
     return (
       <>
         <ElectionTitleForm id={id} />

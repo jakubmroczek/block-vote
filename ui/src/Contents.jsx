@@ -14,7 +14,7 @@ const NotFound = () => <h1>Page Not Found</h1>;
 export default function Contents({ onUserChange }) {
   return (
     <>
-      <Route path="/" render={props => <NavBar {...props} onUserChange={onUserChange} /> } />
+      <Route path="/" render={props => <NavBar {...props} onUserChange={onUserChange} />} />
       <Switch>
         <Route exact path="/" component={Welcome} />
         <Route path="/vote" component={VotingdApp} />

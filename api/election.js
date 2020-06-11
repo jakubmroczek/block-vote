@@ -20,7 +20,7 @@ async function create(_, {}, { user }) {
   return savedElection;
 }
 
-async function list(_, {}, { user}) {
+async function list(_, {}, { user }) {
   const db = getDb();
   const { username } = user;
   const dbUser = await db.collection('users').findOne({ username });
