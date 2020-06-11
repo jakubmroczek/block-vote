@@ -11,7 +11,9 @@
     "#watch": "Compile, and recompile on any changes.",
     "watch": "webpack --watch",
     "#lint": "Runs ESLint on all relevant files",
-    "lint": "eslint . --ext js,jsx --ignore-pattern public"
+    "lint": "eslint . --ext js,jsx --ignore-pattern public",
+    "#lint-fix": "Runs ESLint on all relevant files with auto-fixing",
+    "lint-fix": "eslint . --ext js,jsx --ignore-pattern public --fix"
   },
   "repository": {
     "type": "git",
