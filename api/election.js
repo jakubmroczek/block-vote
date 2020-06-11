@@ -3,8 +3,9 @@ const { getDb } = require('./db.js');
 
 const COLLECTION = 'elections';
 
-async function create(_, { username }) {
+async function create(_, {}, { user }) {
   const db = getDb();
+  const { username } = user;
 
   const election = {
     status: 'New',
@@ -19,10 +20,11 @@ async function create(_, { username }) {
   return savedElection;
 }
 
-async function list(_, { username }) {
+async function list(_, {}, { user}) {
   const db = getDb();
-  const user = await db.collection('users').findOne({ username });
-  const electionIDs = user.elections;
+  const { username } = user;
+  const dbUser = await db.collection('users').findOne({ username });
+  const electionIDs = dbUser.elections;
   const elections = await db.collection(COLLECTION).find({ _id: { $in: electionIDs } }).toArray();
   return elections;
 }
@@ -46,8 +48,9 @@ async function update(_, { id, changes }) {
   return savedElection;
 }
 
-async function remove(_, { username, id }) {
+async function remove(_, { id }, { user }) {
   const db = getDb();
+  const { username } = user;
   const filter = { _id: mongo.ObjectID(id) };
   const result = await db.collection(COLLECTION).removeOne(filter);
   await db.collection('users').updateOne(

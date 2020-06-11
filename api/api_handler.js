@@ -10,6 +10,9 @@ const auth = require('./auth.js');
 
 function getContext({ req }) {
   const user = auth.getUser(req);
+  // TODO: Fix this username mismatch
+  const { email } = user;
+  user.username = email;
   return { user };
 }
 
