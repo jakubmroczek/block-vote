@@ -3,13 +3,11 @@ const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
 const { mustBeSignedIn } = require('./auth.js');
 
-const user = require('./user.js');
 const election = require('./election.js');
 const mailService = require('./mail_service.js');
 const auth = require('./auth.js');
 
 function getContext({ req }) {
-  // eslint-disable-next-line no-shadow
   const user = auth.getUser(req);
   // TODO: Fix this username mismatch
   const { email } = user;
@@ -19,8 +17,6 @@ function getContext({ req }) {
 
 const resolvers = {
   Query: {
-    getUser: mustBeSignedIn(user.get),
-
     getElection: mustBeSignedIn(election.get),
     listElection: mustBeSignedIn(election.list),
 

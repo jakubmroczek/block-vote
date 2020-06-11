@@ -31,11 +31,6 @@ type Election {
     participants: [Participant!]!
 }
 
-type User {
-    username: String!
-    elections: [ID!]!
-}
-
 input CandidateInputs {
     name: String!
     surname: String!
@@ -55,8 +50,6 @@ input ParticipantUpdateInputs {
 }
 
 type Query {
-    getUser : User
-
     getElection(id: ID!) : Election
     listElection : [Election!]!
 
