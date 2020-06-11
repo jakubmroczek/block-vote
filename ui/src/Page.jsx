@@ -1,12 +1,9 @@
 import React from 'react';
-// import {
-// Navbar, Nav, NavItem, OverlayTrigger,
-// NavDropdown, MenuItem, Tooltip,
-// } from 'react-bootstrap';
 import {
-  Navbar, Nav, NavDropdown, Form, FormControl, Button,
+  Navbar, Nav, Button,
 } from 'react-bootstrap';
-import Contents from './AppContents.jsx';
+import UserContext from './UserContext.js';
+import Contents from './Contents.jsx';
 
 function NavBar() {
   return (
@@ -22,11 +19,31 @@ function NavBar() {
   );
 }
 
-export default function Page() {
-  return (
-    <div>
-      <NavBar />
-      <Contents />
-    </div>
-  );
+export default class Page extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      user: { signedIn: false, username: '' },
+    };
+  }
+
+  render() {
+    const { user } = this.state;
+
+    if (user.signedIn) {
+      return (
+        <>
+          <NavBar />
+          <UserContext.Provider value={user}>
+            <Contents />
+          </UserContext.Provider>
+        </>
+      );
+    }
+    return (
+      <>
+        <Contents />
+      </>
+    );
+  }
 }

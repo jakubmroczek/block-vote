@@ -65,7 +65,7 @@ function NavBar({ user, onLogOut }) {
         <Navbar.Text>
           Signed in as:
           {' '}
-          {user.username}
+          {/* {user.username} */}
         </Navbar.Text>
         <Nav className="mr-auto">
           <LogOutButton onLogOut={onLogOut} />
@@ -78,7 +78,9 @@ function NavBar({ user, onLogOut }) {
 export default class UserViewPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { user: { signedId: false } };
+    this.state = {
+      user: this.props.user,
+    }
 
     this.onUserChange = this.onUserChange.bind(this);
     this.onLogOut = this.onLogOut.bind(this);
@@ -105,7 +107,6 @@ export default class UserViewPage extends React.Component {
   }
 
   render() {
-    const {history} = this.props;
     const { user } = this.state;
 
   return (

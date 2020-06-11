@@ -3,13 +3,13 @@ import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import AppContents from './AppContents.jsx';
+import Page from './Page.jsx';
 
 /* eslint "react/react-in-jsx-scope": "off" */
 
 const element = (
   <Router>
-    <AppContents />
+    <Page />
   </Router>
 );
 
