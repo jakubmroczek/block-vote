@@ -13,7 +13,6 @@ export default class SignInItem extends React.Component {
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
-    this.signOut = this.signOut.bind(this);
     this.signIn = this.signIn.bind(this);
   }
 
@@ -76,21 +75,6 @@ export default class SignInItem extends React.Component {
 
     } catch (error) {
       alert(`Error signing into the app: ${error}`);
-    }
-  }
-
-  async signOut() {
-    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
-
-    try { 
-      await fetch(`${apiEndpoint}/signout`, {
-        method: 'POST',
-      });
-      const auth2 = window.gapi.auth2.getAuthInstance();
-      await auth2.signOut();
-      this.setState({ user: { signedIn: false, usrename: ''}})
-    } catch (error) {
-      alert(`Error signing out ${error}`);
     }
   }
 
