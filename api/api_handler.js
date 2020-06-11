@@ -9,6 +9,7 @@ const mailService = require('./mail_service.js');
 const auth = require('./auth.js');
 
 function getContext({ req }) {
+  // eslint-disable-next-line no-shadow
   const user = auth.getUser(req);
   // TODO: Fix this username mismatch
   const { email } = user;

@@ -24,7 +24,6 @@ export default class UserPanel extends React.Component {
     super();
 
     this.state = {
-      elections: [],
       election: undefined,
     };
   }
@@ -58,7 +57,6 @@ export default class UserPanel extends React.Component {
 
     if (response && response.listElection.length >= 1) {
       this.setState({
-        elections: response.listElection,
         election: response.listElection[0],
       });
     } else {

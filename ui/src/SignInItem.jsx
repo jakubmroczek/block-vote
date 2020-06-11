@@ -8,8 +8,6 @@ export default class SignInItem extends React.Component {
     super(props);
     this.state = {
       visible: false,
-      intialized: false,
-      user: { signedIn: false, username: undefined },
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -24,22 +22,9 @@ export default class SignInItem extends React.Component {
     window.gapi.load('auth2', () => {
       if (!window.gapi.auth2.getAuthInstance()) {
         window.gapi.auth2.init({ client_id: clientId }).then(() => {
-          this.setState({ intialized: true });
         });
       }
     });
-    await this.read();
-  }
-
-  async read() {
-    const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
-    const response = await fetch(`${apiEndpoint}/user`, {
-      method: 'POST',
-    });
-    const body = await response.text();
-    const result = JSON.parse(body);
-    const { signedIn, username } = result;
-    this.setState({ user: { signedIn, username } });
   }
 
   async signIn() {
@@ -66,8 +51,6 @@ export default class SignInItem extends React.Component {
       const result = JSON.parse(body);
 
       const { signedIn, email: username } = result;
-
-      this.setState({ signedIn, username });
 
       // TODO: Reorganize this code
       const user = { signedIn, username };

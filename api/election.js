@@ -3,7 +3,7 @@ const { getDb } = require('./db.js');
 
 const COLLECTION = 'elections';
 
-async function create(_, {}, { user }) {
+async function create(_1, _2, { user }) {
   const db = getDb();
   const { username } = user;
 
@@ -20,7 +20,7 @@ async function create(_, {}, { user }) {
   return savedElection;
 }
 
-async function list(_, {}, { user }) {
+async function list(_1, _2, { user }) {
   const db = getDb();
   const { username } = user;
   const dbUser = await db.collection('users').findOne({ username });

@@ -4,32 +4,28 @@ import {
 } from 'react-bootstrap';
 import UserContext from './UserContext.js';
 
+async function initGApi() {
+  const clientId = window.ENV.GOOGLE_CLIENT_ID;
+  if (!clientId) {
+    return;
+  }
+  window.gapi.load('auth2', () => {
+    if (!window.gapi.auth2.getAuthInstance()) {
+      window.gapi.auth2.init({ client_id: clientId }).then(() => {
+      });
+    }
+  });
+}
+
 // TODO: Rename me
 class LogOutButton extends React.Component {
   constructor() {
     super();
-    this.state = {
-      initialized: true,
-    };
     this.signOut = this.signOut.bind(this);
   }
 
-  async init() {
-    const clientId = window.ENV.GOOGLE_CLIENT_ID;
-    if (!clientId) {
-      return;
-    }
-    window.gapi.load('auth2', () => {
-      if (!window.gapi.auth2.getAuthInstance()) {
-        window.gapi.auth2.init({ client_id: clientId }).then(() => {
-          this.setState({ intialized: true });
-        });
-      }
-    });
-  }
-
   async signOut() {
-    await this.init();
+    await initGApi();
 
     const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
 
