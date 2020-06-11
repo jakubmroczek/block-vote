@@ -3,7 +3,7 @@ const { getDb } = require('./db.js');
 
 const COLLECTION = 'elections';
 
-async function create(_1, _2, { user }) {
+async function create(_, { user }) {
   const db = getDb();
   const { username } = user;
 

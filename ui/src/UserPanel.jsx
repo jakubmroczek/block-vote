@@ -33,33 +33,30 @@ export default class UserPanel extends React.Component {
   }
 
   async read() {
-    const user = this.context;
-    const { username } = user;
+    const query = `query {
+      listElection {
+        _id
+        status
+        title
+        candidates {
+            name 
+            surname
+        }
+        participants {
+            email
+        }
+      }
+    }`;
 
-    const query = `query listElection($username: String!) {
-            listElection(username: $username) {
-                _id
-                status
-                title
-                candidates {
-                    name 
-                    surname
-                }
-                participants {
-                    email
-                }
-            }
-        }`;
-
-    const vars = { username };
-
-    const response = await graphQLFetch(query, vars);
+    const response = await graphQLFetch(query);
 
     if (response && response.listElection.length >= 1) {
       this.setState({
         election: response.listElection[0],
       });
     } else {
+      const user = this.context;
+      const { username } = user;
       alert(`Could not fetch Elections for the user ${username}`);
     }
   }

@@ -55,16 +55,16 @@ input ParticipantUpdateInputs {
 }
 
 type Query {
-    getUser() : User
+    getUser(username: String!) : User
 
     getElection(id: ID!) : Election
-    listElection() : [Election!]!
+    listElection : [Election!]!
 
     sendRegisterPublicKeysMail(to: [String!]!): Boolean!
 }
 
 type Mutation {
-    createElection() : Election!
+    createElection(username: String!) : Election!
     updateElection(id: ID!, changes: ElectionUpdateInputs!) : Election!
     removeElection(id: ID!) : Boolean!
 }
