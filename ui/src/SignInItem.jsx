@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Modal, Button,
 } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 
 export default class SignInItem extends React.Component {
   constructor(props) {
@@ -70,7 +69,11 @@ export default class SignInItem extends React.Component {
       const { signedIn, givenName: username } = result;
       
       this.setState({ signedIn, username });
-      alert(`Succesfull log in ${body}`);
+      
+      // TODO: Reorganize this code
+      const { onSucessfulSignIn } = this.props;
+      onSucessfulSignIn();
+
     } catch (error) {
       alert(`Error signing into the app: ${error}`);
     }

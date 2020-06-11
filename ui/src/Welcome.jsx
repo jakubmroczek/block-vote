@@ -18,18 +18,29 @@ function Logo() {
   );
 }
 
-export default function Welcome() {
-  return (
-    <div>
-      <Logo />
+export default class Welcome extends React.Component {
+  constructor() {
+    super();
+    this.onSucessfulSignIn = this.onSucessfulSignIn.bind(this);
+  }
+  
+  onSucessfulSignIn() {
+    const { history } = this.props;
+    history.push('/panel');
+  }
 
-      <LinkContainer to="/vote">
-        <Button>
-          Vote
-        </Button>
-      </LinkContainer>
-      {' '}
-      <SignInItem />
-    </div>
-  );
+  render() {
+    return (
+      <div>
+        <Logo />
+        <LinkContainer to="/vote">
+          <Button>
+            Vote
+          </Button>
+        </LinkContainer>
+        {' '}
+        <SignInItem onSucessfulSignIn={this.onSucessfulSignIn} />
+      </div>
+    );
+  }
 }
