@@ -10,19 +10,18 @@ import ParticipantList from './ParticipantList.jsx';
 export default class ElectionSetUpPanel extends React.Component {
   constructor(props) {
     super(props);
-    
+
     const { match: { params: { electionID } } } = this.props;
 
-    // TODO: Get if from the props
     this.state = {
-      username: 'jakubmroczek',
       id: electionID,
     };
   }
 
   render() {
-    const { username, id } = this.state;
-
+    const { username } = this.props;
+    const { id } = this.state;
+    
     return (
       <>
         <ElectionTitleForm username={username} id={id} />
