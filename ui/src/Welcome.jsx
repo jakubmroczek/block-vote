@@ -24,8 +24,9 @@ export default class Welcome extends React.Component {
     this.onSucessfulSignIn = this.onSucessfulSignIn.bind(this);
   }
   
-  onSucessfulSignIn() {
-    const { history } = this.props;
+  onSucessfulSignIn(user) {
+    const { history, onUserChange } = this.props;
+    onUserChange(user);
     history.push('/panel');
   }
 

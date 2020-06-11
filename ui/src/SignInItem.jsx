@@ -39,7 +39,7 @@ export default class SignInItem extends React.Component {
     const body = await response.text();
     const result = JSON.parse(body);
     const { signedIn, username } = result;
-    this.setState({ user: { signedIn, username}});
+    this.setState({ user: { signedIn, username } });
   }
 
   async signIn() {
@@ -64,15 +64,15 @@ export default class SignInItem extends React.Component {
 
       const body = await response.text();
       const result = JSON.parse(body);
-      
-      const { signedIn, givenName: username } = result;
-      
-      this.setState({ signedIn, username });
-      
-      // TODO: Reorganize this code
-      const { onSucessfulSignIn } = this.props;
-      onSucessfulSignIn();
 
+      const { signedIn, givenName: username } = result;
+
+      this.setState({ signedIn, username });
+
+      // TODO: Reorganize this code
+      const user = { signedIn, username };
+      const { onSucessfulSignIn } = this.props;
+      onSucessfulSignIn(user);
     } catch (error) {
       alert(`Error signing into the app: ${error}`);
     }
