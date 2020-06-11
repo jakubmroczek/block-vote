@@ -18,7 +18,7 @@ async function fetchParticipants() {
 
 // TODO: Code duplication like in  the CandidateList (participants)
 async function sendRegisterPublicKeyMail(to) {
-    const query = `query sendRegisterPublicKeysMail($to: [String!]!) {
+  const query = `query sendRegisterPublicKeysMail($to: [String!]!) {
     sendRegisterPublicKeysMail(to: $to) 
   }`;
 

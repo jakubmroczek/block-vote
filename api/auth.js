@@ -31,7 +31,7 @@ function mustBeSignedIn(resolver) {
       throw new AuthenticationError('You must be signed in');
     }
     return resolver(root, args, { user });
-  }
+  };
 }
 
 routes.post('/signin', async (req, res) => {
