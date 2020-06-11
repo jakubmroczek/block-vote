@@ -57,7 +57,7 @@ type Query {
 }
 
 type Mutation {
-    createElection(username: String!) : Election!
+    createElection : Election!
     updateElection(id: ID!, changes: ElectionUpdateInputs!) : Election!
     removeElection(id: ID!) : Boolean!
 }
