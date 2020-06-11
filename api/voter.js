@@ -15,7 +15,6 @@ function getParticipant(electionDB, secretToken) {
 
   const participant = participants.find(p => p.secretToken === secretToken);
 
-  // TODO: What if is undefined
   return participant;
 }
 
@@ -27,27 +26,38 @@ async function verifySecretToken(electionID, secretToken) {
   // Find participant having the secretToken
   const participant = getParticipant(electionDB, secretToken);
 
+  if (participant === undefined) {
+    return false;
+  }
+
   // Check if participant is registered
   return isRegistered(participant) && secretTokenMatches(participant, secretToken);
 }
 
 // TODO: Change name or move to the election.js
-function tryRegisterPublicKey(electionID, publicKey) {
+async function tryRegisterPublicKey(electionID, secretToken, publicKey) {
   // Read election
+  const id = electionID;
+  const electionDB = await election.get({}, { id });
 
-  // Find particpant
+  // Find participant having the secretToken
+  // Must exists
+  const participant = getParticipant(electionDB, secretToken);
 
+  // !!! Update participant and merge they with those from the databse
   // Mark participatn as registered
-
   // Insert public key
+  const changes = nullptr; 
+  
+    //   TODO: How to check if it was succesful?
+   await election.update({}, { id ,changes } ); 
 
-  // return success
   return false;
 }
 
 function registerPublicKey(_, { electionID, secretToken, publicKey }) {
   return verifySecretToken(electionID, secretToken)
-            && tryRegisterPublicKey(electionID, publicKey);
+            && tryRegisterPublicKey(electionID, secretToken, publicKey);
 }
 
 module.exports = { registerPublicKey };
