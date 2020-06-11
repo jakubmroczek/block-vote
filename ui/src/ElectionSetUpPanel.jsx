@@ -19,16 +19,15 @@ export default class ElectionSetUpPanel extends React.Component {
   }
 
   render() {
-    const { username } = this.props;
     const { id } = this.state;
     
     return (
       <>
-        <ElectionTitleForm username={username} id={id} />
+        <ElectionTitleForm id={id} />
         <hr />
-        <CandidateList username={username} id={id} />
+        <CandidateList id={id} />
         <hr />
-        <ParticipantList username={username} id={id} />
+        <ParticipantList id={id} />
         <hr />
         <LinkContainer to="/panel/lobby">
           <Button>Next (make your voters register public keys)</Button>
