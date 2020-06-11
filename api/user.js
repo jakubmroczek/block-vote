@@ -2,11 +2,12 @@ const { getDb } = require('./db.js');
 
 const COLLECTION = 'users';
 
-async function get(_, { username }) {
+async function get(_1, _2, { user }) {
   const db = getDb();
+  const { username } = user;
   const filter = { username };
-  const user = await db.collection(COLLECTION).findOne(filter);
-  return user;
+  const userDB = await db.collection(COLLECTION).findOne(filter);
+  return userDB;
 }
 
 module.exports = {

@@ -55,7 +55,7 @@ input ParticipantUpdateInputs {
 }
 
 type Query {
-    getUser(username: String!) : User
+    getUser : User
 
     getElection(id: ID!) : Election
     listElection : [Election!]!
