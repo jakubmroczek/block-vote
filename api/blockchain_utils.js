@@ -8,28 +8,17 @@ function electionSmartContractTemplate() {
 }
 
 function format(template, election) {
-  // Register public key signature
-  // One param public key - provided as bytes, string without apostophe
   const registerNewVoterSignature = 'registerNewVoter(%s);';
-  // Add candidate signature
-  // 2 args - String, String
   const addNewCandidateSignature = 'addNewCandidate(\"%s\",\"%s\");';
-
-  // Generate add candidate signature
-  //   const addNewCandidateCalls = addNewCandidateSignature.map();
+  
   const { candidates } = election;
   const addNewCandidateCalls = candidates.map(c => util.format(addNewCandidateSignature, c.name, c.surname)).join('\n');
 
-  // Generate public keys method calls
-  //   const registerMethodCalls = registerNewVoterSignature.map();
   const { publicKeys } = election;
   const registerMethodCalls = publicKeys.map(pk => util.format(registerNewVoterSignature, pk)).join('\n');
 
-  // We must format the template here
   const smartContract = util.format(template, addNewCandidateCalls, registerMethodCalls);
-
-  console.log(smartContract);
-
+  
   return smartContract;
 }
 
