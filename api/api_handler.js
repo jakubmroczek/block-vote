@@ -29,6 +29,8 @@ const resolvers = {
     removeElection: mustBeSignedIn(election.remove),
 
     registerPublicKey: voter.registerPublicKey,
+
+    setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(election.setElectionInPublicKeyRegisterationStage),
   },
 };
 
