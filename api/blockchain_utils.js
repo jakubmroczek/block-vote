@@ -2,16 +2,34 @@ const solc = require('solc');
 const fs = require('fs');
 const path = require('path');
 
+function electionSmartContractTemplate() {
+  return fs.readFileSync(path.resolve(__dirname, 'contracts', 'Election.template.sol'), 'utf8');
+}
+
+function format(template, election) {
+  return template;
+}
+
+function generateElectionSmartContract(election) {
+  const template = electionSmartContractTemplate();
+  return format(template, election);
+}
+
 // Compiles the eleciton with the solc and returns the JSON bytecodes
 function compile(election) {
   // TODO: Format the election template
-  
-  const content = fs.readFileSync(path.resolve(__dirname, 'contracts', 'Election.sol'), 'utf8');
+
+  const electionSmartContract = generateElectionSmartContract(election);
+
+  console.log('Formatted smart contract');
+  console.log(electionSmartContract);
+
+
   const input = {
     language: 'Solidity',
     sources: {
       'Election.sol': {
-        content,
+        content: electionSmartContract,
       },
     },
     settings: {
@@ -27,8 +45,7 @@ function compile(election) {
 
   console.log('Output is');
   console.log(output);
-  
-  
+
 
   // `output` here contains the JSON output as specified in the documentation
   for (const contractName in output.contracts['Election.sol']) {

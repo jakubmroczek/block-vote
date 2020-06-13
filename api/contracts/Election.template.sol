@@ -1,6 +1,6 @@
 pragma solidity ^0.6.9;
 
-// TODO: What it is?
+// TODO: Check if I can delete it
 pragma experimental ABIEncoderV2;
 
 contract Election {
@@ -66,16 +66,11 @@ contract Election {
     m_owner = msg.sender;
     m_electionTitle = electionTitle;
 
-    //TODO: Delete this when the second component will be ready
-    addNewCandidate("Bill", "Doe");
-    addNewCandidate("Steve", "West");
-    addNewCandidate("George", "Sander");
-    addNewCandidate("Mathew", "Allen");
-    addNewCandidate("Charles", "Hogan");
-    addNewCandidate("Peter", "Gates");                                                                                                                              
+    // Substituted with data from database in the compilatin process.
+    ${registerCandidates}
 
-    registerNewVoter(0x6bbe6b9946B280a633Bc424BdA575132E95d1695);
-    // registerNewVoter(0xf545863518f84d372C93e170abCB2490946059b3);
+    // Substitute with data from database in the compilatin process.
+    ${registerVoters}
   }
 
   //TODO: Change to addCandidate
