@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.6.9;
 
 // TODO: What it is?
 pragma experimental ABIEncoderV2;

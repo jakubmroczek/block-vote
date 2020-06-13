@@ -25,12 +25,17 @@ function compile(election) {
 
   const output = JSON.parse(solc.compile(JSON.stringify(input)));
 
+  console.log('Output is');
+  console.log(output);
+  
+  
+
   // `output` here contains the JSON output as specified in the documentation
-  for (const contractName in output.contracts['test.sol']) {
+  for (const contractName in output.contracts['Election.sol']) {
     console.log(
       `${contractName
       }: ${
-        output.contracts['test.sol'][contractName].evm.bytecode.object}`,
+        output.contracts['Election.sol'][contractName].evm.bytecode.object}`,
     );
   }
 
