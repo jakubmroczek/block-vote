@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { withRouter } from 'react-router-dom';
 import graphQLFetch from './graphQLFetch.js';
-
+import ElectionLobby from './ElectionLobby.jsx';
 import UserContext from './UserContext.js';
 
 const EditElectionInfo = withRouter(({ id, location: { search } }) => {
@@ -106,9 +106,7 @@ export default class UserPanel extends React.Component {
 
     if (election.status === 'PublicKeyRegistration') {
       return (
-        <div>
-          <h1>Waiting for the users to register</h1>
-        </div>
+        <ElectionLobby id={id} />
       );
     }
 

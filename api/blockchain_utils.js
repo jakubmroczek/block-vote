@@ -1,0 +1,55 @@
+const solc = require('solc');
+const fs = require('fs');
+const path = require('path');
+const util = require('util');
+
+function electionSmartContractTemplate() {
+  return fs.readFileSync(path.resolve(__dirname, 'contracts', 'Election.template.sol'), 'utf8');
+}
+
+function format(template, election) {
+  const registerNewVoterSignature = 'registerNewVoter(0x%s);';
+  const addNewCandidateSignature = 'addNewCandidate(\"%s\",\"%s\");';
+  
+  const { candidates } = election;
+  const addNewCandidateCalls = candidates.map(c => util.format(addNewCandidateSignature, c.name, c.surname)).join('\n');
+
+  const { publicKeys } = election;
+  const registerMethodCalls = publicKeys.map(pk => util.format(registerNewVoterSignature, pk)).join('\n');
+
+  const smartContract = util.format(template, addNewCandidateCalls, registerMethodCalls);
+
+  return smartContract;
+}
+
+function generateElectionSmartContract(election) {
+  const template = electionSmartContractTemplate();
+  return format(template, election);
+}
+
+
+// Compiles the eleciton with the solc and returns the whole solc output
+function compile(election) {
+  const electionSmartContract = generateElectionSmartContract(election);
+
+  const input = {
+    language: 'Solidity',
+    sources: {
+      'Election.template.sol': {
+        content: electionSmartContract,
+      },
+    },
+    settings: {
+      outputSelection: {
+        '*': {
+          '*': ['*'],
+        },
+      },
+    },
+  };
+
+  const output = JSON.parse(solc.compile(JSON.stringify(input)));
+  return output;
+}
+
+module.exports = { compile };

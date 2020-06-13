@@ -2,6 +2,8 @@ const mongo = require('mongodb');
 const generator = require('generate-password');
 const { getDb } = require('./db.js');
 
+const blockchainUtils = require('./blockchain_utils.js');
+
 const COLLECTION = 'elections';
 
 async function create(_1, _2, { user }) {
@@ -88,6 +90,17 @@ async function setElectionInPublicKeyRegisterationStage(_, { id }) {
   return savedElection;
 }
 
+async function deployElection(_, { id }) {
+  const electionDB = await get({}, { id });
+
+  const solcOutput = blockchainUtils.compile(electionDB);
+  
+  const changes = { solcOutput };
+  const updatedElection = await update({}, { id, changes });
+
+  return updatedElection;
+}
+
 module.exports = {
-  create, list, get, update, remove, setElectionInPublicKeyRegisterationStage,
+  create, list, get, update, remove, setElectionInPublicKeyRegisterationStage, deployElection,
 };

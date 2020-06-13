@@ -11,8 +11,9 @@ export default function RegisterPublicKeyPanel(props) {
         registerPublicKey($electionID: ID!, $secretToken: String!, $publicKey: String!) {
             registerPublicKey(electionID: $electionID, secretToken: $secretToken, publicKey: $publicKey) 
     }`;
-    
+
     const response = await graphQLFetch(query, { electionID, secretToken, publicKey });
+    // TODO: Error handling
     alert(JSON.stringify(response))
   };
 
