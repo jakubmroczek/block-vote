@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const election = require('./election.js');
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
@@ -20,10 +21,12 @@ const registerKeyMailTemplate = to => ({
 });
 
 // TODO: Each user should have a unique link?
-// TODO: Each user can only send email once
-async function sendRegisterKeyMail(_, { to }) {
-  const receivers = to.join();
-  const mailOptions = registerKeyMailTemplate(receivers);
+async function sendRegisterKeyMail(_, { id }) {
+  const electionDB = await election.get({}, { id });
+  const { participants } = electionDB;
+  const emails = participants.map(p => p.email).join();
+
+  const mailOptions = registerKeyMailTemplate(emails);
   transporter.sendMail(mailOptions, (error /* info */) => {
     if (error) {
       // TOOD: Logging
