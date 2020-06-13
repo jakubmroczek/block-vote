@@ -19,6 +19,7 @@ function getContext({ req }) {
 const resolvers = {
   Query: {
     getElection: mustBeSignedIn(election.get),
+
     listElection: mustBeSignedIn(election.list),
 
     sendRegisterPublicKeysMail: mustBeSignedIn(mailService.sendRegisterKeyMail),

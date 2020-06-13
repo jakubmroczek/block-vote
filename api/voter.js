@@ -43,7 +43,7 @@ async function tryRegisterPublicKey(electionID, secretToken, publicKey) {
   // Find participant having the secretToken
   // Must exists
   const participant = getParticipant(electionDB, secretToken);
-  
+
   // TODO: Unsure if this really works
   const { participants } = electionDB;
   const newParticpant = { ...participant, publicKey };
