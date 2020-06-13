@@ -8,7 +8,7 @@ function electionSmartContractTemplate() {
 }
 
 function format(template, election) {
-  const registerNewVoterSignature = 'registerNewVoter(%s);';
+  const registerNewVoterSignature = 'registerNewVoter(0x%s);';
   const addNewCandidateSignature = 'addNewCandidate(\"%s\",\"%s\");';
   
   const { candidates } = election;
@@ -18,7 +18,7 @@ function format(template, election) {
   const registerMethodCalls = publicKeys.map(pk => util.format(registerNewVoterSignature, pk)).join('\n');
 
   const smartContract = util.format(template, addNewCandidateCalls, registerMethodCalls);
-  
+
   return smartContract;
 }
 
@@ -27,20 +27,15 @@ function generateElectionSmartContract(election) {
   return format(template, election);
 }
 
+
 // Compiles the eleciton with the solc and returns the JSON bytecodes
 function compile(election) {
-  // TODO: Format the election template
-
   const electionSmartContract = generateElectionSmartContract(election);
-
-  console.log('Formatted smart contract');
-  console.log(electionSmartContract);
-
 
   const input = {
     language: 'Solidity',
     sources: {
-      'Election.sol': {
+      'Election.template.sol': {
         content: electionSmartContract,
       },
     },
@@ -53,18 +48,19 @@ function compile(election) {
     },
   };
 
+
+
   const output = JSON.parse(solc.compile(JSON.stringify(input)));
 
-  console.log('Output is');
   console.log(output);
-
+  
 
   // `output` here contains the JSON output as specified in the documentation
-  for (const contractName in output.contracts['Election.sol']) {
+  for (const contractName in output.contracts['Election.template.sol']) {
     console.log(
       `${contractName
       }: ${
-        output.contracts['Election.sol'][contractName].evm.bytecode.object}`,
+        output.contracts['Election.template.sol'][contractName].evm.bytecode.object}`,
     );
   }
 
