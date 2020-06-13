@@ -7,6 +7,7 @@ type Candidate {
 type Participant {
     _id: ID!    
     email: String!
+    secretToken: String
 }
 
 enum Status {
@@ -53,11 +54,16 @@ type Query {
     getElection(id: ID!) : Election
     listElection : [Election!]!
 
-    sendRegisterPublicKeysMail(to: [String!]!): Boolean!
+    # id of the election 
+    sendRegisterPublicKeysMail(id: ID!): Boolean!
 }
 
 type Mutation {
     createElection : Election!
     updateElection(id: ID!, changes: ElectionUpdateInputs!) : Election!
     removeElection(id: ID!) : Boolean!
+
+    registerPublicKey(electionID: ID!, secretToken: String!, publicKey: String!) : Boolean!
+
+    setElectionIntoPublicKeyWaitingStage(id: ID!) : Election!
 }

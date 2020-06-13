@@ -6,6 +6,7 @@ const { mustBeSignedIn } = require('./auth.js');
 const election = require('./election.js');
 const mailService = require('./mail_service.js');
 const auth = require('./auth.js');
+const voter = require('./voter.js');
 
 function getContext({ req }) {
   const user = auth.getUser(req);
@@ -18,6 +19,7 @@ function getContext({ req }) {
 const resolvers = {
   Query: {
     getElection: mustBeSignedIn(election.get),
+
     listElection: mustBeSignedIn(election.list),
 
     sendRegisterPublicKeysMail: mustBeSignedIn(mailService.sendRegisterKeyMail),
@@ -26,6 +28,10 @@ const resolvers = {
     createElection: mustBeSignedIn(election.create),
     updateElection: mustBeSignedIn(election.update),
     removeElection: mustBeSignedIn(election.remove),
+
+    registerPublicKey: voter.registerPublicKey,
+
+    setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(election.setElectionInPublicKeyRegisterationStage),
   },
 };
 

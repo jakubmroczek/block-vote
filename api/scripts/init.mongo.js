@@ -42,15 +42,13 @@ const election = {
   ],
   participants: [
     {
-      email: 'small@gmail.com',
+      email: 'blockvote.bot@gmail.com',
     },
     {
-      email: 'johny@yahoo.com',
-    },
-    {
-      email: 'tuesday@outlook.com',
+      email: 'jakubmroczek2@gmail.com',
     },
   ],
+  publicKeys: [],
 };
 
 db.elections.remove({});
