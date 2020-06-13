@@ -99,7 +99,6 @@ async function deployElection(_, { id }) {
   // Update MongoDB collection with the compiled smart contract
 
   console.log(bytecode);
-  
 
   // Return the updated elections
   return { _id: "1234", title: 'smart contract'};
