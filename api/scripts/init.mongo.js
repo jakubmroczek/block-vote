@@ -48,6 +48,7 @@ const election = {
       email: 'jakubmroczek2@gmail.com',
     },
   ],
+  publicKeys: [],
 };
 
 db.elections.remove({});

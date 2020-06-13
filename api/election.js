@@ -13,6 +13,7 @@ async function create(_1, _2, { user }) {
     title: '',
     candidates: [],
     participants: [],
+    publicKeys: [],
   };
 
   const result = await db.collection(COLLECTION).insertOne(election);

@@ -44,15 +44,20 @@ async function tryRegisterPublicKey(id, secretToken, publicKey) {
   // Must exists because this method is called second
   const participant = getParticipant(electionDB, secretToken);
 
-  // TODO: Unsure if this really works
-  const { participants } = electionDB;
+  const { participants, publicKeys } = electionDB;
   const newParticpant = { ...participant, publicKey, registered: true };
   const index = participants.indexOf(participant);
   participants[index] = newParticpant;
-  const changes = { participants };
+
+  // Updating the public keys
+  publicKeys.push(publicKey);
+
+  const changes = { participants, publicKeys };
 
   //   TODO: Handle issue when the database was not handled correctly
   await election.update({}, { id, changes });
+
+  // Add to the public key public key
   return true;
 }
 
