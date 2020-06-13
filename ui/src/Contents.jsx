@@ -5,7 +5,6 @@ import Welcome from './Welcome.jsx';
 import VotingdApp from './VotingdApp.jsx';
 import ElectionSetUpPanel from './ElectionSetUpPanel.jsx';
 import ElectionLobby from './ElectionLobby.jsx';
-import RegisterKeyView from './RegisterKeyView.jsx';
 import UserPanel from './UserPanel.jsx';
 import NavBar from './NavBar.jsx';
 
@@ -21,7 +20,6 @@ export default function Contents({ onUserChange }) {
         <Route exact path="/panel" component={UserPanel} />
         <Route path="/panel/edit/:electionID" component={ElectionSetUpPanel} />
         <Route exact path="/panel/lobby" component={ElectionLobby} />
-        <Route exact path="/panel/key" component={RegisterKeyView} />
         <Route component={NotFound} />
       </Switch>
     </>

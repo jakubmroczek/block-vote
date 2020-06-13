@@ -11,7 +11,7 @@ export default function RegisterPublicKeyPanel(props) {
         registerPublicKey($electionID: ID!, $secretToken: String!, $publicKey: String!) {
             registerPublicKey(electionID: $electionID, secretToken: $secretToken, publicKey: $publicKey) 
     }`;
-
+    
     const response = await graphQLFetch(query, { electionID, secretToken, publicKey });
     alert(JSON.stringify(response))
   };
@@ -27,7 +27,7 @@ export default function RegisterPublicKeyPanel(props) {
 
     const { secretToken, publicKey } = credentials;
 
-    await register(electionID, secretToken, publicKey);
+    await register(secretToken, publicKey);
   };
 
   return (

@@ -6,7 +6,12 @@ function secretTokenMatches(participant, secretToken) {
 }
 
 function isRegistered(participant) {
-  return participant.isRegistered;
+  // TODO: Fix this, this field should be present just when the participant is created
+  const { registered } = participant;
+  if (registered === undefined) {
+    return false;
+  }
+  return registered;
 }
 
 // TODO: Better name than electionDB
@@ -27,8 +32,7 @@ async function verifySecretToken(id, secretToken) {
     return false;
   }
 
-  // Check if participant is registered
-  return isRegistered(participant) && secretTokenMatches(participant, secretToken);
+  return !isRegistered(participant) && secretTokenMatches(participant, secretToken);
 }
 
 // TODO: Change name or move to the election.js
