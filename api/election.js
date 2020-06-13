@@ -2,6 +2,8 @@ const mongo = require('mongodb');
 const generator = require('generate-password');
 const { getDb } = require('./db.js');
 
+const blockchainUtils = require('./blockchain_utils.js');
+
 const COLLECTION = 'elections';
 
 async function create(_1, _2, { user }) {
@@ -88,8 +90,18 @@ async function setElectionInPublicKeyRegisterationStage(_, { id }) {
   return savedElection;
 }
 
-async function deployElection() {
-  console.log('compiling smart contract');
+async function deployElection(_, { id }) {
+  // Get election
+  const electionDB = await get({}, { id });
+
+  // Compile
+  const bytecode = blockchainUtils.compile(electionDB);
+  // Update MongoDB collection with the compiled smart contract
+
+  console.log(bytecode);
+  
+
+  // Return the updated elections
   return { _id: "1234", title: 'smart contract'};
 }
 
