@@ -28,7 +28,7 @@ function generateElectionSmartContract(election) {
 }
 
 
-// Compiles the eleciton with the solc and returns the JSON bytecodes
+// Compiles the eleciton with the solc and returns the whole solc output
 function compile(election) {
   const electionSmartContract = generateElectionSmartContract(election);
 
@@ -48,25 +48,8 @@ function compile(election) {
     },
   };
 
-
-
   const output = JSON.parse(solc.compile(JSON.stringify(input)));
-
-  console.log(output);
-  
-
-  // `output` here contains the JSON output as specified in the documentation
-  for (const contractName in output.contracts['Election.template.sol']) {
-    console.log(
-      `${contractName
-      }: ${
-        output.contracts['Election.template.sol'][contractName].evm.bytecode.object}`,
-    );
-  }
-
-  console.log(output);
-
-  return 'dummy json';
+  return output;
 }
 
 module.exports = { compile };
