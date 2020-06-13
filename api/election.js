@@ -1,4 +1,5 @@
 const mongo = require('mongodb');
+const generator = require('generate-password');
 const { getDb } = require('./db.js');
 
 const COLLECTION = 'elections';
@@ -60,6 +61,32 @@ async function remove(_, { id }, { user }) {
   return result.deletedCount === 1;
 }
 
+// TODO: Not CRUD operation, wher is should be?
+async function setElectionInPublicKeyRegisterationStage(_, { id }) {
+  const electionDB = await get({}, { id });
+
+  const status = 'PublicKeyRegistration';
+  const { participants } = electionDB;
+
+  // Lame for loop
+  const { length } = participants;
+  for (let i = 0; i < length; i += 1) {
+    const participant = participants[i];
+    const secretToken = generator.generate({
+      length: 32,
+      numbers: true,
+    });
+    participants[i] = {
+      ...participant,
+      secretToken,
+    };
+  }
+
+  const changes = { status, participants };
+  const savedElection = await update({}, { id, changes });
+  return savedElection;
+}
+
 module.exports = {
-  create, list, get, update, remove,
+  create, list, get, update, remove, setElectionInPublicKeyRegisterationStage,
 };
