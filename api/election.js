@@ -90,7 +90,7 @@ async function setElectionInPublicKeyRegisterationStage(_, { id }) {
 
 async function deployElection() {
   console.log('compiling smart contract');
-  return undefined;
+  return { _id: "1234", title: 'smart contract'};
 }
 
 module.exports = {
