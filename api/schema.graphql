@@ -66,4 +66,7 @@ type Mutation {
     registerPublicKey(electionID: ID!, secretToken: String!, publicKey: String!) : Boolean!
 
     setElectionIntoPublicKeyWaitingStage(id: ID!) : Election!
+
+    # TODO: The update can do the same... Fix this
+    deployElection(id: ID!) : Election!
 }

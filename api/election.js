@@ -88,6 +88,11 @@ async function setElectionInPublicKeyRegisterationStage(_, { id }) {
   return savedElection;
 }
 
+async function deployElection() {
+  console.log('compiling smart contract');
+  return undefined;
+}
+
 module.exports = {
-  create, list, get, update, remove, setElectionInPublicKeyRegisterationStage,
+  create, list, get, update, remove, setElectionInPublicKeyRegisterationStage, deployElection,
 };
