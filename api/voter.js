@@ -36,34 +36,30 @@ async function verifySecretToken(id, secretToken) {
 }
 
 // TODO: Change name or move to the election.js
-async function tryRegisterPublicKey(electionID, secretToken, publicKey) {
+async function tryRegisterPublicKey(id, secretToken, publicKey) {
   // Read election
-  const id = electionID;
-
   const electionDB = await election.get({}, { id });
 
   // Find participant having the secretToken
-  // Must exists
+  // Must exists because this method is called second
   const participant = getParticipant(electionDB, secretToken);
 
   // TODO: Unsure if this really works
   const { participants } = electionDB;
-  const newParticpant = { ...participant, publicKey };
+  const newParticpant = { ...participant, publicKey, registered: true };
   const index = participants.indexOf(participant);
   participants[index] = newParticpant;
-  const { changes } = participants;
+  const changes = { participants };
 
-  //   TODO: How to check if it was succesful?
+  //   TODO: Handle issue when the database was not handled correctly
   await election.update({}, { id, changes });
-
-  return false;
+  return true;
 }
 
-function registerPublicKey(_, { electionID, secretToken, publicKey }) {
+async function registerPublicKey(_, { electionID, secretToken, publicKey }) {
   const id = electionID;
-  return verifySecretToken(id, secretToken);
-  // return verifySecretToken(electionID, secretToken)
-  //           && tryRegisterPublicKey(electionID, secretToken, publicKey);
+  const succes = (await verifySecretToken(id, secretToken)) && (await tryRegisterPublicKey(id, secretToken, publicKey));
+  return succes;
 }
 
 module.exports = { registerPublicKey };
