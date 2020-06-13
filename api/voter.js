@@ -11,16 +11,13 @@ function isRegistered(participant) {
 
 // TODO: Better name than electionDB
 function getParticipant(electionDB, secretToken) {
-  const { participants } = election;
-
+  const { participants } = electionDB;
   const participant = participants.find(p => p.secretToken === secretToken);
-
   return participant;
 }
 
-async function verifySecretToken(electionID, secretToken) {
+async function verifySecretToken(id, secretToken) {
   // Read election
-  const id = electionID;
   const electionDB = await election.get({}, { id });
 
   // Find participant having the secretToken
@@ -38,6 +35,7 @@ async function verifySecretToken(electionID, secretToken) {
 async function tryRegisterPublicKey(electionID, secretToken, publicKey) {
   // Read election
   const id = electionID;
+
   const electionDB = await election.get({}, { id });
 
   // Find participant having the secretToken
@@ -58,8 +56,10 @@ async function tryRegisterPublicKey(electionID, secretToken, publicKey) {
 }
 
 function registerPublicKey(_, { electionID, secretToken, publicKey }) {
-  return verifySecretToken(electionID, secretToken)
-            && tryRegisterPublicKey(electionID, secretToken, publicKey);
+  const id = electionID;
+  return verifySecretToken(id, secretToken);
+  // return verifySecretToken(electionID, secretToken)
+  //           && tryRegisterPublicKey(electionID, secretToken, publicKey);
 }
 
 module.exports = { registerPublicKey };

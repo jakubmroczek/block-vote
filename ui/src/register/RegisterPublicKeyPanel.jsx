@@ -1,15 +1,33 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
+import graphQLFetch from '../graphQLFetch.js';
 
-export default function RegisterPublicKeyPanel() {
-  const onSubmit = (event) => {
+
+export default function RegisterPublicKeyPanel(props) {
+  const { match: { params: { electionID } } } = props;
+  
+  const register = async (secretToken, publicKey) => {
+    const query = `mutation 
+        registerPublicKey($electionID: ID!, $secretToken: String!, $publicKey: String!) {
+            registerPublicKey(electionID: $electionID, secretToken: $secretToken, publicKey: $publicKey) 
+    }`;
+
+    const response = await graphQLFetch(query, { electionID, secretToken, publicKey });
+    alert(JSON.stringify(response))
+  };
+
+  const onSubmit = async (event) => {
     event.preventDefault();
-    
+
     const form = document.forms.registerPublicKey;
     const credentials = {
       secretToken: form.secretToken.value,
       publicKey: form.publicKey.value,
     };
+
+    const { secretToken, publicKey } = credentials;
+
+    await register(electionID, secretToken, publicKey);
   };
 
   return (
