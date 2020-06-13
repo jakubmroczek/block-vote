@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import UserContext from './UserContext.js';
 import Contents from './Contents.jsx';
 import Welcome from './Welcome.jsx';
+import RegisterPublicKeyPanel from './register/RegisterPublicKeyPanel.jsx';
 import VotingdApp from './VotingdApp.jsx';
 
 function NotFound() {
@@ -40,6 +41,7 @@ export default class Page extends React.Component {
     return (
       <Switch>
         <Route exact path="/" render={props => <Welcome {...props} onUserChange={this.onUserChange} />} />
+        <Route path="/register/:electionID" component={RegisterPublicKeyPanel} />
         <Route path="/vote" component={VotingdApp} />
         <Route component={NotFound} />
       </Switch>
