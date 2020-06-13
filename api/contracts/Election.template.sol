@@ -67,10 +67,10 @@ contract Election {
     m_electionTitle = electionTitle;
 
     // Substituted with data from database in the compilatin process.
-    %s
+%s
 
     // Substitute with data from database in the compilatin process.
-    %s
+%s
   }
 
   //TODO: Change to addCandidate
