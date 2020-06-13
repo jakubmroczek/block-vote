@@ -26,10 +26,9 @@ const mailTemplate = (to, html) => ({
   html,
 });
 
-function generateMail(participant) {
+function generateMail(participant, link) {
   const { email, secretToken } = participant;
   // TODO: From where to we take the voting link?
-  const link = 'very-dumy-link';
   const html = htmlForm(link, secretToken);
   return mailTemplate(email, html);
 }
@@ -45,8 +44,8 @@ function sendEmail(mailOptions) {
   });
 }
 
-function mailEveryone(participants) {
-  const mails = participants.map(generateMail);
+function mailEveryone(participants, link) {
+  const mails = participants.map(p => generateMail(p, link));
 
   mails.forEach((mail) => {
     sendEmail(mail);
@@ -59,9 +58,12 @@ function mailEveryone(participants) {
 // TODO: Each user should have a unique link?
 async function sendRegisterKeyMail(_, { id }) {
   const electionDB = await election.get({}, { id });
-  const { participants } = electionDB;
+  const { _id, participants } = electionDB;
+  
+  // TODO: Move it to the distinct service
+  const link = process.env.UI_VOTING_ENDPOINT + _id;
 
-  return mailEveryone(participants);
+  return mailEveryone(participants, link);
 }
 
 module.exports = {
