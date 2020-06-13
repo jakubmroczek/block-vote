@@ -43,14 +43,16 @@ async function tryRegisterPublicKey(electionID, secretToken, publicKey) {
   // Find participant having the secretToken
   // Must exists
   const participant = getParticipant(electionDB, secretToken);
-
-  // !!! Update participant and merge they with those from the databse
-  // Mark participatn as registered
-  // Insert public key
-  const changes = nullptr; 
   
-    //   TODO: How to check if it was succesful?
-   await election.update({}, { id ,changes } ); 
+  // TODO: Unsure if this really works
+  const { participants } = electionDB;
+  const newParticpant = { ...participant, publicKey };
+  const index = participants.indexOf(participant);
+  participants[index] = newParticpant;
+  const { changes } = participants;
+
+  //   TODO: How to check if it was succesful?
+  await election.update({}, { id, changes });
 
   return false;
 }
