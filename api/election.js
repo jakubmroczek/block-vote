@@ -91,17 +91,14 @@ async function setElectionInPublicKeyRegisterationStage(_, { id }) {
 }
 
 async function deployElection(_, { id }) {
-  // Get election
   const electionDB = await get({}, { id });
 
-  // Compile
-  const bytecode = blockchainUtils.compile(electionDB);
-  // Update MongoDB collection with the compiled smart contract
+  const solcOutput = blockchainUtils.compile(electionDB);
+  
+  const changes = { solcOutput };
+  const updatedElection = await update({}, { id, changes });
 
-  console.log(bytecode);
-
-  // Return the updated elections
-  return { _id: "1234", title: 'smart contract'};
+  return updatedElection;
 }
 
 module.exports = {
