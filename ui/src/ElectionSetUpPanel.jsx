@@ -16,9 +16,41 @@ export default class ElectionSetUpPanel extends React.Component {
 
     this.state = {
       id: electionID,
+      title: '',
+      candidates: [],
+      participants: [],
     };
 
     this.deploy = this.deploy.bind(this);
+  }
+
+  componentDidMount() {
+    this.read();
+  }
+
+  async read() {
+    const query = `query 
+    getElection($id: ID!) {
+            getElection(id: $id) {
+                title
+                candidates {
+                  name surname
+                }  
+                participants {
+                  email
+                }
+            }
+}`;
+
+    const { id } = this.state;
+    const response = await graphQLFetch(query, { id });
+
+    if (response) {
+      const { title, candidates, participants } = response.getElection;
+      this.setState({ title, candidates, participants });
+    } else {
+      alert('getElection call failed');
+    }
   }
 
   async mailUsers() {
@@ -57,13 +89,15 @@ export default class ElectionSetUpPanel extends React.Component {
   }
 
   render() {
-    const { id } = this.state;
+    const {
+      id, title, candidates, participants,
+    } = this.state;
 
     return (
-      <div style={{display: 'flex', justifyContent: 'center'}} className="mt-1">
-        <ElectionTitleForm id={id} />
-        <CandidateList id={id} />
-        <ParticipantList id={id} />
+      <div style={{ display: 'flex', justifyContent: 'center' }} className="mt-1">
+        <ElectionTitleForm id={id} title={title} />
+        <CandidateList id={id} candidates={candidates} />
+        <ParticipantList id={id} participants={participants} />
         <Button onClick={this.deploy} variant="outline-success">Next</Button>
       </div>
     );

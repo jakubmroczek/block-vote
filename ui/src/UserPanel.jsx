@@ -64,14 +64,6 @@ export default class UserPanel extends React.Component {
       listElection {
         _id
         status
-        title
-        candidates {
-          name 
-            surname
-        }
-        participants {
-            email
-        }
       }
     }`;
 
@@ -97,20 +89,20 @@ export default class UserPanel extends React.Component {
       );
     }
 
-    const { _id: id } = election;
-    if (election.status === 'New') {
+    const { _id: id, status } = election;
+    if (status === 'New') {
       return (
         <EditElectionInfo id={id} />
       );
     }
 
-    if (election.status === 'PublicKeyRegistration') {
+    if (status === 'PublicKeyRegistration') {
       return (
         <ElectionLobby id={id} />
       );
     }
 
-    if (election.status === 'Under') {
+    if (status === 'Under') {
       return (
         <div>
           <h1>Conducting election!</h1>
@@ -118,7 +110,7 @@ export default class UserPanel extends React.Component {
       );
     }
 
-    if (election.status === 'Finished') {
+    if (status === 'Finished') {
       return (
         <div>
           <h1>Election finished</h1>
@@ -131,7 +123,7 @@ export default class UserPanel extends React.Component {
       <div>
         <h1>Unsupported state</h1>
         {' '}
-        {election.state}
+        {state}
       </div>
     );
   }
