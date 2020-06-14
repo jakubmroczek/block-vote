@@ -1,22 +1,50 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import './fontawesome.js';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+function renderEditTooltip(props) {
+  return (
+    <Tooltip id="button-tooltip" {...props}>
+      Edit
+    </Tooltip>
+  );
+}
+
+function renderRemoveTooltip(props) {
+  return (
+    <Tooltip id="button-tooltip" {...props}>
+      Remove
+    </Tooltip>
+  );
+}
 
 export default function ActionsItem({ handleEdit, handleRemove }) {
   return (
     <>
-      <Button onClick={handleEdit} variant="secondary">
-        <FontAwesomeIcon icon={faPen} />
-      </Button>
+      <OverlayTrigger
+        placement="top"
+        delay={{ show: 250 }}
+        overlay={renderEditTooltip}
+        message="Add a new candidate"
+      >
+        <Button onClick={handleEdit} variant="secondary">
+          <FontAwesomeIcon icon={faPen} />
+        </Button>
+      </OverlayTrigger>
       {' '}
-      <Button onClick={handleRemove} variant="secondary">
-        <FontAwesomeIcon icon={faTrash} />
-      </Button>
-
+      <OverlayTrigger
+        placement="top"
+        delay={{ show: 250, hide: 400 }}
+        overlay={renderRemoveTooltip}
+      >
+        <Button onClick={handleRemove} variant="secondary">
+          <FontAwesomeIcon icon={faTrash} />
+        </Button>
+      </OverlayTrigger>
     </>
   );
 }
