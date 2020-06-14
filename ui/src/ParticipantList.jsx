@@ -376,15 +376,15 @@ export default class ParticipantList extends React.Component {
         <Card.Header as="h5">Participants</Card.Header>
         <Card.Body>
           <ParticipantTable participants={participants} update={this.update} remove={this.remove} />
+          <Button onClick={this.showParticipantAddModal} variant="secondary">
+            <FontAwesomeIcon icon={faPlus} />
+          </Button>
+          <ParticipantAddModal
+            visible={addModalVisible}
+            hide={this.hideParticipantAddModal}
+            add={this.create}
+          />
         </Card.Body>
-        <Button onClick={this.showParticipantAddModal} variant="secondary">
-          <FontAwesomeIcon icon={faPlus} />
-        </Button>
-        <ParticipantAddModal
-          visible={addModalVisible}
-          hide={this.hideParticipantAddModal}
-          add={this.create}
-        />
       </Card>
     );
   }

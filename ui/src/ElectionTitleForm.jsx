@@ -83,8 +83,8 @@ export default class ElectionTitleForm extends React.Component {
               />
             </FormGroup>
           </Form>
+          <Button onClick={this.onSubmit} variant="secondary"> Save election title</Button>
         </Card.Body>
-        <Button onClick={this.onSubmit} variant="secondary"> Save election title</Button>
       </Card>
     );
   }

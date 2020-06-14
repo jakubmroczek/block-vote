@@ -398,15 +398,15 @@ export default class CandidateList extends React.Component {
             update={this.update}
             remove={this.remove}
           />
+          <Button onClick={this.showCandidateAddModal} variant="secondary">
+            <FontAwesomeIcon icon={faPlus} />
+          </Button>
+          <CandidateAddModal
+            visible={candidateAddVisible}
+            hide={this.hideCanddiateAddModal}
+            add={this.create}
+          />
         </Card.Body>
-        <Button onClick={this.showCandidateAddModal} variant="secondary">
-          <FontAwesomeIcon icon={faPlus} />
-        </Button>
-        <CandidateAddModal
-          visible={candidateAddVisible}
-          hide={this.hideCanddiateAddModal}
-          add={this.create}
-        />
       </Card>
     );
   }
