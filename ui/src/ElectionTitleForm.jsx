@@ -1,5 +1,7 @@
 import React from 'react';
-import { Button, Form, FormGroup, Card } from 'react-bootstrap';
+import {
+  Button, Form, FormGroup, Card,
+} from 'react-bootstrap';
 import graphQLFetch from './graphQLFetch.js';
 
 export default class ElectionTitleForm extends React.Component {
@@ -12,6 +14,13 @@ export default class ElectionTitleForm extends React.Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.title !== prevProps.title) {
+      const { title } = this.props;
+      this.setState({ title });
+    }
   }
 
   onChange(event) {

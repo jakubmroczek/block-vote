@@ -262,6 +262,13 @@ export default class ParticipantList extends React.Component {
     this.hideParticipantAddModal = this.hideParticipantAddModal.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.participants !== prevProps.participants) {
+      const { participants } = this.props;
+      this.setState({ participants });
+    }
+  }
+
   async read() {
     const query = `query 
         getElection($id: ID!) {

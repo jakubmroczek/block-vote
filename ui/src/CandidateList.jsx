@@ -280,6 +280,13 @@ export default class CandidateList extends React.Component {
     this.hideCanddiateAddModal = this.hideCanddiateAddModal.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.candidates !== prevProps.candidates) {
+      const { candidates } = this.props;
+      this.setState({ candidates });
+    }
+  }
+
   async read() {
     const query = `query 
         getElection($id: ID!) {
