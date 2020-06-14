@@ -11,8 +11,8 @@ function Logo() {
       <Figure.Image
         width={171}
         height={180}
-        alt="171x180"
-        src="/logo.png"
+        alt="BlockVote.logo"
+        src="/logo.svg"
       />
     </Figure>
   );
