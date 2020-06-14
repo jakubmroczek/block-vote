@@ -70,7 +70,7 @@ export default class ElectionTitleForm extends React.Component {
   render() {
     const { title } = this.state;
     return (
-      <Card>
+      <Card className="text-center">
         <Card.Header as="h5">Election Title</Card.Header>
         <Card.Body>
           <Form name="electionTitle">

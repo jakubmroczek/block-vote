@@ -247,7 +247,7 @@ function CandidateTable({ candidates, update, remove }) {
     ));
 
   return (
-    <Table bordered condensed hover responsive>
+    <Table bordered condensed hover responsive className="text-left">
       <thead>
         <tr>
           <th>Name</th>
@@ -390,7 +390,7 @@ export default class CandidateList extends React.Component {
   render() {
     const { candidates, candidateAddVisible } = this.state;
     return (
-      <Card>
+      <Card className="text-center">
         <Card.Header as="h5">Candidates</Card.Header>
         <Card.Body>
           <CandidateTable

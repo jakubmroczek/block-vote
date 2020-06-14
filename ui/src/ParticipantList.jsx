@@ -231,7 +231,7 @@ function ParticipantTable({ participants, update, remove }) {
 
   return (
     <>
-      <Table bordered condensed hover responsive>
+      <Table bordered condensed hover responsive className="text-left">
         <thead>
           <tr>
             <th>E-mail</th>
@@ -372,7 +372,7 @@ export default class ParticipantList extends React.Component {
   render() {
     const { participants, addModalVisible } = this.state;
     return (
-      <Card>
+      <Card className="text-center">
         <Card.Header as="h5">Participants</Card.Header>
         <Card.Body>
           <ParticipantTable participants={participants} update={this.update} remove={this.remove} />
@@ -385,6 +385,7 @@ export default class ParticipantList extends React.Component {
             add={this.create}
           />
         </Card.Body>
+
       </Card>
     );
   }
