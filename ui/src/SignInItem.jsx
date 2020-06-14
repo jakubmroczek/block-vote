@@ -88,14 +88,14 @@ export default class SignInItem extends React.Component {
           <Modal.Body>
             <Button
               block
-              bsStyle="primary"
               onClick={this.signIn}
+              variant="outline-success"
             >
-              <img src="https://goo.gl/4yjp6B" alt="Sign In" />
+              <img src="signWithGoogle.png" alt="Sign In" />
             </Button>
           </Modal.Body>
           <Modal.Footer>
-            <Button bsStyle="link" onClick={this.hideModal}>Cancel</Button>
+            <Button bsStyle="link" onClick={this.hideModal} variant="danger">Cancel</Button>
           </Modal.Footer>
         </Modal>
       </>
