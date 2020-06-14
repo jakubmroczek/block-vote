@@ -144,7 +144,7 @@ class ParticipantRow extends React.Component {
         <tr>
           <td>{email}</td>
           <td>
-            <ActionsItem />
+            <ActionsItem handleEdit={this.showParticipantUpdateModal} handleRemove={this.showParticipantRemoveModal} />
           </td>
         </tr>
         <ParticipantRemoveModal

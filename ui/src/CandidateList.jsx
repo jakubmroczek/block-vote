@@ -157,7 +157,7 @@ class CandidateRow extends React.Component {
           <td>{name}</td>
           <td>{surname}</td>
           <td>
-            <ActionsItem />
+            <ActionsItem handleEdit={this.showEdit} handleRemove={this.showRemove} />
           </td>
         </tr>
         <CandidateEditModal
