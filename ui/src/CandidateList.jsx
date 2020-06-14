@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Button, Table, Modal, Form, FormGroup, ButtonToolbar,
+  Button, Table, Modal, Form, FormGroup, ButtonToolbar, Card,
 } from 'react-bootstrap';
 import './fontawesome.js';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -103,6 +103,7 @@ function CandidateEditModal({
           >
             Submit
           </Button>
+          {' '}
           <Button onClick={hideEdit}>Cancel</Button>
         </ButtonToolbar>
       </Modal.Footer>
@@ -247,7 +248,7 @@ function CandidateTable({ candidates, update, remove }) {
     ));
 
   return (
-    <Table bordered condensed hover responsive>
+    <Table bordered condensed hover responsive className="text-left">
       <thead>
         <tr>
           <th>Name</th>
@@ -390,22 +391,24 @@ export default class CandidateList extends React.Component {
   render() {
     const { candidates, candidateAddVisible } = this.state;
     return (
-      <>
-        <CandidateTable
-          candidates={candidates}
-          update={this.update}
-          remove={this.remove}
-        />
-
-        <Button onClick={this.showCandidateAddModal} variant="secondary">
-          <FontAwesomeIcon icon={faPlus} />
-        </Button>
-        <CandidateAddModal
-          visible={candidateAddVisible}
-          hide={this.hideCanddiateAddModal}
-          add={this.create}
-        />
-      </>
+      <Card className="text-center">
+        <Card.Header as="h5">Candidates</Card.Header>
+        <Card.Body>
+          <CandidateTable
+            candidates={candidates}
+            update={this.update}
+            remove={this.remove}
+          />
+          <Button onClick={this.showCandidateAddModal} variant="secondary">
+            <FontAwesomeIcon icon={faPlus} />
+          </Button>
+          <CandidateAddModal
+            visible={candidateAddVisible}
+            hide={this.hideCanddiateAddModal}
+            add={this.create}
+          />
+        </Card.Body>
+      </Card>
     );
   }
 }

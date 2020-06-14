@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Button, Table, Modal, Form, FormGroup, ButtonToolbar,
+  Button, Table, Modal, Form, FormGroup, ButtonToolbar, Card,
 } from 'react-bootstrap';
 import './fontawesome.js';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -231,7 +231,7 @@ function ParticipantTable({ participants, update, remove }) {
 
   return (
     <>
-      <Table bordered condensed hover responsive>
+      <Table bordered condensed hover responsive className="text-left">
         <thead>
           <tr>
             <th>E-mail</th>
@@ -372,17 +372,21 @@ export default class ParticipantList extends React.Component {
   render() {
     const { participants, addModalVisible } = this.state;
     return (
-      <>
-        <ParticipantTable participants={participants} update={this.update} remove={this.remove} />
-        <Button onClick={this.showParticipantAddModal} variant="secondary">
-          <FontAwesomeIcon icon={faPlus} />
-        </Button>
-        <ParticipantAddModal
-          visible={addModalVisible}
-          hide={this.hideParticipantAddModal}
-          add={this.create}
-        />
-      </>
+      <Card className="text-center">
+        <Card.Header as="h5">Participants</Card.Header>
+        <Card.Body>
+          <ParticipantTable participants={participants} update={this.update} remove={this.remove} />
+          <Button onClick={this.showParticipantAddModal} variant="secondary">
+            <FontAwesomeIcon icon={faPlus} />
+          </Button>
+          <ParticipantAddModal
+            visible={addModalVisible}
+            hide={this.hideParticipantAddModal}
+            add={this.create}
+          />
+        </Card.Body>
+
+      </Card>
     );
   }
 }

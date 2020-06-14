@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, FormGroup } from 'react-bootstrap';
+import { Button, Form, FormGroup, Card } from 'react-bootstrap';
 import graphQLFetch from './graphQLFetch.js';
 
 export default class ElectionTitleForm extends React.Component {
@@ -70,20 +70,22 @@ export default class ElectionTitleForm extends React.Component {
   render() {
     const { title } = this.state;
     return (
-      <>
-        <Form name="electionTitle">
-          <FormGroup>
-            <Form.Label>Election title</Form.Label>
-            <Form.Control
-              name="title"
-              autoFocus
-              value={title}
-              onChange={this.onChange}
-            />
-          </FormGroup>
-        </Form>
-        <Button onClick={this.onSubmit}> Save election title</Button>
-      </>
+      <Card className="text-center">
+        <Card.Header as="h5">Election Title</Card.Header>
+        <Card.Body>
+          <Form name="electionTitle">
+            <FormGroup>
+              <Form.Control
+                name="title"
+                autoFocus
+                value={title}
+                onChange={this.onChange}
+              />
+            </FormGroup>
+          </Form>
+          <Button onClick={this.onSubmit} variant="secondary"> Save election title</Button>
+        </Card.Body>
+      </Card>
     );
   }
 }
