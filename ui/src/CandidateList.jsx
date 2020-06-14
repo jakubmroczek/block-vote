@@ -4,6 +4,7 @@ import {
 } from 'react-bootstrap';
 
 import graphQLFetch from './graphQLFetch.js';
+import ActionsItem from './ActionsItem.jsx';
 
 function CandidateRemoveModal({
   candidate, visible, hideRemove, handleRemove,
@@ -156,13 +157,7 @@ class CandidateRow extends React.Component {
           <td>{name}</td>
           <td>{surname}</td>
           <td>
-            <Button onClick={this.showEdit}>
-              Edit
-            </Button>
-            {'    '}
-            <Button onClick={this.showRemove}>
-              Remove
-            </Button>
+            <ActionsItem />
           </td>
         </tr>
         <CandidateEditModal
