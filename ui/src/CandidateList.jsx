@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import {
   Button, Table, Modal, Form, FormGroup, ButtonToolbar,
 } from 'react-bootstrap';
-
+import './fontawesome.js';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import graphQLFetch from './graphQLFetch.js';
+import ActionsItem from './ActionsItem.jsx';
 
 function CandidateRemoveModal({
   candidate, visible, hideRemove, handleRemove,
@@ -156,13 +159,7 @@ class CandidateRow extends React.Component {
           <td>{name}</td>
           <td>{surname}</td>
           <td>
-            <Button onClick={this.showEdit}>
-              Edit
-            </Button>
-            {'    '}
-            <Button onClick={this.showRemove}>
-              Remove
-            </Button>
+            <ActionsItem handleEdit={this.showEdit} handleRemove={this.showRemove} />
           </td>
         </tr>
         <CandidateEditModal
@@ -400,7 +397,9 @@ export default class CandidateList extends React.Component {
           remove={this.remove}
         />
 
-        <Button onClick={this.showCandidateAddModal}>Add a new candidate</Button>
+        <Button onClick={this.showCandidateAddModal} variant="secondary">
+          <FontAwesomeIcon icon={faPlus} />
+        </Button>
         <CandidateAddModal
           visible={candidateAddVisible}
           hide={this.hideCanddiateAddModal}

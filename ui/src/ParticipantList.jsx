@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import {
   Button, Table, Modal, Form, FormGroup, ButtonToolbar,
 } from 'react-bootstrap';
+import './fontawesome.js';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import graphQLFetch from './graphQLFetch.js';
+import ActionsItem from './ActionsItem.jsx';
 
 function ParticipantUpdateModal({
   index, participant, visible, hide, update,
@@ -143,13 +147,7 @@ class ParticipantRow extends React.Component {
         <tr>
           <td>{email}</td>
           <td>
-            <Button onClick={this.showParticipantUpdateModal}>
-              Edit
-            </Button>
-            {' '}
-            <Button onClick={this.showParticipantRemoveModal}>
-              Remove
-            </Button>
+            <ActionsItem handleEdit={this.showParticipantUpdateModal} handleRemove={this.showParticipantRemoveModal} />
           </td>
         </tr>
         <ParticipantRemoveModal
@@ -376,7 +374,9 @@ export default class ParticipantList extends React.Component {
     return (
       <>
         <ParticipantTable participants={participants} update={this.update} remove={this.remove} />
-        <Button onClick={this.showParticipantAddModal}>Add a new participant</Button>
+        <Button onClick={this.showParticipantAddModal} variant="secondary">
+          <FontAwesomeIcon icon={faPlus} />
+        </Button>
         <ParticipantAddModal
           visible={addModalVisible}
           hide={this.hideParticipantAddModal}
