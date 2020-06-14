@@ -73,7 +73,17 @@ export default class NavBar extends React.Component {
 
     return (
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="#home">BlockVote</Navbar.Brand>
+        <Navbar.Brand>
+          <img
+            src="/logo.svg"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+            alt="BlockVote logo"
+          />
+          {' '}
+          BlockVote
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Navbar.Text>
