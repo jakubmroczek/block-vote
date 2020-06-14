@@ -3,6 +3,7 @@ import {
   Button, Table, Modal, Form, FormGroup, ButtonToolbar,
 } from 'react-bootstrap';
 import graphQLFetch from './graphQLFetch.js';
+import ActionsItem from './ActionsItem.jsx';
 
 function ParticipantUpdateModal({
   index, participant, visible, hide, update,
@@ -143,13 +144,7 @@ class ParticipantRow extends React.Component {
         <tr>
           <td>{email}</td>
           <td>
-            <Button onClick={this.showParticipantUpdateModal}>
-              Edit
-            </Button>
-            {' '}
-            <Button onClick={this.showParticipantRemoveModal}>
-              Remove
-            </Button>
+            <ActionsItem />
           </td>
         </tr>
         <ParticipantRemoveModal

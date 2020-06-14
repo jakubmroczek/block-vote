@@ -1,22 +1,23 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
-// get our fontawesome imports
 import './fontawesome.js';
-import { faImages } from '@fortawesome/free-solid-svg-icons';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default function ActionsItem({handleEdit, handleRemove}) {
-//     <Button onClick={this.showEdit}>
-//     Edit
-//   </Button>
-//   {'    '}
-//   <Button onClick={this.showRemove}>
-//     Remove
-//   </Button>
-  
-    return (
+
+export default function ActionsItem({ handleEdit, handleRemove }) {
+  return (
     <>
-      <FontAwesomeIcon icon={faImages} />
+      <Button onClick={handleEdit} variant="secondary">
+        <FontAwesomeIcon icon={faPen} />
+      </Button>
+      {' '}
+      <Button onClick={handleRemove} variant="secondary">
+        <FontAwesomeIcon icon={faTrash} />
+      </Button>
+
     </>
   );
 }
