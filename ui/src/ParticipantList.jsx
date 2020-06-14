@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Button, Table, Modal, Form, FormGroup, ButtonToolbar,
+  Button, Table, Modal, Form, FormGroup, ButtonToolbar, Card,
 } from 'react-bootstrap';
 import './fontawesome.js';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -372,8 +372,11 @@ export default class ParticipantList extends React.Component {
   render() {
     const { participants, addModalVisible } = this.state;
     return (
-      <>
-        <ParticipantTable participants={participants} update={this.update} remove={this.remove} />
+      <Card>
+        <Card.Header as="h5">Participants</Card.Header>
+        <Card.Body>
+          <ParticipantTable participants={participants} update={this.update} remove={this.remove} />
+        </Card.Body>
         <Button onClick={this.showParticipantAddModal} variant="secondary">
           <FontAwesomeIcon icon={faPlus} />
         </Button>
@@ -382,7 +385,7 @@ export default class ParticipantList extends React.Component {
           hide={this.hideParticipantAddModal}
           add={this.create}
         />
-      </>
+      </Card>
     );
   }
 }

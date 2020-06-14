@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Button, Table, Modal, Form, FormGroup, ButtonToolbar,
+  Button, Table, Modal, Form, FormGroup, ButtonToolbar, Card,
 } from 'react-bootstrap';
 import './fontawesome.js';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -390,13 +390,15 @@ export default class CandidateList extends React.Component {
   render() {
     const { candidates, candidateAddVisible } = this.state;
     return (
-      <>
-        <CandidateTable
-          candidates={candidates}
-          update={this.update}
-          remove={this.remove}
-        />
-
+      <Card>
+        <Card.Header as="h5">Candidates</Card.Header>
+        <Card.Body>
+          <CandidateTable
+            candidates={candidates}
+            update={this.update}
+            remove={this.remove}
+          />
+        </Card.Body>
         <Button onClick={this.showCandidateAddModal} variant="secondary">
           <FontAwesomeIcon icon={faPlus} />
         </Button>
@@ -405,7 +407,7 @@ export default class CandidateList extends React.Component {
           hide={this.hideCanddiateAddModal}
           add={this.create}
         />
-      </>
+      </Card>
     );
   }
 }
