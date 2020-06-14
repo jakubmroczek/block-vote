@@ -266,8 +266,9 @@ function CandidateTable({ candidates, update, remove }) {
 export default class CandidateList extends React.Component {
   constructor(props) {
     super(props);
+    const { candidates } = this.props;
     this.state = {
-      candidates: [],
+      candidates,
       candidateAddVisible: false,
     };
 
@@ -277,10 +278,6 @@ export default class CandidateList extends React.Component {
 
     this.showCandidateAddModal = this.showCandidateAddModal.bind(this);
     this.hideCanddiateAddModal = this.hideCanddiateAddModal.bind(this);
-  }
-
-  componentDidMount() {
-    this.read();
   }
 
   async read() {

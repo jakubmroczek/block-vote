@@ -247,10 +247,11 @@ function ParticipantTable({ participants, update, remove }) {
 }
 
 export default class ParticipantList extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    const { participants } = this.props;
     this.state = {
-      participants: [],
+      participants,
       addModalVisible: false,
     };
 
@@ -259,10 +260,6 @@ export default class ParticipantList extends React.Component {
     this.remove = this.remove.bind(this);
     this.showParticipantAddModal = this.showParticipantAddModal.bind(this);
     this.hideParticipantAddModal = this.hideParticipantAddModal.bind(this);
-  }
-
-  componentDidMount() {
-    this.read();
   }
 
   async read() {
