@@ -1,8 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Welcome from './Welcome.jsx';
-import VotingdApp from './VotingdApp.jsx';
 import ElectionSetUpPanel from './ElectionSetUpPanel.jsx';
 import ElectionLobby from './ElectionLobby.jsx';
 import UserPanel from './UserPanel.jsx';
@@ -16,8 +14,6 @@ export default function Contents({ onUserChange }) {
     <>
       <Route path="/" render={props => <NavBar {...props} onUserChange={onUserChange} />} />
       <Switch>
-        <Route exact path="/" component={Welcome} />
-        <Route path="/vote" component={VotingdApp} />
         <Route exact path="/panel" component={UserPanel} />
         <Route path="/panel/edit/:electionID" component={ElectionSetUpPanel} />
         {/* TODO: Think of different path name this one is stupid */}
