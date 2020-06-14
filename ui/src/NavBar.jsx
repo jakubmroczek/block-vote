@@ -84,17 +84,12 @@ export default class NavBar extends React.Component {
           {' '}
           BlockVote
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Navbar.Text>
-            Signed in as:
-            {' '}
+        <Nav className="ml-auto">
+          <Navbar.Text className="mr-1">
             {user.username}
           </Navbar.Text>
-          <Nav className="mr-auto">
-            <LogOutButton onUserChange={this.onUserChange} />
-          </Nav>
-        </Navbar.Collapse>
+          <LogOutButton onUserChange={this.onUserChange} />
+        </Nav>
       </Navbar>
     );
   }
