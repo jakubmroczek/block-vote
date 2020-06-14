@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import {
   Button, Table, Modal, Form, FormGroup, ButtonToolbar,
 } from 'react-bootstrap';
+import './fontawesome.js';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import graphQLFetch from './graphQLFetch.js';
 import ActionsItem from './ActionsItem.jsx';
 
@@ -371,7 +374,9 @@ export default class ParticipantList extends React.Component {
     return (
       <>
         <ParticipantTable participants={participants} update={this.update} remove={this.remove} />
-        <Button onClick={this.showParticipantAddModal}>Add a new participant</Button>
+        <Button onClick={this.showParticipantAddModal} variant="secondary">
+          <FontAwesomeIcon icon={faPlus} />
+        </Button>
         <ParticipantAddModal
           visible={addModalVisible}
           hide={this.hideParticipantAddModal}
