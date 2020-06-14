@@ -1,6 +1,2 @@
-public/1.app.bundle.js
-public/1.app.bundle.js.map
-public/app.bundle.js
-public/app.bundle.js.map
-public/vendor.app.bundle.js
-public/vendor.app.bundle.js.map
+*.bundle.js
+*.bundle.js.map
