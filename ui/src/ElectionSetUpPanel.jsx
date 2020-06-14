@@ -60,7 +60,7 @@ export default class ElectionSetUpPanel extends React.Component {
     const { id } = this.state;
 
     return (
-      <div style={{display: 'flex', justifyContent: 'center'}}>
+      <div style={{display: 'flex', justifyContent: 'center'}} className="mt-1">
         <ElectionTitleForm id={id} />
         <CandidateList id={id} />
         <ParticipantList id={id} />

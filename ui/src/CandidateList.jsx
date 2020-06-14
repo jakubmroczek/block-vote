@@ -103,6 +103,7 @@ function CandidateEditModal({
           >
             Submit
           </Button>
+          {' '}
           <Button onClick={hideEdit}>Cancel</Button>
         </ButtonToolbar>
       </Modal.Footer>
