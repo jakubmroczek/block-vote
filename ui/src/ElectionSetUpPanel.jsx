@@ -60,15 +60,12 @@ export default class ElectionSetUpPanel extends React.Component {
     const { id } = this.state;
 
     return (
-      <>
+      <div style={{display: 'flex', justifyContent: 'center'}}>
         <ElectionTitleForm id={id} />
-        <hr />
         <CandidateList id={id} />
-        <hr />
         <ParticipantList id={id} />
-        <hr />
-        <Button onClick={this.deploy}>Next (make your voters register public keys)</Button>
-      </>
+        <Button onClick={this.deploy} variant="outline-success">Next</Button>
+      </div>
     );
   }
 }
