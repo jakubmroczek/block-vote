@@ -24,12 +24,18 @@ input ElectionUpdateInputs {
     participants: [ParticipantInputs!]
 }
 
+type SmartContract {
+    # TODO: Split into needed sections
+    serializedValue: String!
+}
+
 type Election { 
     _id: ID!
     status: Status!
     title: String!
     candidates: [Candidate!]!
     participants: [Participant!]!
+    smartContract: SmartContract
 }
 
 input CandidateInputs {

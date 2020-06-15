@@ -94,8 +94,10 @@ async function deployElection(_, { id }) {
   const electionDB = await get({}, { id });
 
   const solcOutput = blockchainUtils.compile(electionDB);
-  
-  const changes = { solcOutput };
+  const serializedSolcOutput = JSON.stringify(solcOutput);
+
+  const smartContract = { serializedValue: serializedSolcOutput };
+  const changes = { smartContract };
   const updatedElection = await update({}, { id, changes });
 
   return updatedElection;
