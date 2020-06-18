@@ -2,7 +2,7 @@ const Tx = require('ethereumjs-tx').Transaction;
 const Web3 = require('web3');
 
 // TODO: Metamask should take care of it.
-const web3 = new Web3('http://localhost:7545');
+const web3 = new Web3('http://localhost:8545');
 
 // object from the backend
 // TODO: We must persist the tx somehow, private key should be get from the metamask

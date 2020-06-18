@@ -35,26 +35,23 @@ export default class ElectionLobby extends React.Component {
 
   bytecodeObject() {
     const { smartContract } = this.state;
-    const sm = JSON.parse(smartContract);
-    const bytecode = sm.data.getElection.smartContract.bytecode;
-    const object = JSON.parse(bytecode);
-    alert(JSON.stringify(object))
+    const { bytecode } = smartContract;
+    const { object } = JSON.parse(bytecode);
     return object;
   }
 
   async deployElection() {
     await this.fetchSmartContract();
 
-    alert(this.bytecodeObject());
     // TODO: Get this from MetaMask
-    // const account = '';
-    // const privateKey = '';
+    const account = '0x6Fde7929911c098367d346766760265F82AE9203';
+    const privateKey = Buffer.from('ce41ca55ca303cc19d7baac0644f32bf63e722c13c17eeb97cea7151e652153d', 'hex');
 
-    // const data = this.bytecodeObject();
+    const data = `0x${this.bytecodeObject()}`;
 
-    // alert(data)
-    // deploy(data, account, privateKey);
-    // TODO: How to handle this?
+    await deploy(data, account, privateKey);
+
+    // TODO: How to handle success or failure of the deploy
   }
 
   render() {
