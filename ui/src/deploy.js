@@ -1,13 +1,14 @@
 const Tx = require('ethereumjs-tx').Transaction;
 const Web3 = require('web3');
 
-const web3 = new Web3('https://ropsten.infura.io/v3/76ba732d07064c4ab4178385fc6c005f');
+// const web3 = new Web3('https://ropsten.infura.io/v3/76ba732d07064c4ab4178385fc6c005f');
+const web3 = new Web3('http://localhost:8545');
 
-const account1 = '0x63133471af7dbc3b4de87d071ef8d77b9c5912fc';
+const account1 = '0x6bbe6b9946B280a633Bc424BdA575132E95d1695';
 // const pK1 = Buffer.from('0xc39b1962b1910e8724095df3e3cb41150d6a6f1c0739a9869db1b195facee6c9');
-const pK1 = Buffer.from('c39b1962b1910e8724095df3e3cb41150d6a6f1c0739a9869db1b195facee6c9', 'hex');
+const pK1 = Buffer.from('dda520c88004cb0b8a9e4cea64c55bd0a124571419bff59d872b300660a9e389', 'hex');
 
-web3.eth.getTransactionCount(account1, (err, txCount) => {  
+web3.eth.getTransactionCount(account1, (err, txCount) => {
     // Smart contract data
   // Fetch the compiled code from the backend
 
