@@ -2,10 +2,6 @@ import Web3 from 'web3';
 
 const contract = require('@truffle/contract');
 
-// TODO: This should be fetched from graphQLApi
-// eslint-disable-next-line import/no-unresolved
-const Election = require('../contracts/Election.json');
-
 class ElectionAPI {
   web3Provider = null;
 
