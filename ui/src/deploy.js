@@ -2,8 +2,9 @@ const Tx = require('ethereumjs-tx');
 const Web3 = require('web3');
 
 const web3 = new Web3('https://ropsten.infura.io/v3/76ba732d07064c4ab4178385fc6c005f')
-const account1 = '';
-const pK1 = '';
+
+const account1 ='0x63133471af7dbc3b4de87d071ef8d77b9c5912fc'
+const pK1 = '0xc39b1962b1910e8724095df3e3cb41150d6a6f1c0739a9869db1b195facee6c9'
 
 web3.eth.getTransactionCount(account1, (err, txCount) => {
   // Smart contract data
