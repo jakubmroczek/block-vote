@@ -1,4 +1,6 @@
 import Web3 from 'web3';
+import graphQLFetch from '../../graphQLFetch.js';
+
 
 const contract = require('@truffle/contract');
 const Election = require('../../../build/contracts/Election.json');
@@ -32,6 +34,25 @@ class ElectionAPI {
       this.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
     }
     this.web3 = new Web3(this.web3Provider);
+  }
+
+  // TODO: Make this dependant on the public key
+  async fetchCompiledSmartContrat() {
+    const query = `query 
+    getSmartContract($publicKey: String!) {
+            getElection(publicKey: $publicKey) 
+}`;
+
+    // TODO: Fix this 
+    const publicKey = 'foobart';
+    const response = await graphQLFetch(query, { publicKey });
+
+    if (response) {
+      const { title, candidates, participants } = response.getElection;
+      this.setState({ title, candidates, participants });
+    } else {
+      alert('getElection call failed');
+    }
   }
 
   async blockchainInit() {

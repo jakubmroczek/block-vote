@@ -23,6 +23,8 @@ const resolvers = {
     listElection: mustBeSignedIn(election.list),
 
     sendRegisterPublicKeysMail: mustBeSignedIn(mailService.sendRegisterKeyMail),
+
+    getVoterElection: voter.getElection,
   },
   Mutation: {
     createElection: mustBeSignedIn(election.create),

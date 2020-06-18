@@ -61,7 +61,10 @@ type Query {
     listElection : [Election!]!
 
     # id of the election 
+    # Mutation
     sendRegisterPublicKeysMail(id: ID!): Boolean!
+
+    getVoterElection(publicKey: String!) : String!
 }
 
 type Mutation {
