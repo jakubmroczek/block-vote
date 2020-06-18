@@ -2,9 +2,9 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import graphQLFetch from './graphQLFetch.js';
 
-export class  ElectionLobby extends React.Component {
+export default class ElectionLobby extends React.Component {
   
-  const fetchSmartContract = async () => {
+  async fetchSmartContract() {
     const query = `query 
       getElection($id: ID!) {
               getElection(id: $id) {
@@ -25,7 +25,7 @@ export class  ElectionLobby extends React.Component {
   };
 
 
-  const deployElection = async () => {
+  async deployElection() {
     const query = `mutation 
     deployElection($id: ID!) {
       deployElection(id: $id) {
