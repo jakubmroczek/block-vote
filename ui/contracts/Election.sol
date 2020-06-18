@@ -1,6 +1,6 @@
-pragma solidity ^0.5.0;
+pragma solidity >0.5.1;
 
-// TODO: What it is?
+// TODO: Check if I can delete it
 pragma experimental ABIEncoderV2;
 
 contract Election {
@@ -53,7 +53,7 @@ contract Election {
  }
 
  modifier voterDidNotVoteOnly {
-  //  require(!m_registesredVotersWhoVoted[msg.sender], "You have already voted");
+  //  require(!m_registeredVotersWhoVoted[msg.sender], "You have already voted");
    _;
  }
 
@@ -66,14 +66,13 @@ contract Election {
     m_owner = msg.sender;
     m_electionTitle = electionTitle;
 
-    //TODO: Delete this when the second component will be ready
-    addNewCandidate("Bill", "Doe");
-    addNewCandidate("Steve", "West");
-    addNewCandidate("George", "Sander");
-    addNewCandidate("Mathew", "Allen");
-    addNewCandidate("Charles", "Hogan");
-    addNewCandidate("Peter", "Gates");                                                                                                                              
+    // Substituted with data from database in the compilatin process.
+addNewCandidate("Marek","Kraśko");
+addNewCandidate("Michał","Kodłubański");
+addNewCandidate("Krystian","Andrzejewski");
+addNewCandidate("Maciek","Moszczyński");
 
+    // Substitute with data from database in the compilatin process.
     registerNewVoter(0xFbC79CFc69405B218799feF48615aEfc444cB699);
   }
 

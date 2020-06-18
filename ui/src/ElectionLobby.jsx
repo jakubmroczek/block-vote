@@ -13,9 +13,9 @@ export default class ElectionLobby extends React.Component {
   }
 
   async fetchSmartContract() {
-    const query = `query 
-      getElection($id: ID!) {
-              getElection(id: $id) {
+    const query = `mutation  
+      deployElection($id: ID!) {
+        deployElection(id: $id) {
                   smartContract {
                     bytecode
                   }
