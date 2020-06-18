@@ -74,8 +74,7 @@ contract Election {
     addNewCandidate("Charles", "Hogan");
     addNewCandidate("Peter", "Gates");                                                                                                                              
 
-    registerNewVoter(0x6bbe6b9946B280a633Bc424BdA575132E95d1695);
-    // registerNewVoter(0xf545863518f84d372C93e170abCB2490946059b3);
+    registerNewVoter(0xFbC79CFc69405B218799feF48615aEfc444cB699);
   }
 
   //TODO: Change to addCandidate

@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 
 const contract = require('@truffle/contract');
+const Election = require('../../../build/contracts/Election.json');
 
 class ElectionAPI {
   web3Provider = null;
