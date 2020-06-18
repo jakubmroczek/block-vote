@@ -52,5 +52,6 @@ export class  ElectionLobby extends React.Component {
       </Button>
     </>
   );
+  
  }
 }
