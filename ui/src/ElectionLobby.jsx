@@ -44,8 +44,8 @@ export default class ElectionLobby extends React.Component {
     await this.fetchSmartContract();
 
     // TODO: Get this from MetaMask
-    const account = '0x6Fde7929911c098367d346766760265F82AE9203';
-    const privateKey = Buffer.from('ce41ca55ca303cc19d7baac0644f32bf63e722c13c17eeb97cea7151e652153d', 'hex');
+    const account = '0xFbC79CFc69405B218799feF48615aEfc444cB699';
+    const privateKey = Buffer.from('94a644335935f2a8c0342ae8b74f4dcdd0e47768c5f5237253924183ef1a1921', 'hex');
 
     const data = `0x${this.bytecodeObject()}`;
 
