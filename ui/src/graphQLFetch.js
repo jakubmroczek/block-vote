@@ -1,4 +1,5 @@
 const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
+// TODO: Remove me
 function jsonDateReviver(key, value) {
   if (dateRegex.test(value)) return new Date(value);
   return value;
