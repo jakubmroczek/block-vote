@@ -2,9 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import ElectionSetUpPanel from './ElectionSetUpPanel.jsx';
-import ElectionLobby from './ElectionLobby.jsx';
 import UserPanel from './UserPanel.jsx';
-import ElectionProgressView from './ElectionProgressView.jsx';
 import NavBar from './NavBar.jsx';
 
 const NotFound = () => <h1>Page Not Found</h1>;
@@ -17,8 +15,6 @@ export default function Contents({ onUserChange }) {
         <Route exact path="/panel" component={UserPanel} />
         <Route path="/panel/edit/:electionID" component={ElectionSetUpPanel} />
         {/* TODO: Think of different path name this one is stupid */}
-        <Route path="/panel/progress/:electionID" component={ElectionProgressView} />
-        <Route exact path="/panel/lobby" component={ElectionLobby} />
         <Route component={NotFound} />
       </Switch>
     </>

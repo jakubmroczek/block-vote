@@ -6,6 +6,7 @@ const web3 = new Web3('http://localhost:7545');
 
 // object from the backend
 // TODO: We must persist the tx somehow, private key should be get from the metamask
+// TODO: Rename this
 export default function deploy(data, account, privateKey) {
   // TODO: The first param is errror _ log it
   web3.eth.getTransactionCount(account, (err, txCount) => {
