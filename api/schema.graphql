@@ -24,13 +24,9 @@ input ElectionUpdateInputs {
     participants: [ParticipantInputs!]
 }
 
-type Bytecode {
-    object: String!
-}
-
 type SmartContract {
-    # TODO: Split into needed sections
-    bytecode: Bytecode
+    bytecode: String!
+    abi: String! 
 }
 
 type Election { 

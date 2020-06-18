@@ -51,9 +51,10 @@ function compile(election) {
   const solcOutput = JSON.parse(solc.compile(JSON.stringify(input)));
   // TODO: Remove the magic strings
   const contract = solcOutput.contracts['Election.template.sol']['Election'];
-  const { evm } = contract;
+  const { abi, evm } = contract;
   const { bytecode } = evm;
-  return bytecode;
+
+  return { bytecode: JSON.stringify(bytecode), abi: JSON.stringify(abi) };
 }
 
 module.exports = { compile };

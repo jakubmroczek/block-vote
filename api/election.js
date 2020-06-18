@@ -94,10 +94,8 @@ async function deployElection(_, { id }) {
   const electionDB = await get({}, { id });
 
   // TODO: What does it return
-  // TODO: Right now it is bytecode
-  const solcOutput = blockchainUtils.compile(electionDB);
-  const { object } = solcOutput;
-  const smartContract = { bytecode: { object } };
+  // Returns abi and bytecode
+  const smartContract = blockchainUtils.compile(electionDB);
   const changes = { smartContract };
   const updatedElection = await update({}, { id, changes });
   return updatedElection;
