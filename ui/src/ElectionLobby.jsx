@@ -10,6 +10,7 @@ export default class ElectionLobby extends React.Component {
     this.fetchSmartContract = this.fetchSmartContract.bind(this);
     this.deployElection = this.deployElection.bind(this);
     this.bytecodeObject = this.bytecodeObject.bind(this);
+    this.abi = this.abi.bind(this);
   }
 
   async fetchSmartContract() {
@@ -18,6 +19,7 @@ export default class ElectionLobby extends React.Component {
         deployElection(id: $id) {
                   smartContract {
                     bytecode
+                    abi
                   }
               }
     }`;
@@ -26,7 +28,7 @@ export default class ElectionLobby extends React.Component {
     const response = await graphQLFetch(query, { id });
 
     if (response) {
-      const { smartContract } = response.getElection;
+      const { smartContract } = response.deployElection;
       this.setState({ smartContract });
     } else {
       alert('getElection call failed');
@@ -40,16 +42,27 @@ export default class ElectionLobby extends React.Component {
     return object;
   }
 
+  abi() {
+    const { smartContract } = this.state;
+    const { abi } = smartContract;
+    const result = JSON.parse(abi);
+    return result;
+  }
+
   async deployElection() {
     await this.fetchSmartContract();
 
     // TODO: Get this from MetaMask
-    const account = '0xFbC79CFc69405B218799feF48615aEfc444cB699';
-    const privateKey = Buffer.from('94a644335935f2a8c0342ae8b74f4dcdd0e47768c5f5237253924183ef1a1921', 'hex');
+    const account = '0x7132208CB0b813a922e690e6fdBAC3Aa9e994a79';
+    const privateKey = Buffer.from('08c4542513c972bbfeb716959d2ca98e3c4a657ca4782112a15a67e87147e0d5', 'hex');
 
-    const data = `0x${this.bytecodeObject()}`;
+    // const data = `0x${this.bytecodeObject()}`;
+    const data = this.bytecodeObject;
+    const abi = this.abi();
 
-    await deploy(data, account, privateKey);
+    alert('Deploying the smart contract...')
+
+    await deploy(data, abi, account, privateKey);
 
     // TODO: How to handle success or failure of the deploy
   }
