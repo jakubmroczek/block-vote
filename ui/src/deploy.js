@@ -15,7 +15,7 @@ export default function deploy(bytecode, abi, account, pk) {
   const gasLimitHex = web3.utils.toHex(6000000);
   const block = web3.eth.getBlock('latest');
   const nonce = web3.eth.getTransactionCount(account, 'pending');
-  const nonceHex = web3.utils.toHex(0);
+  const nonceHex = web3.utils.toHex(22);
 
   const tokenContract = new web3.eth.Contract(abi);
   let contractData = null;
@@ -54,7 +54,7 @@ export default function deploy(bytecode, abi, account, pk) {
   let receipt = null;
 
   // Submit the smart contract deployment transaction
-  web3.eth.sendSignedTransaction(`0x${serializedTx.toString('hex')}`, (err, hash) => {
+  web3.eth.sendSignedTransaction(`0x${serializedTx.toString('hex')}`, async (err, hash) => {
     if (err) {
       console.log(err); return;
     }
@@ -62,20 +62,19 @@ export default function deploy(bytecode, abi, account, pk) {
     // Log the tx, you can explore status manually with eth.getTransaction()
     console.log(`Contract creation tx: ${hash}`);
 
-    // Wait for the transaction to be mined
-    while (receipt == null) {
-      receipt = web3.eth.getTransactionReceipt(hash);
-
-      // Simulate the sleep function
-      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 1000);
+    const sleep = (ms) => {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    // Wait for the transaction to be mined
+    receipt = await web3.eth.getTransactionReceipt(hash);
+  
+    console.log(`Receipt ${receipt}`)
+    console.log(receipt);
+    
     console.log(`Contract address: ${receipt.contractAddress}`);
-    // console.log(`Contract File: ${contract}`);
 
     // // Update JSON
-    // jsonOutput.contracts[contract].contractAddress = receipt.contractAddress;
-
     // // Web frontend just need to have abi & contract address information
     // const webJsonOutput = {
     //   abi,
@@ -89,7 +88,7 @@ export default function deploy(bytecode, abi, account, pk) {
     // fs.writeFileSync(jsonFile, formattedJson);
     // fs.writeFileSync(webJsonFile, formattedWebJson);
 
-    // console.log('==============================');
+    console.log('==============================');
   });
 
   return true;

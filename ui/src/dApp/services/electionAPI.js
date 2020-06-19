@@ -1,6 +1,8 @@
 import Web3 from 'web3';
 import graphQLFetch from '../../graphQLFetch.js';
 
+const contract = require('@truffle/contract')
+
 class ElectionAPI {
   web3Provider = null;
 
@@ -63,10 +65,11 @@ class ElectionAPI {
     // TODO: Get this from the metamask
     const web3 = new Web3('http://localhost:8545');
     // TODO: Take this from the backend
-    const contractAddress = '0x7a448Eb4d9f07Ed6a4B431E490652be43dDE1Ad8';
+    const contractAddress = '0x240256eCc013B7D975ae15a7bFF382B2003E0AF6';
     const contractABI = JSON.parse(abi);
     const dapptokenContract = new web3.eth.Contract(contractABI, contractAddress);
 
+    console.log(dapptokenContract.methods.getElectionTitle().call().then(console.log))
     this.electionInstance = dapptokenContract;
   }
 
