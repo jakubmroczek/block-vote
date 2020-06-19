@@ -2,20 +2,22 @@ const Tx = require('ethereumjs-tx').Transaction;
 const Web3 = require('web3');
 
 // TODO: Metamask should take care of it.
-const web3 = new Web3('http://localhost:8545');
+// Ganache or Private Ethereum Blockchain
+let selectedHost = 'http://127.0.0.1:8545';
+const web3 = new Web3(new Web3.providers.HttpProvider(selectedHost));
 
 // object from the backend
 // TODO: We must persist the tx somehow, private key should be get from the metamask
 // TODO: Rename this
-export default function deploy(data, abi, account, pk) {
+export default function deploy(bytecode, abi, account, pk) {
   const { gasPrice } = web3.eth;
-  const gasPriceHex = web3.toHex(gasPrice);
-  const gasLimitHex = web3.toHex(6000000);
+  const gasPriceHex = web3.utils.toHex(gasPrice);
+  const gasLimitHex = web3.utils.toHex(6000000);
   const block = web3.eth.getBlock('latest');
   const nonce = web3.eth.getTransactionCount(account, 'pending');
-  const nonceHex = web3.toHex(nonce);
+  const nonceHex = web3.utils.toHex(1);
 
-  const tokenContract = web3.eth.contract(abi);
+  const tokenContract = new web3.eth.Contract(abi);
   let contractData = null;
 
   // Prepare the smart contract deployment payload
@@ -25,9 +27,11 @@ export default function deploy(data, abi, account, pk) {
   //    data: '0x' + bytecode
   // });
 
-  contractData = tokenContract.new.getData({
-    data: `0x${bytecode}`,
-  });
+  console.log(tokenContract);
+  const data = `0x${bytecode}`;
+  // contractData = tokenContract.new.getData({
+  //   ,
+  // });
 
   // Prepare the raw transaction information
   const rawTx = {
@@ -39,7 +43,7 @@ export default function deploy(data, abi, account, pk) {
   };
 
   // Get the account private key, need to use it to sign the transaction later.
-  const privateKey = new Buffer(pk, 'hex');
+  const privateKey = Buffer.from(pk, 'hex');
 
   const tx = new Tx(rawTx);
 
@@ -50,7 +54,7 @@ export default function deploy(data, abi, account, pk) {
   let receipt = null;
 
   // Submit the smart contract deployment transaction
-  web3.eth.sendRawTransaction(`0x${serializedTx.toString('hex')}`, (err, hash) => {
+  web3.eth.sendSignedTransaction(`0x${serializedTx.toString('hex')}`, (err, hash) => {
     if (err) {
       console.log(err); return;
     }
