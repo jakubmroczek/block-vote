@@ -68,13 +68,9 @@ async function registerPublicKey(_, { electionID, secretToken, publicKey }) {
 }
 
 async function getElection(_, { publicKey }) {
-  const fs = require('fs');
-  const path = require('path');
-
-  const p = path.join(__dirname, 'build.json');
-  const content = fs.readFileSync(p).toString();
-  
-  return content;
+  const id = '5eebecf62fa711c4439d6cd0';
+  const foo = election.get({}, { id });
+  return foo;
 }
 
 module.exports = { registerPublicKey, getElection };

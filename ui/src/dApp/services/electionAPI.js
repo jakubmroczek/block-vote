@@ -40,7 +40,11 @@ class ElectionAPI {
   async fetchCompiledSmartContract() {
     const query = `query 
     getVoterElection($publicKey: String!) {
-      getVoterElection(publicKey: $publicKey) 
+      getVoterElection(publicKey: $publicKey) {
+        smartContract {
+          abi
+        }
+      }
 }`;
 
     // TODO: Fix thiss
@@ -55,13 +59,15 @@ class ElectionAPI {
   }
 
   async blockchainInit() {
-    // const Election = await this.fetchCompiledSmartContract();
-    // const election = contract(JSON.parse(Election));
+    const response = await this.fetchCompiledSmartContract();
+    const { smartContract } = response;
+    const { abi } = smartContract;
 
+  
     const web3 = new Web3('http://localhost:8545');
+    // TODO: Take this from the backend
     const contractAddress = '0x05e2347F132ee13cD6D3AcC4E0b3E18b3ee05e1c';
-    let contractABI = '[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"electionTitle\",\"type\":\"string\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"surname\",\"type\":\"string\"}],\"name\":\"addNewCandidate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getCandidates\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"surname\",\"type\":\"string\"},{\"internalType\":\"bytes32\",\"name\":\"id\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"votes\",\"type\":\"uint256\"}],\"internalType\":\"struct Election.Candidate[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getElectionTitle\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"voter\",\"type\":\"address\"}],\"name\":\"hasVoterAlreadyVoted\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"voter\",\"type\":\"address\"}],\"name\":\"isVoterRegistered\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"m_candidates\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"surname\",\"type\":\"string\"},{\"internalType\":\"bytes32\",\"name\":\"id\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"votes\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"voter\",\"type\":\"address\"}],\"name\":\"registerNewVoter\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"candidateId\",\"type\":\"bytes32\"}],\"name\":\"vote\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]';
-    contractABI = JSON.parse(contractABI);
+    const contractABI = JSON.parse(abi);
     const dapptokenContract = new web3.eth.Contract(contractABI, contractAddress);
 
     // TODO: Get the addres from the MetaMask
