@@ -63,7 +63,7 @@ class ElectionAPI {
     // TODO: Get this from the metamask
     const web3 = new Web3('http://localhost:8545');
     // TODO: Take this from the backend
-    const contractAddress = '0x7F9034Eb1C291d92eBeCB85C5137316AC079531e';
+    const contractAddress = '0x7a448Eb4d9f07Ed6a4B431E490652be43dDE1Ad8';
     const contractABI = JSON.parse(abi);
     const dapptokenContract = new web3.eth.Contract(contractABI, contractAddress);
 
@@ -92,7 +92,7 @@ class ElectionAPI {
 
     // TODO: Error handling
     const electionTitle = this.electionInstance.methods.getElectionTitle().call((err, title) => title);
-    
+
     return Promise.all([candidates, electionTitle])
       .then(values => ({
         candidates: values[0],
@@ -115,7 +115,7 @@ class ElectionAPI {
     await this.blockchainInit();
 
     // TODO: Rename the function in the blockchain
-    return this.electionInstance.methods.isVoterRegistered(window.web3.eth.defaultAccount);
+    return this.electionInstance.methods.isVoterRegistered(window.web3.eth.defaultAccount).call(result => result);
   }
 
   async hasUserAlreadyVoted() {
@@ -124,9 +124,8 @@ class ElectionAPI {
     await this.blockchainInit();
 
     // TODO: Rename the function in the blockchain
-    // TODO: Fix this shit
-    // return this.electionInstance.methods.hasVoterAlreadyVoted(window.web3.eth.defaultAccount);
-    return false;
+    return this.electionInstance.methods.hasVoterAlreadyVoted(window.web3.eth.defaultAccount).call()
+      .then(res => res);
   }
 }
 
