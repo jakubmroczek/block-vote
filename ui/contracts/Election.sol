@@ -73,7 +73,7 @@ addNewCandidate("Krystian","Andrzejewski");
 addNewCandidate("Maciek","Moszczyński");
 
     // Substitute with data from database in the compilatin process.
-    registerNewVoter(0xFbC79CFc69405B218799feF48615aEfc444cB699);
+    registerNewVoter(0x3d614385A08c9c797387B594cb39Ce02BFdE2be9);
   }
 
   //TODO: Change to addCandidate
