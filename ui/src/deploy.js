@@ -15,7 +15,7 @@ export default function deploy(bytecode, abi, account, pk) {
   const gasLimitHex = web3.utils.toHex(6000000);
   const block = web3.eth.getBlock('latest');
   const nonce = web3.eth.getTransactionCount(account, 'pending');
-  const nonceHex = web3.utils.toHex(1);
+  const nonceHex = web3.utils.toHex(0);
 
   const tokenContract = new web3.eth.Contract(abi);
   let contractData = null;

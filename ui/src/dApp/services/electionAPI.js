@@ -63,7 +63,7 @@ class ElectionAPI {
     const { smartContract } = response;
     const { abi } = smartContract;
 
-  
+
     const web3 = new Web3('http://localhost:8545');
     // TODO: Take this from the backend
     const contractAddress = '0x05e2347F132ee13cD6D3AcC4E0b3E18b3ee05e1c';
@@ -71,16 +71,14 @@ class ElectionAPI {
     const dapptokenContract = new web3.eth.Contract(contractABI, contractAddress);
 
     // TODO: Get the addres from the MetaMask
+    dapptokenContract.methods.getElectionTitle().call().then(console.log).catch((err) => {
+      console.log('huuuuuhuhuh');
+      console.log(err);
+    });
+
     console.log(dapptokenContract.methods.getElectionTitle().call({ from: '0x7132208CB0b813a922e690e6fdBAC3Aa9e994a79' }).then((result) => {
       console.log(result);
     }));
-
-    // dapptokenContract.methods.getCandidates().call((err, res) => {
-    //   console.log(res);
-    // });
-
-    election.setProvider(this.web3Provider);
-    this.electionInstance = await election.deployed();
   }
 
   async getElection() {

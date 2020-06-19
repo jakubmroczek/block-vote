@@ -68,7 +68,7 @@ async function registerPublicKey(_, { electionID, secretToken, publicKey }) {
 }
 
 async function getElection(_, { publicKey }) {
-  const id = '5eebecf62fa711c4439d6cd0';
+  const id = '5eec7a9ec95c5c09665f0fdc';
   const foo = election.get({}, { id });
   return foo;
 }
