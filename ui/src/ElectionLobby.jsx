@@ -4,15 +4,22 @@ import graphQLFetch from './graphQLFetch.js';
 
 import deploy from './deploy.js';
 
+// TODO: Is this okay in the react?
+const Web3 = require('web3');
+
 export default class ElectionLobby extends React.Component {
   constructor(props) {
     super(props);
-    
     this.fetchSmartContract = this.fetchSmartContract.bind(this);
     this.deployElection = this.deployElection.bind(this);
     this.bytecodeObject = this.bytecodeObject.bind(this);
     this.abi = this.abi.bind(this);
+    this.metaMaskInit = this.metaMaskInit.bind(this);
   }
+
+  web3Provider = null;
+
+  web3 = null;
 
   async fetchSmartContract() {
     const query = `mutation  
@@ -78,19 +85,42 @@ export default class ElectionLobby extends React.Component {
     }
   }
 
+  async metaMaskInit() {
+    // TODO: What does Modern means?
+    // Modern dapp browsers...
+    if (window.ethereum) {
+      this.web3Provider = window.ethereum;
+      try {
+        // Request account access
+        await window.ethereum.enable();
+      } catch (error) {
+        // User denied account access...
+        // TODO: Beter error handling
+        console.error('User denied account access');
+      }
+    } else if (window.web3) {
+      // Legacy dapp browsers...
+      this.web3Provider = window.web3.currentProvider;
+    } else {
+      // If no injected web3 instance is detected, fall back to Ganache
+      // TODO: This should be removed from production code
+      this.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
+    }
+    this.web3 = new Web3(this.web3Provider);
+  }
+
   async deployElection() {
     await this.fetchSmartContract();
+    await this.metaMaskInit();
 
-    // TODO: Get this from MetaMask
-    const account = '0xDEE08921Eb01449319fC800C7C93dF32eAe81c3d';
+    const account = window.web3.eth.defaultAccount;
 
     const bytecode = this.bytecodeObject();
     const abi = this.abi();
     const { title: electionTitle } = this.state;
 
     // TODO: How to handle success or failure of the deploy
-    const contractAddress = await deploy(bytecode, abi, electionTitle, account);
-    
+    const contractAddress = await deploy(bytecode, abi, electionTitle, account, this.web3);
     await this.update(contractAddress);
   }
 

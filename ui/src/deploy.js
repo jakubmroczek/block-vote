@@ -1,17 +1,14 @@
 const Tx = require('ethereumjs-tx').Transaction;
-const Web3 = require('web3');
+
 
 
 // object from the backend
 // TODO: We must persist the tx somehow, private key should be get from the metamask
 // TODO: Rename this
-export default function deploy(bytecode, abi, electionTitle, account) {
-  const selectedHost = 'http://127.0.0.1:8545';
-  const web3 = new Web3(new Web3.providers.HttpProvider(selectedHost));
-
+export default function deploy(bytecode, abi, electionTitle, account, web3) {
   const electionContract = new web3.eth.Contract(abi);
 
-  return electionContract.deploy({ data: bytecode, arguments: [ electionTitle ] })
+  return electionContract.deploy({ data: bytecode, arguments: [electionTitle] })
     .send({
       from: account,
       gas: 1500000,
