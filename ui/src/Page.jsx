@@ -28,29 +28,22 @@ export default class Page extends React.Component {
 
   render() {
     const { user } = this.state;
+    if (user.signedIn) {
+      return (
+        <>
+          <UserContext.Provider value={user}>
+            <Contents onUserChange={this.onUserChange} />
+          </UserContext.Provider>
+        </>
+      );
+    }
     return (
-      <>
-        <UserContext.Provider value={user}>
-          <Contents onUserChange={this.onUserChange} />
-        </UserContext.Provider>
-      </>
+      <Switch>
+        <Route exact path="/" render={props => <Welcome {...props} onUserChange={this.onUserChange} />} />
+        <Route path="/register/:electionID" component={RegisterPublicKeyPanel} />
+        <Route path="/vote" component={DApp} />
+        <Route component={NotFound} />
+      </Switch>
     );
-    // if (user.signedIn) {
-    //   return (
-    //     <>
-    //       <UserContext.Provider value={user}>
-    //         <Contents onUserChange={this.onUserChange} />
-    //       </UserContext.Provider>
-    //     </>
-    //   );
-    // }
-    // return (
-    //   <Switch>
-    //     <Route exact path="/" render={props => <Welcome {...props} onUserChange={this.onUserChange} />} />
-    //     <Route path="/register/:electionID" component={RegisterPublicKeyPanel} />
-    //     <Route path="/vote" component={DApp} />
-    //     <Route component={NotFound} />
-    //   </Switch>
-    // );
   }
 }
