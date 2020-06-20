@@ -1,4 +1,4 @@
-pragma solidity ^0.6.9;
+pragma solidity ^0.5.16;
 
 // TODO: Check if I can delete it
 pragma experimental ABIEncoderV2;
@@ -65,12 +65,10 @@ contract Election {
   constructor(string memory electionTitle) public {
     m_owner = msg.sender;
     m_electionTitle = electionTitle;
-
     // Substituted with data from database in the compilatin process.
-%s
-
+    %s
     // Substitute with data from database in the compilatin process.
-%s
+    %s 
   }
 
   //TODO: Change to addCandidate

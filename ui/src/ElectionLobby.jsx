@@ -7,6 +7,7 @@ import deploy from './deploy.js';
 export default class ElectionLobby extends React.Component {
   constructor(props) {
     super(props);
+    
     this.fetchSmartContract = this.fetchSmartContract.bind(this);
     this.deployElection = this.deployElection.bind(this);
     this.bytecodeObject = this.bytecodeObject.bind(this);
@@ -17,6 +18,7 @@ export default class ElectionLobby extends React.Component {
     const query = `mutation  
       deployElection($id: ID!) {
         deployElection(id: $id) {
+                  title
                   smartContract {
                     bytecode
                     abi
@@ -28,20 +30,22 @@ export default class ElectionLobby extends React.Component {
     const response = await graphQLFetch(query, { id });
 
     if (response) {
-      const { smartContract } = response.deployElection;
-      this.setState({ smartContract });
+      const { smartContract, title } = response.deployElection;
+      this.setState({ smartContract, title });
     } else {
       alert('getElection call failed');
     }
   }
 
+  // TODO: Move to the state
   bytecodeObject() {
     const { smartContract } = this.state;
     const { bytecode } = smartContract;
     const { object } = JSON.parse(bytecode);
-    return object;
+    return `0x${object}`;
   }
 
+  // TODO: Move to the state
   abi() {
     const { smartContract } = this.state;
     const { abi } = smartContract;
@@ -50,21 +54,18 @@ export default class ElectionLobby extends React.Component {
   }
 
   async deployElection() {
-    // await this.fetchSmartContract();
+    await this.fetchSmartContract();
 
     // TODO: Get this from MetaMask
     const account = '0x3d614385A08c9c797387B594cb39Ce02BFdE2be9';
-    const privateKey = Buffer.from('dd2f8fa53ec78a8ce4c103d52029a7882884330271835826c997358af6824174', 'hex');
 
-    // const data = `0x${this.bytecodeObject()}`;
-    // const data = this.bytecodeObject();
-    const data = undefined;
-
-    const abi = undefined;
+    const bytecode = this.bytecodeObject();
+    const abi = this.abi();
+    const { title: electionTitle } = this.state;
 
     alert('Deploying the smart contract...')
 
-    await deploy(data, abi, account, privateKey);
+    await deploy(bytecode, abi, electionTitle, account);
 
     // TODO: How to handle success or failure of the deploy
   }
