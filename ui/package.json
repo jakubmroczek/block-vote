@@ -39,6 +39,7 @@
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.5.0",
     "dotenv": "^6.2.0",
+    "ethereumjs-tx": "^2.1.2",
     "express": "^4.17.1",
     "http-proxy-middleware": "^0.21.0",
     "jquery": "^3.5.1",
@@ -53,8 +54,9 @@
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "truffle": "^5.1.30",
     "url-search-params": "^1.1.0",
-    "web3": "^1.2.7",
+    "web3": "^1.2.1",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {

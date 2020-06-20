@@ -1,4 +1,4 @@
-pragma solidity ^0.6.9;
+pragma solidity ^0.5.16;
 
 // TODO: Check if I can delete it
 pragma experimental ABIEncoderV2;
@@ -48,29 +48,27 @@ contract Election {
 
 
  modifier registeredVoterOnly {
-   require(m_reqisteredVoters[msg.sender], "You are not allowed to participate in the voring as you public key has not been registered");
+  //  require(m_reqisteredVoters[msg.sender], "You are not allowed to participate in the voring as you public key has not been registered");
    _;
  }
 
  modifier voterDidNotVoteOnly {
-   require(!m_registeredVotersWhoVoted[msg.sender], "You have already voted");
+  //  require(!m_registseredVotersWhoVoted[msg.sender], "You have already voted");
    _;
  }
 
   modifier ownerOnly {
-    require(msg.sender == m_owner, "Only contract owner can call this method`");
+    // require(msg.sender == m_owner, "Only contract owner can call this method`");
     _;
   }
 
   constructor(string memory electionTitle) public {
     m_owner = msg.sender;
     m_electionTitle = electionTitle;
-
     // Substituted with data from database in the compilatin process.
-%s
-
+    %s
     // Substitute with data from database in the compilatin process.
-%s
+    %s 
   }
 
   //TODO: Change to addCandidate

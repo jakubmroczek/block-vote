@@ -1,10 +1,5 @@
 import Web3 from 'web3';
-
-const contract = require('@truffle/contract');
-
-// TODO: This should be fetched from graphQLApi
-// eslint-disable-next-line import/no-unresolved
-const Election = require('../contracts/Election.json');
+import graphQLFetch from '../../graphQLFetch.js';
 
 class ElectionAPI {
   web3Provider = null;
@@ -32,15 +27,46 @@ class ElectionAPI {
     } else {
       // If no injected web3 instance is detected, fall back to Ganache
       // TODO: This should be removed from production code
-      this.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+      this.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
     }
     this.web3 = new Web3(this.web3Provider);
   }
 
+  // TODO: Make this dependant on the public key
+  // eslint-disable-next-line class-methods-use-this
+  async fetchCompiledSmartContract() {
+    const query = `query 
+    getVoterElection($publicKey: String!) {
+      getVoterElection(publicKey: $publicKey) {
+        smartContract {
+          abi
+          address
+        }
+      }
+}`;
+
+    // TODO: Fix thiss
+    const publicKey = 'foobart';
+    const response = await graphQLFetch(query, { publicKey });
+
+    if (response) {
+      return response.getVoterElection;
+    }
+    alert('getElection call failed');
+    return undefined;
+  }
+
   async blockchainInit() {
-    const election = contract(Election);
-    election.setProvider(this.web3Provider);
-    this.electionInstance = await election.deployed();
+    const response = await this.fetchCompiledSmartContract();
+    const { smartContract } = response;
+    const { abi, address } = smartContract;
+    const contractABI = JSON.parse(abi);
+
+    // TODO: Get this from the metamask
+    const web3 = new Web3('http://localhost:8545');
+
+    const dapptokenContract = new web3.eth.Contract(contractABI, address);
+    this.electionInstance = dapptokenContract;
   }
 
   async getElection() {
@@ -48,7 +74,8 @@ class ElectionAPI {
     await this.blockchainInit();
 
     // TODO: Error handling
-    const candidates = this.electionInstance.getCandidates().then((ethereumCandidates) => {
+    // TOOD: rename to promise
+    const candidates = this.electionInstance.methods.getCandidates().call((err, ethereumCandidates) => {
       const candidatesArray = [];
       for (let i = 0; i < ethereumCandidates.length; i += 1) {
         candidatesArray.push(
@@ -63,7 +90,7 @@ class ElectionAPI {
     });
 
     // TODO: Error handling
-    const electionTitle = this.electionInstance.getElectionTitle().then(title => title);
+    const electionTitle = this.electionInstance.methods.getElectionTitle().call((err, title) => title);
 
     return Promise.all([candidates, electionTitle])
       .then(values => ({
@@ -76,7 +103,8 @@ class ElectionAPI {
     await this.metaMaskInit();
     await this.blockchainInit();
 
-    return this.electionInstance.vote(candidate.id, { from: window.web3.eth.defaultAccount })
+    // TODO: Use send here
+    return this.electionInstance.methods.vote(candidate.id, { from: window.web3.eth.defaultAccount })
       .catch(error => console.log(error));
   }
 
@@ -86,7 +114,7 @@ class ElectionAPI {
     await this.blockchainInit();
 
     // TODO: Rename the function in the blockchain
-    return this.electionInstance.isVoterRegistered(window.web3.eth.defaultAccount);
+    return this.electionInstance.methods.isVoterRegistered(window.web3.eth.defaultAccount).call(result => result);
   }
 
   async hasUserAlreadyVoted() {
@@ -95,7 +123,8 @@ class ElectionAPI {
     await this.blockchainInit();
 
     // TODO: Rename the function in the blockchain
-    return this.electionInstance.hasVoterAlreadyVoted(window.web3.eth.defaultAccount);
+    return this.electionInstance.methods.hasVoterAlreadyVoted(window.web3.eth.defaultAccount).call()
+      .then(res => res);
   }
 }
 

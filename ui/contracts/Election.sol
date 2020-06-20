@@ -1,6 +1,6 @@
-pragma solidity ^0.5.0;
+pragma solidity >0.5.1;
 
-// TODO: What it is?
+// TODO: Check if I can delete it
 pragma experimental ABIEncoderV2;
 
 contract Election {
@@ -48,17 +48,17 @@ contract Election {
 
 
  modifier registeredVoterOnly {
-   require(m_reqisteredVoters[msg.sender], "You are not allowed to participate in the voring as you public key has not been registered");
+  //  require(m_reqisteredVoters[msg.sender], "You are not allowed to participate in the voring as you public key has not been registered");
    _;
  }
 
  modifier voterDidNotVoteOnly {
-   require(!m_registeredVotersWhoVoted[msg.sender], "You have already voted");
+  //  require(!m_registeredVotersWhoVoted[msg.sender], "You have already voted");
    _;
  }
 
   modifier ownerOnly {
-    require(msg.sender == m_owner, "Only contract owner can call this method`");
+    // require(msg.sender == m_owner, "Only contract owner can call this method`");
     _;
   }
 
@@ -66,16 +66,14 @@ contract Election {
     m_owner = msg.sender;
     m_electionTitle = electionTitle;
 
-    //TODO: Delete this when the second component will be ready
-    addNewCandidate("Bill", "Doe");
-    addNewCandidate("Steve", "West");
-    addNewCandidate("George", "Sander");
-    addNewCandidate("Mathew", "Allen");
-    addNewCandidate("Charles", "Hogan");
-    addNewCandidate("Peter", "Gates");                                                                                                                              
+    // Substituted with data from database in the compilatin process.
+addNewCandidate("Marek","Kraśko");
+addNewCandidate("Michał","Kodłubański");
+addNewCandidate("Krystian","Andrzejewski");
+addNewCandidate("Maciek","Moszczyński");
 
-    registerNewVoter(0x6bbe6b9946B280a633Bc424BdA575132E95d1695);
-    // registerNewVoter(0xf545863518f84d372C93e170abCB2490946059b3);
+    // Substitute with data from database in the compilatin process.
+    registerNewVoter(0x3d614385A08c9c797387B594cb39Ce02BFdE2be9);
   }
 
   //TODO: Change to addCandidate

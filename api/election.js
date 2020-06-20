@@ -43,7 +43,7 @@ async function get(_, { id }) {
 async function update(_, { id, changes }) {
   const db = getDb();
   const filter = { _id: mongo.ObjectID(id) };
-  if (changes.title || changes.candidates || changes.participants) {
+  if (changes.title || changes.candidates || changes.participants || changes.smartContract.address) {
     const election = await db.collection(COLLECTION).findOne(filter);
     Object.assign(election, changes);
   }
@@ -93,11 +93,11 @@ async function setElectionInPublicKeyRegisterationStage(_, { id }) {
 async function deployElection(_, { id }) {
   const electionDB = await get({}, { id });
 
-  const solcOutput = blockchainUtils.compile(electionDB);
-  
-  const changes = { solcOutput };
+  // TODO: What does it return
+  // Returns abi and bytecode
+  const smartContract = blockchainUtils.compile(electionDB);
+  const changes = { smartContract };
   const updatedElection = await update({}, { id, changes });
-
   return updatedElection;
 }
 

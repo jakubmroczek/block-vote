@@ -67,4 +67,10 @@ async function registerPublicKey(_, { electionID, secretToken, publicKey }) {
   return succes;
 }
 
-module.exports = { registerPublicKey };
+async function getElection(_, { publicKey }) {
+  const id = '5eedaed2cfe9ec4055fcbcb7';
+  const foo = election.get({}, { id });  
+  return foo;
+}
+
+module.exports = { registerPublicKey, getElection };

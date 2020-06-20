@@ -17,11 +17,25 @@ enum Status {
     Finished
 }
 
+input SmartContractUpdateInputs {
+    address: String!
+    bytecode: String!
+    abi: String! 
+}
+
 input ElectionUpdateInputs {
     status: Status
     title: String
     candidates: [CandidateInputs!]
     participants: [ParticipantInputs!]
+    smartContract: SmartContractUpdateInputs
+}
+
+type SmartContract {
+    bytecode: String!
+    abi: String! 
+    # Only deployed smart contracts have this field
+    address: String
 }
 
 type Election { 
@@ -30,6 +44,7 @@ type Election {
     title: String!
     candidates: [Candidate!]!
     participants: [Participant!]!
+    smartContract: SmartContract
 }
 
 input CandidateInputs {
@@ -55,7 +70,11 @@ type Query {
     listElection : [Election!]!
 
     # id of the election 
+    # Mutation
     sendRegisterPublicKeysMail(id: ID!): Boolean!
+
+    # TODO: Should it be a different respones - Electio dedicated for the voter 
+    getVoterElection(publicKey: String!) : Election
 }
 
 type Mutation {
