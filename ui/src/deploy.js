@@ -10,8 +10,8 @@ export default function deploy(bytecode, abi, electionTitle, account) {
   const web3 = new Web3(new Web3.providers.HttpProvider(selectedHost));
 
   const electionContract = new web3.eth.Contract(abi);
-  
-  electionContract.deploy({ data: bytecode, arguments: [ electionTitle ] })
+
+  return electionContract.deploy({ data: bytecode, arguments: [ electionTitle ] })
     .send({
       from: account,
       gas: 1500000,
@@ -20,8 +20,6 @@ export default function deploy(bytecode, abi, electionTitle, account) {
       console.log(`Error ${error} Transaction hash ${transactionHash}`);
     }) // TODO: Error handling
     .then((newContractInstance) => {
-      console.log('Got a new instance!!!!');
-      console.log(newContractInstance.options.addres);
-      return newContractInstance;
+      return newContractInstance.options.address;
     });
 }
