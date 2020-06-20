@@ -26,8 +26,7 @@ async function create(_1, _2, { user }) {
 
 async function list(_1, _2, { user }) {
   const db = getDb();
-  // const { username } = user;
-const username  = 'jakubmroczek2@gmail.com';
+  const { username } = user;
   const dbUser = await db.collection('users').findOne({ username });
   const electionIDs = dbUser.elections;
   const elections = await db.collection(COLLECTION).find({ _id: { $in: electionIDs } }).toArray();
