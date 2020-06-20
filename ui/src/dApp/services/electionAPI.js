@@ -40,6 +40,7 @@ class ElectionAPI {
       getVoterElection(publicKey: $publicKey) {
         smartContract {
           abi
+          address
         }
       }
 }`;
@@ -58,14 +59,13 @@ class ElectionAPI {
   async blockchainInit() {
     const response = await this.fetchCompiledSmartContract();
     const { smartContract } = response;
-    const { abi } = smartContract;
+    const { abi, address } = smartContract;
     const contractABI = JSON.parse(abi);
 
     // TODO: Get this from the metamask
     const web3 = new Web3('http://localhost:8545');
-    // TODO: Take this from the backend
-    const contractAddress = '0x17a19169b243635Bf38cda3c0aeE883f9B316946';    
-    const dapptokenContract = new web3.eth.Contract(contractABI, contractAddress);
+
+    const dapptokenContract = new web3.eth.Contract(contractABI, address);
     this.electionInstance = dapptokenContract;
   }
 
