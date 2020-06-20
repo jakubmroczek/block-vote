@@ -50,15 +50,17 @@ export default class ElectionLobby extends React.Component {
   }
 
   async deployElection() {
-    await this.fetchSmartContract();
+    // await this.fetchSmartContract();
 
     // TODO: Get this from MetaMask
     const account = '0x3d614385A08c9c797387B594cb39Ce02BFdE2be9';
     const privateKey = Buffer.from('dd2f8fa53ec78a8ce4c103d52029a7882884330271835826c997358af6824174', 'hex');
 
     // const data = `0x${this.bytecodeObject()}`;
-    const data = this.bytecodeObject;
-    const abi = this.abi();
+    // const data = this.bytecodeObject();
+    const data = undefined;
+
+    const abi = undefined;
 
     alert('Deploying the smart contract...')
 

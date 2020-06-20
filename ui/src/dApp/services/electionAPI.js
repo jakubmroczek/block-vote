@@ -65,11 +65,37 @@ class ElectionAPI {
     // TODO: Get this from the metamask
     const web3 = new Web3('http://localhost:8545');
     // TODO: Take this from the backend
-    const contractAddress = '0x240256eCc013B7D975ae15a7bFF382B2003E0AF6';
+    const contractAddress = '0x618C333696C1f334D4a9f977a5E139A1665c804e';
     const contractABI = JSON.parse(abi);
-    const dapptokenContract = new web3.eth.Contract(contractABI, contractAddress);
+    const dapptokenContract = new web3.eth.Contract([{ inputs: [{ internalType: 'string', name: 'electionTitle', type: 'string' }], stateMutability: 'nonpayable', type: 'constructor' }, {
+      inputs: [{ internalType: 'string', name: 'name', type: 'string' }, { internalType: 'string', name: 'surname', type: 'string' }], name: 'addNewCandidate', outputs: [], stateMutability: 'nonpayable', type: 'function',
+    }, {
+      inputs: [],
+      name: 'getCandidates',
+      outputs: [{
+        components: [{ internalType: 'string', name: 'name', type: 'string' }, { internalType: 'string', name: 'surname', type: 'string' }, { internalType: 'bytes32', name: 'id', type: 'bytes32' }, { internalType: 'uint256', name: 'votes', type: 'uint256' }], internalType: 'struct Election.Candidate[]', name: '', type: 'tuple[]',
+      }],
+      stateMutability: 'view',
+      type: 'function',
+    }, {
+      inputs: [], name: 'getElectionTitle', outputs: [{ internalType: 'string', name: '', type: 'string' }], stateMutability: 'view', type: 'function',
+    }, {
+      inputs: [{ internalType: 'address', name: 'voter', type: 'address' }], name: 'hasVoterAlreadyVoted', outputs: [{ internalType: 'bool', name: '', type: 'bool' }], stateMutability: 'view', type: 'function',
+    }, {
+      inputs: [{ internalType: 'address', name: 'voter', type: 'address' }], name: 'isVoterRegistered', outputs: [{ internalType: 'bool', name: '', type: 'bool' }], stateMutability: 'view', type: 'function',
+    }, {
+      inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }], name: 'm_candidates', outputs: [{ internalType: 'string', name: 'name', type: 'string' }, { internalType: 'string', name: 'surname', type: 'string' }, { internalType: 'bytes32', name: 'id', type: 'bytes32' }, { internalType: 'uint256', name: 'votes', type: 'uint256' }], stateMutability: 'view', type: 'function',
+    }, {
+      inputs: [{ internalType: 'address', name: 'voter', type: 'address' }], name: 'registerNewVoter', outputs: [], stateMutability: 'nonpayable', type: 'function',
+    }, {
+      inputs: [{ internalType: 'bytes32', name: 'candidateId', type: 'bytes32' }], name: 'vote', outputs: [], stateMutability: 'nonpayable', type: 'function',
+    }], contractAddress);
 
-    console.log(dapptokenContract.methods.getElectionTitle().call().then(console.log))
+    console.log(dapptokenContract.methods.getElectionTitle().call(function(err, res) {
+      console.log('kurwa');
+      console.log(err);
+      console.log(res);
+    }));
     this.electionInstance = dapptokenContract;
   }
 
