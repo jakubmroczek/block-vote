@@ -57,17 +57,19 @@ export default class ElectionLobby extends React.Component {
     await this.fetchSmartContract();
 
     // TODO: Get this from MetaMask
-    const account = '0x3d614385A08c9c797387B594cb39Ce02BFdE2be9';
+    const account = '0xc5fB4937615C1e0856481004F48051512c87f327';
 
     const bytecode = this.bytecodeObject();
     const abi = this.abi();
     const { title: electionTitle } = this.state;
 
-    alert('Deploying the smart contract...')
-
-    await deploy(bytecode, abi, electionTitle, account);
-
     // TODO: How to handle success or failure of the deploy
+    const contractInstance = await deploy(bytecode, abi, electionTitle, account);
+
+    const contractAddress = contractInstance.options.address;
+    console.log(contractInstance);
+    
+    alert(`Contract address is ${contractAddress}`);
   }
 
   render() {

@@ -64,8 +64,7 @@ class ElectionAPI {
     // TODO: Get this from the metamask
     const web3 = new Web3('http://localhost:8545');
     // TODO: Take this from the backend
-    const contractAddress = '0x17a19169b243635Bf38cda3c0aeE883f9B316946';
-    
+    const contractAddress = '0x17a19169b243635Bf38cda3c0aeE883f9B316946';    
     const dapptokenContract = new web3.eth.Contract(contractABI, contractAddress);
     this.electionInstance = dapptokenContract;
   }
