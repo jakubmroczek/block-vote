@@ -53,11 +53,36 @@ export default class ElectionLobby extends React.Component {
     return result;
   }
 
+  async update(address) {
+    // TODO: Do not resend ABI, change it on the backend.
+    const query = `mutation 
+        updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
+          updateElection(id: $id, changes: $changes) {
+                  title
+                }
+    }`;
+    const { id } = this.props;
+
+    // TODO: Do not do this, change backend logic
+    const { smartContract: sm } = this.state;
+    const { bytecode, abi } = sm;
+
+    const smartContract = { address, bytecode, abi };
+    const changes = { smartContract };
+    const vars = { id, changes };
+    const data = await graphQLFetch(query, vars);
+    if (data) {
+      alert('Successful deployment!!')
+    } else {
+      alert(`Could deploy the smart contract}`);
+    }
+  }
+
   async deployElection() {
     await this.fetchSmartContract();
 
     // TODO: Get this from MetaMask
-    const account = '0x66F8329C2815c1AD82fac2A7f68AD1C76E3F390d';
+    const account = '0xDEE08921Eb01449319fC800C7C93dF32eAe81c3d';
 
     const bytecode = this.bytecodeObject();
     const abi = this.abi();
@@ -65,8 +90,8 @@ export default class ElectionLobby extends React.Component {
 
     // TODO: How to handle success or failure of the deploy
     const contractAddress = await deploy(bytecode, abi, electionTitle, account);
-      
-    alert(`Contract address is ${contractAddress}`);
+    
+    await this.update(contractAddress);
   }
 
   render() {

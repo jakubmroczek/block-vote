@@ -17,16 +17,25 @@ enum Status {
     Finished
 }
 
+input SmartContractUpdateInputs {
+    address: String!
+    bytecode: String!
+    abi: String! 
+}
+
 input ElectionUpdateInputs {
     status: Status
     title: String
     candidates: [CandidateInputs!]
     participants: [ParticipantInputs!]
+    smartContract: SmartContractUpdateInputs
 }
 
 type SmartContract {
     bytecode: String!
     abi: String! 
+    # Only deployed smart contracts have this field
+    address: String
 }
 
 type Election { 

@@ -44,7 +44,7 @@ async function get(_, { id }) {
 async function update(_, { id, changes }) {
   const db = getDb();
   const filter = { _id: mongo.ObjectID(id) };
-  if (changes.title || changes.candidates || changes.participants) {
+  if (changes.title || changes.candidates || changes.participants || changes.smartContract.address) {
     const election = await db.collection(COLLECTION).findOne(filter);
     Object.assign(election, changes);
   }
