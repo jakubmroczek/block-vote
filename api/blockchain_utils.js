@@ -8,8 +8,8 @@ function electionSmartContractTemplate() {
 }
 
 function format(template, election) {
-  const registerNewVoterSignature = 'registerNewVoter(%s);';
-  const addNewCandidateSignature = 'addNewCandidate(\"%s\",\"%s\");';
+  const registerNewVoterSignature = 'registerVoter(%s);';
+  const addNewCandidateSignature = 'addCandidate(\"%s\",\"%s\");';
 
   const { candidates } = election;
   const addNewCandidateCalls = candidates.map(c => util.format(addNewCandidateSignature, c.name, c.surname)).join('\n');
@@ -48,7 +48,7 @@ function compile(election) {
   };
 
   const solcOutput = JSON.parse(solc.compile(JSON.stringify(input)));
-  
+
   // TODO: Remove the magic strings
   const contract = solcOutput.contracts['Election.template.sol'].Election;
   const { abi, evm } = contract;
