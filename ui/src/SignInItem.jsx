@@ -81,7 +81,7 @@ export default class SignInItem extends React.Component {
         <Button onClick={this.showModal}>
           Sign in
         </Button>
-        <Modal centered keyboard show={visible} style={{ opacity: 1 }} onHide={this.hideModal} bsSize="sm">
+        <Modal centered keyboard show={visible} style={{ opacity: 1 }} onHide={this.hideModal}>
           <Modal.Header closeButton>
             <Modal.Title>Sign in</Modal.Title>
           </Modal.Header>
@@ -95,7 +95,7 @@ export default class SignInItem extends React.Component {
             </Button>
           </Modal.Body>
           <Modal.Footer>
-            <Button bsStyle="link" onClick={this.hideModal} variant="outline-danger">Cancel</Button>
+            <Button onClick={this.hideModal} variant="outline-danger">Cancel</Button>
           </Modal.Footer>
         </Modal>
       </>
