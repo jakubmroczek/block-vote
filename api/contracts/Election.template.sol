@@ -20,15 +20,17 @@ contract Election {
     return m_registeredVotersWhoVoted[voter];
   }
 
-  function getCandidates() public view registeredVoter returns (Candidate[] memory) {
-    return  m_candidates;
-  }
+ modifier registeredVoter {
+   require(isVoterRegistered(msg.sender), "You are not allowed to participate in the voting as your public key was not registered");
+   _;
+ }
 
-  function getElectionTitle() public view registeredVoter returns(string memory) {
-    return  m_electionTitle;
-  }
+ modifier voterDidNotVote {
+   require(!hasVoterAlreadyVoted(msg.sender), "You have already voted");
+   _;
+ }
 
-  function vote(bytes32 candidateId) public   registeredVoter voterDidNotVote {
+  function vote(bytes32 candidateId) public  registeredVoter voterDidNotVote {
       //TODO: Can we do it differently
       for (uint i = 0; i <  m_candidates.length; i++) {
         if ( m_candidates[i].id == candidateId) {
@@ -40,21 +42,18 @@ contract Election {
       voterVoted(msg.sender);
   }
 
+  function getCandidates() public view returns (Candidate[] memory) {
+    return  m_candidates;
+  }
+
+  function getElectionTitle() public view returns(string memory) {
+    return  m_electionTitle;
+  }
+
  Candidate[] public m_candidates;
  mapping(address => bool) m_reqisteredVoters;
  mapping(address => bool) m_registeredVotersWhoVoted;
  string m_electionTitle;
-
-
- modifier registeredVoter {
-   require(m_reqisteredVoters[msg.sender], "You are not allowed to participate in the voting as your public key was not registered");
-   _;
- }
-
- modifier voterDidNotVote {
-   require(!m_registeredVotersWhoVoted[msg.sender], "You have already voted");
-   _;
- }
 
   constructor(string memory electionTitle) public {
     m_electionTitle = electionTitle;
