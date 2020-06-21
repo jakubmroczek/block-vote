@@ -12,8 +12,8 @@ type Participant {
 
 enum Status {
     New,
-    PublicKeyRegistration,
-    Under,
+    Registration,
+    Deployed,
     Finished
 }
 
