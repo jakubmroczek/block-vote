@@ -5,7 +5,6 @@ import {
 import './fontawesome.js';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import graphQLFetch from './graphQLFetch.js';
 import ActionsItem from './ActionsItem.jsx';
 
 function CandidateRemoveModal({
@@ -281,107 +280,40 @@ export default class CandidateList extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.candidates !== prevProps.candidates) {
-      const { candidates } = this.props;
+    const { candidates } = this.props;
+    if (candidates !== prevProps.candidates) {
       this.setState({ candidates });
-    }
-  }
-
-  async read() {
-    const query = `query 
-        getElection($id: ID!) {
-                getElection(id: $id) {
-                    candidates {
-                      name surname
-                    }  
-                }
-    }`;
-
-    const { id } = this.props;
-    const vars = { id };
-
-    const data = await graphQLFetch(query, vars);
-
-    const { getElection } = data;
-    const { candidates } = getElection;
-
-    if (candidates) {
-      this.setState({ candidates });
-    } else {
-      alert('Could not fetch candidates from the server');
     }
   }
 
   async create(candidate) {
-    const query = `mutation 
-    updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
-      updateElection(id: $id, changes: $changes) {
-        _id      
-      }
-}`;
-
-    const { id } = this.props;
-
     const { candidates } = this.state;
     const updatedCandidates = Array.from(candidates);
     updatedCandidates.push(candidate);
     const changes = { candidates: updatedCandidates };
 
-    const vars = { id, changes };
-    const data = await graphQLFetch(query, vars);
-    if (data) {
-      this.read();
-    } else {
-      alert(`Could not add candidate ${candidate.name} ${candidate.surname}`);
-    }
+    const { update } = this.props;
+    update(changes);
   }
 
   async update(index, candidate) {
-    const query = `mutation 
-        updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
-          updateElection(id: $id, changes: $changes) {
-            _id      
-          }
-    }`;
-
-    const { id } = this.props;
-
     const { candidates } = this.state;
     const updatedCandidates = Array.from(candidates);
     updatedCandidates[index] = candidate;
     const changes = { candidates: updatedCandidates };
 
-    const vars = { id, changes };
-    const data = await graphQLFetch(query, vars);
-    if (data) {
-      this.read();
-    } else {
-      alert(`Could not update candidate ${candidate.name} ${candidate.surname}`);
-    }
+    const { update } = this.props;
+    update(changes);
   }
 
   async remove(index) {
-    const query = `mutation 
-        updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
-          updateElection(id: $id, changes: $changes) {
-            _id      
-          }
-    }`;
-
-    const { id } = this.props;
-
     const { candidates } = this.state;
     const updatedCandidates = Array.from(candidates);
     updatedCandidates.splice(index, 1);
     const changes = { candidates: updatedCandidates };
 
-    const vars = { id, changes };
-    const data = await graphQLFetch(query, vars);
-    if (data) {
-      this.read();
-    } else {
-      alert(`Could not remove a candidate of a index ${index}`);
-    }
+    const { update } = this.props;
+    update(changes);
   }
 
   showCandidateAddModal() {
