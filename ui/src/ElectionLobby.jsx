@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner, Container, Row, Col } from 'react-bootstrap';
 import graphQLFetch from './graphQLFetch.js';
 
 import deploy from './deploy.js';
@@ -8,8 +8,18 @@ import deploy from './deploy.js';
 const Web3 = require('web3');
 
 export default class ElectionLobby extends React.Component {
+  web3Provider = null;
+
+  web3 = null;
+
   constructor(props) {
     super(props);
+
+    this.state = {
+      registeredUserNumber: '?',
+    };
+
+    this.read = this.read.bind(this);
     this.fetchSmartContract = this.fetchSmartContract.bind(this);
     this.deployElection = this.deployElection.bind(this);
     this.bytecodeObject = this.bytecodeObject.bind(this);
@@ -17,9 +27,36 @@ export default class ElectionLobby extends React.Component {
     this.metaMaskInit = this.metaMaskInit.bind(this);
   }
 
-  web3Provider = null;
+  componentDidMount() {
+    this.read();
+    this.timer = setInterval(() => this.read(), 5000);
+  }
 
-  web3 = null;
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  // TODO: Keep this in a one place
+  async read() {
+    const query = `query 
+    getElection($id: ID!) {
+            getElection(id: $id) {
+              publicKeys
+            }
+}`;
+
+    const { id } = this.props;
+    const response = await graphQLFetch(query, { id });
+
+    if (response) {
+      const { publicKeys } = response.getElection;
+      this.setState({
+        registeredUserNumber: publicKeys.length,
+      });
+    } else {
+      alert('getElection call failed');
+    }
+  }
 
   async fetchSmartContract() {
     const query = `mutation  
@@ -79,9 +116,9 @@ export default class ElectionLobby extends React.Component {
     const vars = { id, changes };
     const data = await graphQLFetch(query, vars);
     if (data) {
-      alert('Successful deployment!!')
+      alert('Successful deployment!!');
     } else {
-      alert(`Could deploy the smart contract}`);
+      alert('Could deploy the smart contract}');
     }
   }
 
@@ -125,13 +162,31 @@ export default class ElectionLobby extends React.Component {
   }
 
   render() {
+    const { registeredUserNumber } = this.state;
+    const { totalNumberOfVoters } = this.props;
+
     return (
-      <>
-        <h1>Please wait for voters to register</h1>
-        <Button onClick={this.deployElection}>
-          Deploy election on blockchain
-        </Button>
-      </>
+      <Container>
+        <Row>
+          <Col>
+            <Spinner animation="border" />
+          </Col>
+        </Row>
+        <Row>
+          Registered users
+          {' '}
+          {registeredUserNumber}
+          /
+          {totalNumberOfVoters}
+        </Row>
+        <Row>
+          <Col>
+            <Button onClick={this.deployElection}>
+              Deploy election on blockchain
+            </Button>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }
