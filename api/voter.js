@@ -46,13 +46,16 @@ async function tryRegisterPublicKey(id, secretToken, publicKey) {
   // Must exists because this method is called second
   const participant = getParticipant(electionDB, secretToken);
 
-  const { participants, publicKeys } = electionDB;
+  const { participants, publicKeys, normalizedPublicKeys } = electionDB;
   const newParticpant = { ...participant, publicKey, registered: true };
   const index = participants.indexOf(participant);
   participants[index] = newParticpant;
 
   // Updating the public keys
+  // TODO: Change the identifier so that it can be faster.
   publicKeys.push(publicKey);
+  const normalizedPublicKey = publicKey.toLowerCase();
+  normalizedPublicKeys.push(normalizedPublicKey);
 
   const changes = { participants, publicKeys };
 
@@ -71,7 +74,8 @@ async function registerPublicKey(_, { electionID, secretToken, publicKey }) {
 
 async function getElection(_, { publicKey }) {
   const db = getDb();
-  const filter = { publicKeys: { $all: [publicKey] } };
+  const normalizedPublicKeys = publicKey.toLowerCase();
+  const filter = { normalizedPublicKeys: { $all: [normalizedPublicKeys] } };
   const collection = 'elections';
   // eslint-disable-next-line no-shadow
   const election = await db.collection(collection).findOne(filter);

@@ -45,7 +45,6 @@ type Election {
     candidates: [Candidate!]!
     participants: [Participant!]!
     smartContract: SmartContract
-    publicKeys: [String!]
 }
 
 input CandidateInputs {
