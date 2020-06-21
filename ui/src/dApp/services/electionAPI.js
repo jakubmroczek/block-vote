@@ -34,7 +34,7 @@ class ElectionAPI {
 
   // TODO: Make this dependant on the public key
   // eslint-disable-next-line class-methods-use-this
-  async fetchCompiledSmartContract() {
+  async fetchCompiledSmartContract(publicKey) {
     const query = `query 
     getVoterElection($publicKey: String!) {
       getVoterElection(publicKey: $publicKey) {
@@ -45,8 +45,6 @@ class ElectionAPI {
       }
 }`;
 
-    // TODO: Fix thiss
-    const publicKey = 'foobart';
     const response = await graphQLFetch(query, { publicKey });
 
     if (response) {
@@ -57,7 +55,8 @@ class ElectionAPI {
   }
 
   async blockchainInit() {
-    const response = await this.fetchCompiledSmartContract();
+    const publicKey = window.web3.eth.defaultAccount;
+    const response = await this.fetchCompiledSmartContract(publicKey);
     const { smartContract } = response;
     const { abi, address } = smartContract;
     const contractABI = JSON.parse(abi);

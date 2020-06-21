@@ -26,7 +26,8 @@ async function create(_1, _2, { user }) {
 
 async function list(_1, _2, { user }) {
   const db = getDb();
-  const { username } = user;
+  // const { username } = user;
+  const username  = "jakubmroczek2@gmail.com";
   const dbUser = await db.collection('users').findOne({ username });
   const electionIDs = dbUser.elections;
   const elections = await db.collection(COLLECTION).find({ _id: { $in: electionIDs } }).toArray();
@@ -64,7 +65,7 @@ async function remove(_, { id }, { user }) {
   return result.deletedCount === 1;
 }
 
-// TODO: Not CRUD operation, wher is should be?
+// TODO: Not CRUD operation, where is should be?
 async function setElectionInPublicKeyRegisterationStage(_, { id }) {
   const electionDB = await get({}, { id });
 
