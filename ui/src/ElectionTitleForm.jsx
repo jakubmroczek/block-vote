@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Button, Form, FormGroup, Card,
 } from 'react-bootstrap';
-import graphQLFetch from './graphQLFetch.js';
 
 export default class ElectionTitleForm extends React.Component {
   constructor(props) {
@@ -17,8 +16,8 @@ export default class ElectionTitleForm extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.title !== prevProps.title) {
-      const { title } = this.props;
+    const { title } = this.props;
+    if (title !== prevProps.title) {
       this.setState({ title });
     }
   }
@@ -32,45 +31,10 @@ export default class ElectionTitleForm extends React.Component {
     this.update(title);
   }
 
-  async read() {
-    const query = `query 
-        getElection($id: ID!) {
-                getElection(id: $id) {
-                    title  
-                }
-    }`;
-
-    const { id } = this.props;
-    const vars = { id };
-    const data = await graphQLFetch(query, vars);
-
-    const { getElection } = data;
-    const { title } = getElection;
-
-    if (title) {
-      this.setState({ title });
-    } else {
-      alert('Could not fetch election title');
-    }
-  }
-
   async update(title) {
-    const query = `mutation 
-        updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
-          updateElection(id: $id, changes: $changes) {
-                  title
-                }
-    }`;
-
-    const { id } = this.props;
     const changes = { title };
-    const vars = { id, changes };
-    const data = await graphQLFetch(query, vars);
-    if (data) {
-      this.read();
-    } else {
-      alert(`Could not update election title ${title}`);
-    }
+    const { update } = this.props;
+    update(changes);
   }
 
   render() {

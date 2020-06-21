@@ -22,6 +22,7 @@ export default class ElectionSetUpPanel extends React.Component {
     };
 
     this.deploy = this.deploy.bind(this);
+    this.update = this.update.bind(this);
   }
 
   componentDidMount() {
@@ -66,6 +67,25 @@ export default class ElectionSetUpPanel extends React.Component {
     }
   }
 
+  async update(changes) {
+    const query = `mutation 
+        updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
+          updateElection(id: $id, changes: $changes) {
+            _id      
+          }
+    }`;
+
+    const { id } = this.state;
+
+    const vars = { id, changes };
+    const data = await graphQLFetch(query, vars);
+    if (data) {
+      this.read();
+    } else {
+      alert(`Could send the changes to the backend`);
+    }
+  }
+
   // setElectionIntoWaitingForPublicKeysStage
   async deploy() {
     const query = `mutation setElectionIntoPublicKeyWaitingStage($id: ID!) {
@@ -90,14 +110,14 @@ export default class ElectionSetUpPanel extends React.Component {
 
   render() {
     const {
-      id, title, candidates, participants,
+      title, candidates, participants,
     } = this.state;
 
     return (
       <div style={{ display: 'flex', justifyContent: 'center' }} className="mt-1">
-        <ElectionTitleForm id={id} title={title} />
-        <CandidateList id={id} candidates={candidates} />
-        <ParticipantList id={id} participants={participants} />
+        <ElectionTitleForm title={title} update={this.update} />
+        <CandidateList candidates={candidates} update={this.update} />
+        <ParticipantList participants={participants} update={this.update} />
         <Button onClick={this.deploy} variant="outline-success">Next</Button>
       </div>
     );
