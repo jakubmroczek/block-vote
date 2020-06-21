@@ -1,6 +1,8 @@
 require('dotenv').config();
 const election = require('./election.js');
 
+const { getDb } = require('./db.js');
+
 function secretTokenMatches(participant, secretToken) {
   return participant.secretToken === secretToken;
 }
@@ -68,9 +70,12 @@ async function registerPublicKey(_, { electionID, secretToken, publicKey }) {
 }
 
 async function getElection(_, { publicKey }) {
-  const id = '5eedaed2cfe9ec4055fcbcb7';
-  const foo = election.get({}, { id });  
-  return foo;
+  const db = getDb();
+  const filter = { publicKeys: { $all: [publicKey] } };
+  const collection = 'elections';
+  // eslint-disable-next-line no-shadow
+  const election = await db.collection(collection).findOne(filter);
+  return election;
 }
 
 module.exports = { registerPublicKey, getElection };
