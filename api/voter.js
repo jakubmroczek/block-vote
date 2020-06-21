@@ -57,7 +57,7 @@ async function tryRegisterPublicKey(id, secretToken, publicKey) {
   const normalizedPublicKey = publicKey.toLowerCase();
   normalizedPublicKeys.push(normalizedPublicKey);
 
-  const changes = { participants, publicKeys };
+  const changes = { participants, publicKeys, normalizedPublicKeys };
 
   //   TODO: Handle issue when the database was not handled correctly
   await election.update({}, { id, changes });
