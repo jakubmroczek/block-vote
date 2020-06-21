@@ -69,7 +69,7 @@ async function remove(_, { id }, { user }) {
 async function setElectionInPublicKeyRegisterationStage(_, { id }) {
   const electionDB = await get({}, { id });
 
-  const status = 'PublicKeyRegistration';
+  const status = 'Registration';
   const { participants } = electionDB;
 
   // Lame for loop

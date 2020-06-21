@@ -12,8 +12,7 @@ type Participant {
 
 enum Status {
     New,
-    # TODO: Change this to registration
-    PublicKeyRegistration,
+    Registration,
     Deployed,
     Finished
 }

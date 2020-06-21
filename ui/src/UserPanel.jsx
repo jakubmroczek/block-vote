@@ -96,7 +96,7 @@ export default class UserPanel extends React.Component {
       );
     }
 
-    if (status === 'PublicKeyRegistration') {
+    if (status === 'Registration') {
       return (
         <ElectionLobby id={id} />
       );
