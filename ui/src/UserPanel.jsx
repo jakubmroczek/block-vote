@@ -102,10 +102,10 @@ export default class UserPanel extends React.Component {
       );
     }
 
-    if (status === 'Under') {
+    if (status === 'Deployed') {
       return (
         <div>
-          <h1>Conducting election!</h1>
+          <h1>Election successfully deployed on the blockchain</h1>
         </div>
       );
     }
