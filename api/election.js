@@ -16,6 +16,7 @@ async function create(_1, _2, { user }) {
     candidates: [],
     participants: [],
     publicKeys: [],
+    normalizedPublicKeys: [],
   };
 
   const result = await db.collection(COLLECTION).insertOne(election);
@@ -64,7 +65,7 @@ async function remove(_, { id }, { user }) {
   return result.deletedCount === 1;
 }
 
-// TODO: Not CRUD operation, wher is should be?
+// TODO: Not CRUD operation, where is should be?
 async function setElectionInPublicKeyRegisterationStage(_, { id }) {
   const electionDB = await get({}, { id });
 

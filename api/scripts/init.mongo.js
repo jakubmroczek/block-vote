@@ -49,6 +49,7 @@ const election = {
     },
   ],
   publicKeys: [],
+  normalizedPublicKeys: [],
 };
 
 db.elections.remove({});

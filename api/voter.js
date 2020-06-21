@@ -1,6 +1,8 @@
 require('dotenv').config();
 const election = require('./election.js');
 
+const { getDb } = require('./db.js');
+
 function secretTokenMatches(participant, secretToken) {
   return participant.secretToken === secretToken;
 }
@@ -44,15 +46,18 @@ async function tryRegisterPublicKey(id, secretToken, publicKey) {
   // Must exists because this method is called second
   const participant = getParticipant(electionDB, secretToken);
 
-  const { participants, publicKeys } = electionDB;
+  const { participants, publicKeys, normalizedPublicKeys } = electionDB;
   const newParticpant = { ...participant, publicKey, registered: true };
   const index = participants.indexOf(participant);
   participants[index] = newParticpant;
 
   // Updating the public keys
+  // TODO: Change the identifier so that it can be faster.
   publicKeys.push(publicKey);
+  const normalizedPublicKey = publicKey.toLowerCase();
+  normalizedPublicKeys.push(normalizedPublicKey);
 
-  const changes = { participants, publicKeys };
+  const changes = { participants, publicKeys, normalizedPublicKeys };
 
   //   TODO: Handle issue when the database was not handled correctly
   await election.update({}, { id, changes });
@@ -68,9 +73,13 @@ async function registerPublicKey(_, { electionID, secretToken, publicKey }) {
 }
 
 async function getElection(_, { publicKey }) {
-  const id = '5eedaed2cfe9ec4055fcbcb7';
-  const foo = election.get({}, { id });  
-  return foo;
+  const db = getDb();
+  const normalizedPublicKeys = publicKey.toLowerCase();
+  const filter = { normalizedPublicKeys: { $all: [normalizedPublicKeys] } };
+  const collection = 'elections';
+  // eslint-disable-next-line no-shadow
+  const election = await db.collection(collection).findOne(filter);
+  return election;
 }
 
 module.exports = { registerPublicKey, getElection };
