@@ -26,10 +26,16 @@ export const candidateUnselected = () => ({
   type: 'CANDIDATE_UNSELECTED',
 });
 
+// Reused by other components
+// TODO: Create a dedicated event for this
+const onFailure = (dispatch) => {
+  dispatch(userNotRegistered());
+};
+
 export const fetchElection = () => (dispatch) => {
   // TODO: BEtter error handling
   new ElectionAPI()
-    .getElection()
+    .getElection(onFailure(dispatch))
     .then((election) => {
       dispatch(electionFetched(election));
     })
@@ -43,8 +49,8 @@ export const connectToBlockchain = () => (dispatch) => {
   dispatch(fetchElectionStarted());
 
   const successfulConnectionConditions = [
-    new ElectionAPI().isUserRegistered(),
-    new ElectionAPI().hasUserAlreadyVoted(),
+    new ElectionAPI().isUserRegistered(onFailure(dispatch)),
+    new ElectionAPI().hasUserAlreadyVoted(onFailure(dispatch)),
   ];
 
   // TODO: Error handling
