@@ -43,20 +43,18 @@ class ElectionAPI {
           address
         }
       }
-}`;
+    }`;
 
     const response = await graphQLFetch(query, { publicKey });
-
     if (response) {
       return response.getVoterElection;
     }
-    alert('getElection call failed');
+
     return undefined;
   }
 
-  async blockchainInit() {
-    const publicKey = window.web3.eth.defaultAccount;
-    const response = await this.fetchCompiledSmartContract(publicKey);
+  // TODO: Better describtion response from the backend
+  async blockchainInit(response) {
     const { smartContract } = response;
     const { abi, address } = smartContract;
     const contractABI = JSON.parse(abi);
@@ -68,9 +66,17 @@ class ElectionAPI {
     this.electionInstance = dapptokenContract;
   }
 
-  async getElection() {
+  async getElection(onFailure) {
     await this.metaMaskInit();
-    await this.blockchainInit();
+    const publicKey = window.web3.eth.defaultAccount;
+    const response = await this.fetchCompiledSmartContract(publicKey);
+
+    if (response === undefined) {
+      onFailure();
+      return;
+    }
+
+    await this.blockchainInit(response);
 
     // TODO: Error handling
     // TOOD: rename to promise
@@ -107,19 +113,35 @@ class ElectionAPI {
       .catch(error => console.log(error));
   }
 
-  async isUserRegistered() {
+  async isUserRegistered(onFailure) {
     // TODO: Encapsulate this into distinct function
     await this.metaMaskInit();
-    await this.blockchainInit();
+    const publicKey = window.web3.eth.defaultAccount;
+    const response = await this.fetchCompiledSmartContract(publicKey);
+
+    if (response === undefined) {
+      onFailure();
+      return;
+    }
+
+    await this.blockchainInit(response);
 
     // TODO: Rename the function in the blockchain
     return this.electionInstance.methods.isVoterRegistered(window.web3.eth.defaultAccount).call(result => result);
   }
 
-  async hasUserAlreadyVoted() {
+  async hasUserAlreadyVoted(onFailure) {
     // TODO: Encapsulate this into distinct function
     await this.metaMaskInit();
-    await this.blockchainInit();
+    const publicKey = window.web3.eth.defaultAccount;
+    const response = await this.fetchCompiledSmartContract(publicKey);
+
+    if (response === undefined) {
+      onFailure();
+      return;
+    }
+
+    await this.blockchainInit(response);
 
     // TODO: Rename the function in the blockchain
     return this.electionInstance.methods.hasVoterAlreadyVoted(window.web3.eth.defaultAccount).call()
