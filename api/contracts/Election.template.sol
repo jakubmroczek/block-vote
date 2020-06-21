@@ -20,15 +20,15 @@ contract Election {
     return m_registeredVotersWhoVoted[voter];
   }
 
-  function getCandidates() public view registeredVoterOnly returns (Candidate[] memory) {
+  function getCandidates() public view registeredVoter returns (Candidate[] memory) {
     return  m_candidates;
   }
 
-  function getElectionTitle() public view registeredVoterOnly returns(string memory) {
+  function getElectionTitle() public view registeredVoter returns(string memory) {
     return  m_electionTitle;
   }
 
-  function vote(bytes32 candidateId) public   registeredVoterOnly voterDidNotVoteOnly {
+  function vote(bytes32 candidateId) public   registeredVoter voterDidNotVote {
       //TODO: Can we do it differently
       for (uint i = 0; i <  m_candidates.length; i++) {
         if ( m_candidates[i].id == candidateId) {
@@ -41,29 +41,22 @@ contract Election {
   }
 
  Candidate[] public m_candidates;
- address private m_owner;
  mapping(address => bool) m_reqisteredVoters;
  mapping(address => bool) m_registeredVotersWhoVoted;
  string m_electionTitle;
 
 
- modifier registeredVoterOnly {
-  //  require(m_reqisteredVoters[msg.sender], "You are not allowed to participate in the voring as you public key has not been registered");
+ modifier registeredVoter {
+   require(m_reqisteredVoters[msg.sender], "You are not allowed to participate in the voting as your public key was not registered");
    _;
  }
 
- modifier voterDidNotVoteOnly {
-  //  require(!m_registseredVotersWhoVoted[msg.sender], "You have already voted");
+ modifier voterDidNotVote {
+   require(!m_registeredVotersWhoVoted[msg.sender], "You have already voted");
    _;
  }
-
-  modifier ownerOnly {
-    // require(msg.sender == m_owner, "Only contract owner can call this method`");
-    _;
-  }
 
   constructor(string memory electionTitle) public {
-    m_owner = msg.sender;
     m_electionTitle = electionTitle;
     // Substituted with data from database in the compilatin process.
     %s
@@ -71,14 +64,12 @@ contract Election {
     %s 
   }
 
-  //TODO: Change to addCandidate
-  function addNewCandidate(string memory name, string memory surname) public ownerOnly {
+  function addCandidate(string memory name, string memory surname) private {
     bytes32 id = keccak256(abi.encode(name, surname));
      m_candidates.push(Candidate(name, surname, id, 0));
   }
 
-  //TODO: Change to registerVoter
-  function registerNewVoter(address voter) public ownerOnly {
+  function registerVoter(address voter) private {
      m_reqisteredVoters[voter] = true;
   }
 
