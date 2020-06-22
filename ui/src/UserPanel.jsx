@@ -64,6 +64,9 @@ export default class UserPanel extends React.Component {
       listElection {
         _id
         status
+        participants {
+          email
+        }
       }
     }`;
 
@@ -96,9 +99,10 @@ export default class UserPanel extends React.Component {
       );
     }
 
+    const { participants } = election;
     if (status === 'Registration') {
       return (
-        <ElectionLobby id={id} />
+        <ElectionLobby id={id} totalNumberOfVoters={participants.length} />
       );
     }
 
