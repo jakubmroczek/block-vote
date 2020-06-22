@@ -1,4 +1,4 @@
-pragma solidity ^0.5.16;
+pragma solidity ^0.6.10;
 
 // TODO: Check if I can delete it
 pragma experimental ABIEncoderV2;
