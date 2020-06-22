@@ -93,10 +93,9 @@ function ParticipantRemoveModal({
         </Modal.Title>
       </Modal.Header>
       <Modal.Footer>
-        <ButtonToolbar>
-          <Button type="button" onClick={onRemove}>Yes</Button>
-          <Button type="button" onClick={hide}>No</Button>
-        </ButtonToolbar>
+        <Button type="button" onClick={onRemove}>Yes</Button>
+        {' '}
+        <Button type="button" onClick={hide}>No</Button>
       </Modal.Footer>
     </Modal>
   );
