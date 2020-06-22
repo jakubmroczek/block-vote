@@ -33,7 +33,7 @@
     "nodemailer": "^6.4.8",
     "nodemon": "^1.19.4",
     "npm": "^6.14.5",
-    "solc": "^0.5.16"
+    "solc": "^0.6.10"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
