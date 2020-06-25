@@ -4,6 +4,8 @@ const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const { AuthenticationError } = require('apollo-server-express');
 
+const user = require('./user.js');
+
 const routes = new Router();
 
 routes.use(bodyParser.json());
@@ -34,6 +36,24 @@ function mustBeSignedIn(resolver) {
   };
 }
 
+async function isNewUser(username) {
+  const dbUser = await user.get(username);
+  return dbUser === null;
+}
+
+async function createNewUseAccount(username) {
+  const dbUser = await user.create(username);
+  return dbUser;
+}
+
+// TODO: I do not like this name
+async function registerIfNewUser(username) {
+  if (await isNewUser(username)) {
+    // TODO: Handle the database error
+    await createNewUseAccount(username);
+  }
+}
+
 routes.post('/signin', async (req, res) => {
   const googleToken = req.body.google_token;
   if (!googleToken) {
@@ -55,7 +75,10 @@ routes.post('/signin', async (req, res) => {
   const token = jwt.sign(credentials, JWT_SECRET);
   res.cookie('jwt', token, { httpOnly: true });
 
-  //TODO: Check if the user.exists if not create an account from him
+  // TODO: Refactor this code, too many things does happen here
+  // We use the email as the username
+  //! !!! Email is the username
+  await registerIfNewUser(email);
 
   res.json(credentials);
 });

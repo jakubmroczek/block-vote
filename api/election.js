@@ -21,7 +21,7 @@ async function create(_1, _2, { user }) {
 
   const result = await db.collection(COLLECTION).insertOne(election);
   const savedElection = await db.collection(COLLECTION).findOne({ _id: result.insertedId });
-  await db.collection('users').updateOne({ username }, { $push: { elections: result.insertedId } });
+  await db.collection('users').updateOne({ username }, { $push: { electionIDs: result.insertedId } });
   return savedElection;
 }
 
@@ -29,7 +29,7 @@ async function list(_1, _2, { user }) {
   const db = getDb();
   const { username } = user;
   const dbUser = await db.collection('users').findOne({ username });
-  const electionIDs = dbUser.elections;
+  const { electionIDs } = dbUser;
   const elections = await db.collection(COLLECTION).find({ _id: { $in: electionIDs } }).toArray();
   return elections;
 }
@@ -53,6 +53,7 @@ async function update(_, { id, changes }) {
   return savedElection;
 }
 
+// TODO: Never used
 async function remove(_, { id }, { user }) {
   const db = getDb();
   const { username } = user;
@@ -60,7 +61,7 @@ async function remove(_, { id }, { user }) {
   const result = await db.collection(COLLECTION).removeOne(filter);
   await db.collection('users').updateOne(
     { username },
-    { $pull: { elections: { id } } },
+    { $pull: { electionIDs: { id } } },
   );
   return result.deletedCount === 1;
 }
