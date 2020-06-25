@@ -1,5 +1,7 @@
 import React from 'react';
-import { Button, Spinner, Container, Row, Col } from 'react-bootstrap';
+import {
+  Button, Spinner, Container, Row, Col,
+} from 'react-bootstrap';
 import graphQLFetch from './graphQLFetch.js';
 
 import deploy from './deploy.js';
@@ -63,6 +65,11 @@ export default class ElectionLobby extends React.Component {
       deployElection($id: ID!) {
         deployElection(id: $id) {
                   title
+                  candidates {
+                    name
+                    surname
+                  }
+                  publicKeys
                   smartContract {
                     bytecode
                     abi
@@ -74,8 +81,12 @@ export default class ElectionLobby extends React.Component {
     const response = await graphQLFetch(query, { id });
 
     if (response) {
-      const { smartContract, title } = response.deployElection;
-      this.setState({ smartContract, title });
+      const {
+        smartContract, title, candidates, publicKeys,
+      } = response.deployElection;
+      this.setState({
+        smartContract, title, candidates, publicKeys,
+      });
     } else {
       alert('getElection call failed');
     }
@@ -99,6 +110,7 @@ export default class ElectionLobby extends React.Component {
 
   async update(address) {
     // TODO: Do not resend ABI, change it on the backend.
+    // TODO: fetch something meaningful from the backen
     const query = `mutation 
         updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
           updateElection(id: $id, changes: $changes) {
@@ -154,10 +166,10 @@ export default class ElectionLobby extends React.Component {
 
     const bytecode = this.bytecodeObject();
     const abi = this.abi();
-    const { title: electionTitle } = this.state;
+    const { title, candidates, publicKeys } = this.state;
 
     // TODO: How to handle success or failure of the deploy
-    const contractAddress = await deploy(bytecode, abi, electionTitle, account, this.web3);
+    const contractAddress = await deploy(bytecode, abi, title, candidates, publicKeys, account, this.web3);
     await this.update(contractAddress);
   }
 

@@ -36,7 +36,8 @@ export default class SignInItem extends React.Component {
       const googleUser = await auth2.signIn();
       googleToken = googleUser.getAuthResponse().id_token;
     } catch (e) {
-      alert(`Error authenticating with Google: ${e}`);
+      const message = JSON.stringify(e);
+      alert(`Error authenticating with Google: ${message}`);
     }
 
     try {
