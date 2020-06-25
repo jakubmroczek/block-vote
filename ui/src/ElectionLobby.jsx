@@ -169,21 +169,7 @@ export default class ElectionLobby extends React.Component {
     const { title, candidates, publicKeys } = this.state;
 
     // TODO: How to handle success or failure of the deploy
-
-    console.log(candidates);
-    console.log(publicKeys);
-
-
-    const ck = [
-      {
-        name: "marke",
-        surname: "foo",
-        votes: 0,
-      }
-    ]
-
-    // const contractAddress = await deploy(bytecode, abi, title, candidates, publicKeys, account, this.web3);
-    const contractAddress = await deploy(bytecode, abi, title, ck, publicKeys, account, this.web3);
+    const contractAddress = await deploy(bytecode, abi, title, candidates, publicKeys, account, this.web3);
     await this.update(contractAddress);
   }
 

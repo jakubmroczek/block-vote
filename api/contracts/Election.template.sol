@@ -11,6 +11,11 @@ contract Election {
     uint votes;
   }
 
+  struct CandidateInput {
+    string name;
+    string surname;
+  }
+
   function isVoterRegistered(address voter) view public returns(bool) {
     //TODO: Is this okay? Check on remix
     for (uint i = 0; i < m_registeredVoters.length; i++) {
@@ -55,15 +60,15 @@ contract Election {
  //TODO: Try use automatic getter
  string m_title;
 
-  constructor(string memory title, Candidate[] memory candidates, address[] memory registeredVoters) public {
+  constructor(string memory title, CandidateInput[] memory candidates, address[] memory registeredVoters) public {
     m_title = title;
 
     //TODO: Try optimize the ehter here
     for (uint i = 0; i < candidates.length; i++) {
-      m_candidates.push(candidates[i]);
+      // 0 as no one has any votes at the beginning
+      m_candidates.push(Candidate(candidates[i].name, candidates[i].surname, 0));
     }
 
-    
     for (uint i = 0; i < registeredVoters.length; i++) {
       //TODO: Try optimize the ehter here
     m_registeredVoters.push(registeredVoters[i]);
