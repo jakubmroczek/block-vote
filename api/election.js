@@ -98,11 +98,8 @@ async function setElectionInPublicKeyRegisterationStage(_, { id }) {
 }
 
 async function deployElection(_, { id }) {
-  const electionDB = await get({}, { id });
-
-  // TODO: What does it return
   // Returns abi and bytecode
-  const smartContract = blockchainUtils.compile(electionDB);
+  const smartContract = blockchainUtils.compile();
   const changes = { smartContract, status: 'Deployed' };
   const updatedElection = await update({}, { id, changes });
   return updatedElection;
