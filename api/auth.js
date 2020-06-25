@@ -55,6 +55,8 @@ routes.post('/signin', async (req, res) => {
   const token = jwt.sign(credentials, JWT_SECRET);
   res.cookie('jwt', token, { httpOnly: true });
 
+  //TODO: Check if the user.exists if not create an account from him
+
   res.json(credentials);
 });
 
