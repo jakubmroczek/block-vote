@@ -34,7 +34,6 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@truffle/contract": "^4.2.2",
     "babel-eslint": "^10.1.0",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.5.0",
@@ -54,7 +53,6 @@
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "truffle": "^5.1.30",
     "url-search-params": "^1.1.0",
     "web3": "^1.2.9",
     "whatwg-fetch": "^3.0.0"
