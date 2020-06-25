@@ -31,7 +31,8 @@ const resolvers = {
     updateElection: mustBeSignedIn(election.update),
     removeElection: mustBeSignedIn(election.remove),
 
-    registerPublicKey: voter.registerPublicKey,
+    // TODO: Make the api name the same as the resolver
+    registerPublicKey: voter.tryRegisterPublicKey,
 
     setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(election.setElectionInPublicKeyRegisterationStage),
 
