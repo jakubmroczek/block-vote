@@ -5,7 +5,7 @@ import graphQLFetch from '../graphQLFetch.js';
 
 export default function RegisterPublicKeyPanel(props) {
   const { match: { params: { electionID } } } = props;
-  
+
   const register = async (secretToken, publicKey) => {
     const query = `mutation 
         registerPublicKey($electionID: ID!, $secretToken: String!, $publicKey: String!) {
@@ -14,11 +14,25 @@ export default function RegisterPublicKeyPanel(props) {
 
     const response = await graphQLFetch(query, { electionID, secretToken, publicKey });
     // TODO: Error handling
-    alert(JSON.stringify(response))
+    alert(JSON.stringify(response));
   };
+
+  const isValidPublicKey = () => {
+    const form = document.forms.registerPublicKey;
+    const publicKey = form.publicKey.value;
+    const regex = RegExp('^0x[a-fA-F0-9]{40}$');
+    return regex.test(publicKey);
+  };
+
 
   const onSubmit = async (event) => {
     event.preventDefault();
+
+    if (!isValidPublicKey()) {
+      alert('Public key is illformatted');
+      return;
+      //TODO: Pass some info to the text label so it indicate the error
+    }
 
     const form = document.forms.registerPublicKey;
     const credentials = {
@@ -42,7 +56,10 @@ export default function RegisterPublicKeyPanel(props) {
       </Form.Group>
       <Form.Group controlId="publicKey">
         <Form.Label>Public key</Form.Label>
-        <Form.Control type="text" placeholder="Enter your Ethereum public keys" />
+        <Form.Control
+          type="text"
+          placeholder="Enter your Ethereum public keys"
+        />
         <Form.Text className="text-muted">
           Ethereum public key (look up the network name in the email).
         </Form.Text>
