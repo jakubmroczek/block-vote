@@ -16,6 +16,7 @@ async function create(_1, _2, { user }) {
     candidates: [],
     participants: [],
     publicKeys: [],
+    secretTokens: [],
   };
 
   const result = await db.collection(COLLECTION).insertOne(election);
@@ -43,7 +44,13 @@ async function get(_, { id }) {
 async function update(_, { id, changes }) {
   const db = getDb();
   const filter = { _id: mongo.ObjectID(id) };
-  if (changes.title || changes.candidates || changes.participants || changes.smartContract.address) {
+  
+  //TODO: Fix problem with handling nulls e.g 
+  if (changes.title
+    || changes.candidates
+    || changes.participants
+    || changes.secretTokens
+    || changes.smartContract.address) {
     const election = await db.collection(COLLECTION).findOne(filter);
     Object.assign(election, changes);
   }
@@ -66,6 +73,7 @@ async function remove(_, { id }, { user }) {
 }
 
 // TODO: Not CRUD operation, where is should be?
+// TODO: When 3 layered architecutre - move to service layer
 async function setElectionInPublicKeyRegisterationStage(_, { id }) {
   const electionDB = await get({}, { id });
 
@@ -74,19 +82,17 @@ async function setElectionInPublicKeyRegisterationStage(_, { id }) {
 
   // Lame for loop
   const { length } = participants;
+  const secretTokens = [];
   for (let i = 0; i < length; i += 1) {
-    const participant = participants[i];
     const secretToken = generator.generate({
       length: 32,
       numbers: true,
     });
-    participants[i] = {
-      ...participant,
-      secretToken,
-    };
+    secretTokens.push(secretToken);
   }
 
-  const changes = { status, participants };
+  // TODO: Is it okay
+  const changes = { status, participants, secretTokens };
   const savedElection = await update({}, { id, changes });
   return savedElection;
 }

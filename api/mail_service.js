@@ -26,8 +26,8 @@ const mailTemplate = (to, html) => ({
   html,
 });
 
-function generateMail(participant, link) {
-  const { email, secretToken } = participant;
+function generateMail(participant, secretToken, link) {
+  const { email } = participant;
   // TODO: From where to we take the voting link?
   const html = htmlForm(link, secretToken);
   return mailTemplate(email, html);
@@ -44,8 +44,19 @@ function sendEmail(mailOptions) {
   });
 }
 
-function mailEveryone(participants, link) {
-  const mails = participants.map(p => generateMail(p, link));
+function mailEveryone(participants, secretTokens, link) {
+  if (participants.length !== secretTokens.length) {
+    // TODO: Handle the error if there is not enough public keys
+    throw 'Not enugh secret tokens generated for the public key';
+  }
+
+  const { length } = participants;
+  const mails = [];
+  for (let i = 0; i < length; i += 1) {
+    const participant = participants[i];
+    const secretToken = secretTokens[i];
+    mails.push(generateMail(participant, secretToken, link));
+  }
 
   mails.forEach((mail) => {
     sendEmail(mail);
@@ -58,12 +69,12 @@ function mailEveryone(participants, link) {
 // TODO: Each user should have a unique link?
 async function sendRegisterKeyMail(_, { id }) {
   const electionDB = await election.get({}, { id });
-  const { _id, participants } = electionDB;
-  
+  const { _id, participants, secretTokens } = electionDB;
+
   // TODO: Move it to the distinct service
   const link = process.env.UI_VOTING_ENDPOINT + _id;
 
-  return mailEveryone(participants, link);
+  return mailEveryone(participants, secretTokens, link);
 }
 
 module.exports = {
