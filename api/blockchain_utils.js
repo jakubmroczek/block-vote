@@ -27,8 +27,6 @@ function compile() {
 
   const solcOutput = JSON.parse(solc.compile(JSON.stringify(input)));
 
-  console.log(solcOutput);
-
   // TODO: Remove the magic strings
   const contract = solcOutput.contracts['Election.sol'].Election;
   const { abi, evm } = contract;

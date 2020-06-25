@@ -1,7 +1,3 @@
-// const Tx = require('ethereumjs-tx').Transaction;
-
-// object from the backend
-// TODO: We must persist the tx somehow, private key should be get from the metamask
 // TODO: Rename this
 export default function deploy(bytecode, abi, title, candidates, publicKeys, account, web3) {
   const electionContract = new web3.eth.Contract(abi);
