@@ -1,7 +1,7 @@
 require('dotenv').config();
 const election = require('./election.js');
-
-const { getDb } = require('./db.js');
+//TODO: Rename the whole module to voter
+const publicKeyDB = require('./public_keys.js');
 
 function secretTokenMatches(participant, secretToken) {
   return participant.secretToken === secretToken;
@@ -39,25 +39,26 @@ async function verifySecretToken(id, secretToken) {
 
 // TODO: Change name or move to the election.js
 async function tryRegisterPublicKey(id, secretToken, publicKey) {
-  // Read election
   const electionDB = await election.get({}, { id });
 
   // Find participant having the secretToken
   // Must exists because this method is called second
   const participant = getParticipant(electionDB, secretToken);
 
-  const { participants, publicKeys, normalizedPublicKeys } = electionDB;
+  const { participants, publicKeys } = electionDB;
+  //TODO: Remove the extra fields form the participant, use distinct array for the secrets
   const newParticpant = { ...participant, publicKey, registered: true };
   const index = participants.indexOf(participant);
   participants[index] = newParticpant;
+  publicKeys.push(publicKey);
 
   // Updating the public keys
   // TODO: Change the identifier so that it can be faster.
-  publicKeys.push(publicKey);
-  const normalizedPublicKey = publicKey.toLowerCase();
-  normalizedPublicKeys.push(normalizedPublicKey);
 
-  const changes = { participants, publicKeys, normalizedPublicKeys };
+  // TODO: Update the number of registered keys by one
+  await publicKeyDB.create(publicKey, id);
+  
+  const changes = { participants, publicKeys };
 
   //   TODO: Handle issue when the database was not handled correctly
   await election.update({}, { id, changes });
@@ -72,14 +73,18 @@ async function registerPublicKey(_, { electionID, secretToken, publicKey }) {
   return succes;
 }
 
+//TODO: When rewriting to the 3 layered architecutre remove me
 async function getElection(_, { publicKey }) {
-  const db = getDb();
-  const normalizedPublicKeys = publicKey.toLowerCase();
-  const filter = { normalizedPublicKeys: { $all: [normalizedPublicKeys] } };
-  const collection = 'elections';
+  //TODO: What if null
+  const pK = await publicKeyDB.get(publicKey);
+
+  //TODO: In the future support for the multiple elections
+  const id = pK.electionIDs;
+
   // eslint-disable-next-line no-shadow
-  const election = await db.collection(collection).findOne(filter);
-  return election;
+  const electionDB = await election.get({}, { id });
+  
+  return electionDB;
 }
 
 module.exports = { registerPublicKey, getElection };

@@ -35,9 +35,7 @@ const resolvers = {
 
     setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(election.setElectionInPublicKeyRegisterationStage),
 
-    // TODO: Add that must be registerd
-    // deployElection: mustBeSignedIn(election.deployElection),
-    deployElection: election.deployElection,
+    deployElection: mustBeSignedIn(election.deployElection),
   },
 };
 

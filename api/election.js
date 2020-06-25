@@ -16,7 +16,6 @@ async function create(_1, _2, { user }) {
     candidates: [],
     participants: [],
     publicKeys: [],
-    normalizedPublicKeys: [],
   };
 
   const result = await db.collection(COLLECTION).insertOne(election);
