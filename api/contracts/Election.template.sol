@@ -8,12 +8,17 @@ contract Election {
   struct Candidate {
     string name;
     string surname;
-    bytes32 id;
     uint votes;
   }
 
   function isVoterRegistered(address voter) view public returns(bool) {
-    return m_reqisteredVoters[voter];
+    //TODO: Is this okay? Check on remix
+    for (uint i = 0; i < m_registeredVoters.length; i++) {
+      if (m_registeredVoters[i] == voter) {
+        return true;
+      }
+    }
+    return false;
   }
 
   function hasVoterAlreadyVoted(address voter) view public returns(bool) {
@@ -30,15 +35,8 @@ contract Election {
    _;
  }
 
-  function vote(bytes32 candidateId) public  registeredVoter voterDidNotVote {
-      //TODO: Can we do it differently
-      for (uint i = 0; i <  m_candidates.length; i++) {
-        if ( m_candidates[i].id == candidateId) {
-           m_candidates[i].votes++;
-          break;
-        }
-      }
-      //TODO: What should happen when if the proper candidate was not found.
+  function vote(uint index) public  registeredVoter voterDidNotVote {
+      m_candidates[index].votes++;
       voterVoted(msg.sender);
   }
 
@@ -47,29 +45,29 @@ contract Election {
   }
 
   function getElectionTitle() public view returns(string memory) {
-    return  m_electionTitle;
+    return  m_title;
   }
 
+  //TODO: Try use automatic getter
  Candidate[] public m_candidates;
- mapping(address => bool) m_reqisteredVoters;
+ address[] m_registeredVoters;
  mapping(address => bool) m_registeredVotersWhoVoted;
- string m_electionTitle;
+ //TODO: Try use automatic getter
+ string m_title;
 
-  constructor(string memory electionTitle) public {
-    m_electionTitle = electionTitle;
-    // Substituted with data from database in the compilatin process.
-    %s
-    // Substitute with data from database in the compilatin process.
-    %s 
-  }
+  constructor(string memory title, Candidate[] memory candidates, address[] memory registeredVoters) public {
+    m_title = title;
 
-  function addCandidate(string memory name, string memory surname) private {
-    bytes32 id = keccak256(abi.encode(name, surname));
-     m_candidates.push(Candidate(name, surname, id, 0));
-  }
+    //TODO: Try optimize the ehter here
+    for (uint i = 0; i < candidates.length; i++) {
+      m_candidates.push(candidates[i]);
+    }
 
-  function registerVoter(address voter) private {
-     m_reqisteredVoters[voter] = true;
+    
+    for (uint i = 0; i < registeredVoters.length; i++) {
+      //TODO: Try optimize the ehter here
+    m_registeredVoters.push(registeredVoters[i]);
+    }
   }
 
   function voterVoted(address voter) private {

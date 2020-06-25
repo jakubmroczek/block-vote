@@ -7,19 +7,9 @@ function electionSmartContractTemplate() {
   return fs.readFileSync(path.resolve(__dirname, 'contracts', 'Election.template.sol'), 'utf8');
 }
 
+// TODO: Remove me
 function format(template, election) {
-  const registerNewVoterSignature = 'registerVoter(%s);';
-  const addNewCandidateSignature = 'addCandidate(\"%s\",\"%s\");';
-
-  const { candidates } = election;
-  const addNewCandidateCalls = candidates.map(c => util.format(addNewCandidateSignature, c.name, c.surname)).join('\n');
-
-  const { publicKeys } = election;
-  const registerMethodCalls = publicKeys.map(pk => util.format(registerNewVoterSignature, pk)).join('\n');
-
-  const smartContract = util.format(template, addNewCandidateCalls, registerMethodCalls);
-
-  return smartContract;
+  return template;
 }
 
 function generateElectionSmartContract(election) {
@@ -48,6 +38,8 @@ function compile(election) {
   };
 
   const solcOutput = JSON.parse(solc.compile(JSON.stringify(input)));
+
+  console.log(solcOutput);
 
   // TODO: Remove the magic strings
   const contract = solcOutput.contracts['Election.template.sol'].Election;

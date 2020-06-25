@@ -100,11 +100,15 @@ export default class UserPanel extends React.Component {
     }
 
     const { participants } = election;
-    if (status === 'Registration') {
+
       return (
         <ElectionLobby id={id} totalNumberOfVoters={participants.length} />
       );
-    }
+    // if (status === 'Registration') {
+    //   return (
+    //     <ElectionLobby id={id} totalNumberOfVoters={participants.length} />
+    //   );
+    // }
 
     if (status === 'Deployed') {
       return (
