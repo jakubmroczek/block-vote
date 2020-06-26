@@ -109,11 +109,6 @@ export default class ElectionTitleForm extends React.Component {
     this.setState({ title: event.target.value });
   }
 
-  onTitleChange() {
-    const { title } = this.state;
-    this.update(title);
-  }
-
   async update(title) {
     const changes = { title };
     const { update } = this.props;
@@ -157,6 +152,7 @@ export default class ElectionTitleForm extends React.Component {
         <Card className="text-center">
           <Card.Header as="h5">Title</Card.Header>
           <Card.Body>
+            {/* TODO: Create a reusable component */}
             <OverlayTrigger
               placement="top"
               delay={{ show: 250 }}
