@@ -29,7 +29,6 @@ export default function ActionsItem({ handleEdit, handleRemove }) {
         placement="top"
         delay={{ show: 250 }}
         overlay={renderEditTooltip}
-        message="Add a new candidate"
       >
         <Button onClick={handleEdit} variant="secondary">
           <FontAwesomeIcon icon={faPen} />
