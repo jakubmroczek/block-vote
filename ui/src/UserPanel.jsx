@@ -4,6 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { withRouter } from 'react-router-dom';
 import graphQLFetch from './graphQLFetch.js';
 import ElectionLobby from './ElectionLobby.jsx';
+import DeployedElectionView from './DeployedElectionView.jsx';
 import UserContext from './UserContext.js';
 
 const EditElectionInfo = withRouter(({ id, location: { search } }) => {
@@ -106,29 +107,9 @@ export default class UserPanel extends React.Component {
       );
     }
 
-    if (status === 'Deployed') {
-      return (
-        <div>
-          <h1>Election successfully deployed on the blockchain</h1>
-        </div>
-      );
-    }
-
-    if (status === 'Finished') {
-      return (
-        <div>
-          <h1>Election finished</h1>
-        </div>
-      );
-    }
-
-    // TODO: Impossbile
+    // Must be deployed
     return (
-      <div>
-        <h1>Unsupported state</h1>
-        {' '}
-        {state}
-      </div>
+      <DeployedElectionView />
     );
   }
 }

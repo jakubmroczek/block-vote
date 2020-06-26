@@ -56,7 +56,7 @@ class ElectionAPI {
   // TODO: Better describtion response from the backend
   async blockchainInit(response) {
     const { smartContract } = response;
-    const { abi, address } = smartContract;
+    const { abi,address } = smartContract;
     const contractABI = JSON.parse(abi);
 
     // TODO: Get this from the metamask
@@ -88,6 +88,7 @@ class ElectionAPI {
             name: ethereumCandidates[i].name,
             surname: ethereumCandidates[i].surname,
             id: ethereumCandidates[i].id,
+            index: i,
           },
         );
       }
@@ -104,12 +105,14 @@ class ElectionAPI {
       }));
   }
 
-  async vote(candidate) {
+  async vote(candidateIndex) {
+    // TODO: Encapsulate this in a function and call only once
     await this.metaMaskInit();
-    await this.blockchainInit();
+    const publicKey = window.web3.eth.defaultAccount;
+    const response = await this.fetchCompiledSmartContract(publicKey);
+    await this.blockchainInit(response);
 
-    // TODO: Use send here
-    return this.electionInstance.methods.vote(candidate.id, { from: window.web3.eth.defaultAccount })
+    return this.electionInstance.methods.vote(candidateIndex).send({ from: publicKey })
       .catch(error => console.log(error));
   }
 
