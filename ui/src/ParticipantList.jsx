@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Button, Table, Modal, Form, FormGroup, ButtonToolbar, Card,
+  Button, Table, Modal, Form, FormGroup, Tooltip, Card, OverlayTrigger,
 } from 'react-bootstrap';
 import './fontawesome.js';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -36,12 +36,12 @@ function ParticipantUpdateModal({
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>Edit participant</Modal.Title>
+        <Modal.Title>Edit the participant</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form name="participantUpdate">
           <FormGroup>
-            <Form.Label>E-mail</Form.Label>
+            <Form.Label>Mail:</Form.Label>
             <Form.Control
               name="email"
               autoFocus
@@ -52,15 +52,20 @@ function ParticipantUpdateModal({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <ButtonToolbar>
-          <Button
-            type="button"
-            onClick={onClick}
-          >
-            Submit
-          </Button>
-          <Button onClick={hide}>Cancel</Button>
-        </ButtonToolbar>
+        <Button
+          type="button"
+          onClick={onClick}
+          variant="outline-success"
+        >
+          Submit
+        </Button>
+        {' '}
+        <Button
+          onClick={hide}
+          variant="outline-dark"
+        >
+          Cancel
+        </Button>
       </Modal.Footer>
     </Modal>
   );
@@ -87,15 +92,16 @@ function ParticipantRemoveModal({
       <Modal.Header closeButton>
         <Modal.Title>
           Do you want to remove
+          {' '}
           {email}
           {' '}
           ?
         </Modal.Title>
       </Modal.Header>
       <Modal.Footer>
-        <Button type="button" onClick={onRemove}>Yes</Button>
+        <Button type="button" onClick={onRemove} variant="outline-success">Yes</Button>
         {' '}
-        <Button type="button" onClick={hide}>No</Button>
+        <Button type="button" onClick={hide} variant="outline-dark">No</Button>
       </Modal.Footer>
     </Modal>
   );
@@ -190,26 +196,31 @@ function ParticipantAddModal({ visible, hide, add }) {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add participant</Modal.Title>
+          <Modal.Title>Add a participant</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form name="participantAdd">
             <FormGroup>
-              <Form.Label>E-mail</Form.Label>
-              <Form.Control name="email" autoFocus />
+              <Form.Label>Mail:</Form.Label>
+              <Form.Control name="email" placeholder="john.doe@gmail.com" autoFocus />
             </FormGroup>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <ButtonToolbar>
-            <Button
-              type="button"
-              onClick={onClick}
-            >
-              Add
-            </Button>
-            <Button onClick={hide}>Cancel</Button>
-          </ButtonToolbar>
+          <Button
+            type="button"
+            onClick={onClick}
+            variant="outline-success"
+          >
+            Submit
+          </Button>
+          {' '}
+          <Button
+            onClick={hide}
+            variant="outline-dark"
+          >
+            Cancel
+          </Button>
         </Modal.Footer>
       </Modal>
     </React.Fragment>
@@ -307,14 +318,29 @@ export default class ParticipantList extends React.Component {
 
   render() {
     const { participants, addModalVisible } = this.state;
+
+    const renderAddTooltip = props => (
+      <Tooltip id="button-tooltip" {...props}>
+        Add
+      </Tooltip>
+    );
+
     return (
       <Card className="text-center">
         <Card.Header as="h5">Participants</Card.Header>
         <Card.Body>
           <ParticipantTable participants={participants} update={this.update} remove={this.remove} />
-          <Button onClick={this.showParticipantAddModal} variant="secondary">
-            <FontAwesomeIcon icon={faPlus} />
-          </Button>
+          {/* TODO: Create a reusable component */}
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250 }}
+            overlay={renderAddTooltip}
+          >
+            {/* Wyswietl modal */}
+            <Button onClick={this.showParticipantAddModal} variant="secondary">
+              <FontAwesomeIcon icon={faPlus} />
+            </Button>
+          </OverlayTrigger>
           <ParticipantAddModal
             visible={addModalVisible}
             hide={this.hideParticipantAddModal}

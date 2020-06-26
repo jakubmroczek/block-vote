@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Button, Table, Modal, Form, FormGroup, ButtonToolbar, Card,
+  Button, Table, Modal, Form, FormGroup, Tooltip, Card, OverlayTrigger,
 } from 'react-bootstrap';
 import './fontawesome.js';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -31,10 +31,9 @@ function CandidateRemoveModal({
         </Modal.Title>
       </Modal.Header>
       <Modal.Footer>
-        <ButtonToolbar>
-          <Button type="button" onClick={handleRemove}>Yes</Button>
-          <Button type="button" onClick={hideRemove}>No</Button>
-        </ButtonToolbar>
+        <Button type="button" onClick={handleRemove} variant="outline-success">Yes</Button>
+        {' '}
+        <Button type="button" onClick={hideRemove} variant="outline-dark">No</Button>
       </Modal.Footer>
     </Modal>
   );
@@ -71,12 +70,12 @@ function CandidateEditModal({
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>Edit candidate</Modal.Title>
+        <Modal.Title>Edit the candidate</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form name="candidateEdit">
           <FormGroup>
-            <Form.Label>Name</Form.Label>
+            <Form.Label>Name:</Form.Label>
             <Form.Control
               name="name"
               autoFocus
@@ -85,7 +84,7 @@ function CandidateEditModal({
             />
           </FormGroup>
           <FormGroup>
-            <Form.Label>Surname</Form.Label>
+            <Form.Label>Surname:</Form.Label>
             <Form.Control
               name="surname"
               value={newSurname}
@@ -95,16 +94,20 @@ function CandidateEditModal({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <ButtonToolbar>
-          <Button
-            type="button"
-            onClick={onClick}
-          >
-            Submit
-          </Button>
-          {' '}
-          <Button onClick={hideEdit}>Cancel</Button>
-        </ButtonToolbar>
+        <Button
+          type="button"
+          onClick={onClick}
+          variant="outline-success"
+        >
+          Submit
+        </Button>
+        {' '}
+        <Button
+          onClick={hideEdit}
+          variant="outline-dark"
+        >
+          Cancel
+        </Button>
       </Modal.Footer>
     </Modal>
   );
@@ -204,30 +207,30 @@ function CandidateAddModal({ visible, hide, add }) {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add candidate</Modal.Title>
+          <Modal.Title>Add a candidate</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form name="candidateAdd">
             <FormGroup>
-              <Form.Label>Name</Form.Label>
-              <Form.Control name="name" autoFocus />
+              <Form.Label>Name:</Form.Label>
+              <Form.Control name="name" placeholder="John" autoFocus />
             </FormGroup>
             <FormGroup>
-              <Form.Label>Surname</Form.Label>
-              <Form.Control name="surname" />
+              <Form.Label>Surname:</Form.Label>
+              <Form.Control name="surname" placeholder="Doe" />
             </FormGroup>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <ButtonToolbar>
-            <Button
-              type="button"
-              onClick={onClick}
-            >
-              Add
-            </Button>
-            <Button onClick={hide}>Cancel</Button>
-          </ButtonToolbar>
+          <Button
+            type="button"
+            onClick={onClick}
+            variant="outline-success"
+          >
+            Submit
+          </Button>
+          {' '}
+          <Button onClick={hide} variant="outline-dark">Cancel</Button>
         </Modal.Footer>
       </Modal>
     </React.Fragment>
@@ -326,6 +329,13 @@ export default class CandidateList extends React.Component {
 
   render() {
     const { candidates, candidateAddVisible } = this.state;
+
+    const renderAddTooltip = props => (
+      <Tooltip id="button-tooltip" {...props}>
+        Add
+      </Tooltip>
+    );
+
     return (
       <Card className="text-center">
         <Card.Header as="h5">Candidates</Card.Header>
@@ -335,9 +345,17 @@ export default class CandidateList extends React.Component {
             update={this.update}
             remove={this.remove}
           />
-          <Button onClick={this.showCandidateAddModal} variant="secondary">
-            <FontAwesomeIcon icon={faPlus} />
-          </Button>
+          {/* TODO: Create a reusable component */}
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250 }}
+            overlay={renderAddTooltip}
+          >
+            {/* Wyswietl modal */}
+            <Button onClick={this.showCandidateAddModal} variant="secondary">
+              <FontAwesomeIcon icon={faPlus} />
+            </Button>
+          </OverlayTrigger>
           <CandidateAddModal
             visible={candidateAddVisible}
             hide={this.hideCanddiateAddModal}
