@@ -96,7 +96,7 @@ export default class SignInItem extends React.Component {
             </Button>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.hideModal} variant="outline-danger">Cancel</Button>
+            <Button onClick={this.hideModal} variant="outline-dark">Cancel</Button>
           </Modal.Footer>
         </Modal>
       </>
