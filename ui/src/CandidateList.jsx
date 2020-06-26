@@ -31,10 +31,9 @@ function CandidateRemoveModal({
         </Modal.Title>
       </Modal.Header>
       <Modal.Footer>
-        <ButtonToolbar>
-          <Button type="button" onClick={handleRemove}>Yes</Button>
-          <Button type="button" onClick={hideRemove}>No</Button>
-        </ButtonToolbar>
+        <Button type="button" onClick={handleRemove} variant="outline-success">Yes</Button>
+        {' '}
+        <Button type="button" onClick={hideRemove} variant="outline-dark">No</Button>
       </Modal.Footer>
     </Modal>
   );
@@ -71,12 +70,12 @@ function CandidateEditModal({
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>Edit candidate</Modal.Title>
+        <Modal.Title>Edit the candidate</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form name="candidateEdit">
           <FormGroup>
-            <Form.Label>Name</Form.Label>
+            <Form.Label>Name:</Form.Label>
             <Form.Control
               name="name"
               autoFocus
@@ -85,7 +84,7 @@ function CandidateEditModal({
             />
           </FormGroup>
           <FormGroup>
-            <Form.Label>Surname</Form.Label>
+            <Form.Label>Surname:</Form.Label>
             <Form.Control
               name="surname"
               value={newSurname}
@@ -95,16 +94,20 @@ function CandidateEditModal({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <ButtonToolbar>
-          <Button
-            type="button"
-            onClick={onClick}
-          >
-            Submit
-          </Button>
-          {' '}
-          <Button onClick={hideEdit}>Cancel</Button>
-        </ButtonToolbar>
+        <Button
+          type="button"
+          onClick={onClick}
+          variant="outline-success"
+        >
+          Submit
+        </Button>
+        {' '}
+        <Button
+          onClick={hideEdit}
+          variant="outline-dark"
+        >
+          Cancel
+        </Button>
       </Modal.Footer>
     </Modal>
   );
@@ -227,7 +230,7 @@ function CandidateAddModal({ visible, hide, add }) {
             Submit
           </Button>
           {' '}
-          <Button onClick={hide} variant="outline-dark" >Cancel</Button>
+          <Button onClick={hide} variant="outline-dark">Cancel</Button>
         </Modal.Footer>
       </Modal>
     </React.Fragment>

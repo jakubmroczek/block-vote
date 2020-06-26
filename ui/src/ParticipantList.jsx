@@ -41,7 +41,7 @@ function ParticipantUpdateModal({
       <Modal.Body>
         <Form name="participantUpdate">
           <FormGroup>
-            <Form.Label>E-mail</Form.Label>
+            <Form.Label>Mail:</Form.Label>
             <Form.Control
               name="email"
               autoFocus
@@ -55,11 +55,14 @@ function ParticipantUpdateModal({
         <Button
           type="button"
           onClick={onClick}
+          variant="outline-success"
         >
           Submit
         </Button>
         {' '}
-        <Button onClick={hide}>Cancel</Button>
+        <Button 
+        onClick={hide}
+        variant="outline-dark">Cancel</Button>
       </Modal.Footer>
     </Modal>
   );
@@ -93,9 +96,9 @@ function ParticipantRemoveModal({
         </Modal.Title>
       </Modal.Header>
       <Modal.Footer>
-        <Button type="button" onClick={onRemove}>Yes</Button>
+        <Button type="button" onClick={onRemove} variant="outline-success">Yes</Button>
         {' '}
-        <Button type="button" onClick={hide}>No</Button>
+        <Button type="button" onClick={hide} variant="outline-dark">No</Button>
       </Modal.Footer>
     </Modal>
   );

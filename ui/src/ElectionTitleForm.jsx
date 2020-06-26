@@ -41,7 +41,7 @@ export default class ElectionTitleForm extends React.Component {
     const { title } = this.state;
     return (
       <Card className="text-center">
-        <Card.Header as="h5">Election Title</Card.Header>
+        <Card.Header as="h5">Title</Card.Header>
         <Card.Body>
           <Form name="electionTitle">
             <FormGroup>
@@ -53,7 +53,7 @@ export default class ElectionTitleForm extends React.Component {
               />
             </FormGroup>
           </Form>
-          <Button onClick={this.onSubmit} variant="secondary"> Save election title</Button>
+          <Button onClick={this.onSubmit} variant="secondary"> Save the election title</Button>
         </Card.Body>
       </Card>
     );
