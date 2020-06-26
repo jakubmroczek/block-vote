@@ -72,6 +72,25 @@ async function remove(_, { id }, { user }) {
   return result.deletedCount === 1;
 }
 
+// TODO: When 3 layer atchiture move to different layer
+// Ensures that there is no conflicts between tokens
+function generateSecretTokens(quantity) {
+  let i = quantity;
+  const secretTokens = [];
+  while (i > 0) {
+    const secretToken = generator.generate({
+      length: 32,
+      numbers: true,
+    });
+    const index = secretTokens.indexOf(secretToken);        
+    if (index === -1) {
+      i -= 1;
+      secretTokens.push(secretToken);
+    }
+  }
+  return secretTokens;
+}
+
 // TODO: Not CRUD operation, where is should be?
 // TODO: When 3 layered architecutre - move to service layer
 async function setElectionInPublicKeyRegisterationStage(_, { id }) {
@@ -80,18 +99,9 @@ async function setElectionInPublicKeyRegisterationStage(_, { id }) {
   const status = 'Registration';
   const { participants } = electionDB;
 
-  // Lame for loop
   const { length } = participants;
-  const secretTokens = [];
-  for (let i = 0; i < length; i += 1) {
-    const secretToken = generator.generate({
-      length: 32,
-      numbers: true,
-    });
-    secretTokens.push(secretToken);
-  }
-
-  // TODO: Is it okay
+  const secretTokens = generateSecretTokens(length);
+  
   const changes = { status, participants, secretTokens };
   const savedElection = await update({}, { id, changes });
   return savedElection;
