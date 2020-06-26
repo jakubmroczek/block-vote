@@ -204,30 +204,30 @@ function CandidateAddModal({ visible, hide, add }) {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add candidate</Modal.Title>
+          <Modal.Title>Add a candidate</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form name="candidateAdd">
             <FormGroup>
-              <Form.Label>Name</Form.Label>
-              <Form.Control name="name" autoFocus />
+              <Form.Label>Name:</Form.Label>
+              <Form.Control name="name" placeholder="John" autoFocus />
             </FormGroup>
             <FormGroup>
-              <Form.Label>Surname</Form.Label>
-              <Form.Control name="surname" />
+              <Form.Label>Surname:</Form.Label>
+              <Form.Control name="surname" placeholder="Doe" />
             </FormGroup>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <ButtonToolbar>
-            <Button
-              type="button"
-              onClick={onClick}
-            >
-              Add
-            </Button>
-            <Button onClick={hide}>Cancel</Button>
-          </ButtonToolbar>
+          <Button
+            type="button"
+            onClick={onClick}
+            variant="outline-success"
+          >
+            Submit
+          </Button>
+          {' '}
+          <Button onClick={hide} variant="outline-dark" >Cancel</Button>
         </Modal.Footer>
       </Modal>
     </React.Fragment>
