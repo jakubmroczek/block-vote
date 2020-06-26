@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Button, Table, Modal, Form, FormGroup, ButtonToolbar, Card,
+  Button, Table, Modal, Form, FormGroup, Tooltip, Card, OverlayTrigger,
 } from 'react-bootstrap';
 import './fontawesome.js';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -60,9 +60,12 @@ function ParticipantUpdateModal({
           Submit
         </Button>
         {' '}
-        <Button 
-        onClick={hide}
-        variant="outline-dark">Cancel</Button>
+        <Button
+          onClick={hide}
+          variant="outline-dark"
+        >
+          Cancel
+        </Button>
       </Modal.Footer>
     </Modal>
   );
@@ -315,14 +318,29 @@ export default class ParticipantList extends React.Component {
 
   render() {
     const { participants, addModalVisible } = this.state;
+
+    const renderAddTooltip = props => (
+      <Tooltip id="button-tooltip" {...props}>
+        Add
+      </Tooltip>
+    );
+
     return (
       <Card className="text-center">
         <Card.Header as="h5">Participants</Card.Header>
         <Card.Body>
           <ParticipantTable participants={participants} update={this.update} remove={this.remove} />
-          <Button onClick={this.showParticipantAddModal} variant="secondary">
-            <FontAwesomeIcon icon={faPlus} />
-          </Button>
+          {/* TODO: Create a reusable component */}
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250 }}
+            overlay={renderAddTooltip}
+          >
+            {/* Wyswietl modal */}
+            <Button onClick={this.showParticipantAddModal} variant="secondary">
+              <FontAwesomeIcon icon={faPlus} />
+            </Button>
+          </OverlayTrigger>
           <ParticipantAddModal
             visible={addModalVisible}
             hide={this.hideParticipantAddModal}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Button, Table, Modal, Form, FormGroup, ButtonToolbar, Card,
+  Button, Table, Modal, Form, FormGroup, Tooltip, Card, OverlayTrigger,
 } from 'react-bootstrap';
 import './fontawesome.js';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -329,6 +329,13 @@ export default class CandidateList extends React.Component {
 
   render() {
     const { candidates, candidateAddVisible } = this.state;
+
+    const renderAddTooltip = props => (
+      <Tooltip id="button-tooltip" {...props}>
+        Add
+      </Tooltip>
+    );
+
     return (
       <Card className="text-center">
         <Card.Header as="h5">Candidates</Card.Header>
@@ -338,9 +345,17 @@ export default class CandidateList extends React.Component {
             update={this.update}
             remove={this.remove}
           />
-          <Button onClick={this.showCandidateAddModal} variant="secondary">
-            <FontAwesomeIcon icon={faPlus} />
-          </Button>
+          {/* TODO: Create a reusable component */}
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250 }}
+            overlay={renderAddTooltip}
+          >
+            {/* Wyswietl modal */}
+            <Button onClick={this.showCandidateAddModal} variant="secondary">
+              <FontAwesomeIcon icon={faPlus} />
+            </Button>
+          </OverlayTrigger>
           <CandidateAddModal
             visible={candidateAddVisible}
             hide={this.hideCanddiateAddModal}
