@@ -19,7 +19,6 @@ function getContext({ req }) {
 const resolvers = {
   Query: {
     getElection: mustBeSignedIn(election.get),
-    // getElection: election.get,
 
     listElection: mustBeSignedIn(election.list),
 
@@ -49,6 +48,7 @@ const server = new ApolloServer({
   context: getContext,
   formatError: (error) => {
     console.log(error);
+    console.log(error.extensions.exception.stacktrace);
     return error;
   },
 });
