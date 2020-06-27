@@ -44,13 +44,13 @@ async function get(_, { id }) {
 async function update(_, { id, changes }) {
   const db = getDb();
   const filter = { _id: mongo.ObjectID(id) };
-  
-  //TODO: Fix problem with handling nulls e.g 
+
+  // TODO: Fix problem with handling nulls e.g
   if (changes.title
     || changes.candidates
     || changes.participants
     || changes.secretTokens
-    || changes.smartContract.address) {
+    || changes.smartContract) {
     const election = await db.collection(COLLECTION).findOne(filter);
     Object.assign(election, changes);
   }
@@ -82,7 +82,7 @@ function generateSecretTokens(quantity) {
       length: 32,
       numbers: true,
     });
-    const index = secretTokens.indexOf(secretToken);        
+    const index = secretTokens.indexOf(secretToken);
     if (index === -1) {
       i -= 1;
       secretTokens.push(secretToken);
@@ -101,12 +101,13 @@ async function setElectionInPublicKeyRegisterationStage(_, { id }) {
 
   const { length } = participants;
   const secretTokens = generateSecretTokens(length);
-  
+
   const changes = { status, participants, secretTokens };
   const savedElection = await update({}, { id, changes });
   return savedElection;
 }
 
+// TODO: Verify if the elction is owned by the user
 async function deployElection(_, { id }) {
   // Returns abi and bytecode
   const smartContract = blockchainUtils.compile();
@@ -115,6 +116,57 @@ async function deployElection(_, { id }) {
   return updatedElection;
 }
 
+// TODO: Verify if the elction is owned by the user
+// TODO: When 3 layered architecture, move to the service
+async function finish(_, { id }) {
+  // Change Election state to be finished
+  // I must mail the users, about election result
+  // How do I get the election results? -> I should query the blockchain from the backend
+  // - it is possible and I will do this
+
+  // Get election
+  // It is here becaouse of the circular dependency
+  const mailService = require('./mail_service.js');
+
+  const setElectionAsFinishedInDB = async () => {
+    const changes = { status: 'Finished' };
+    // TODO: How to check if this was successful
+    const result = await update({}, { id, changes });
+    //TODO: Not sure if this is okay
+    return result !== null;
+  };
+
+  // Returns struct with candidates and votes line in the Elecitno.sol
+  const queryBlockchainAboutResult = async (abi, address) => {
+    const candidates = await blockchainUtils.queryCandidates(abi, address);
+    return candidates;
+  };
+
+  // candidates are the data from the blockchain
+  const mailUsersAboutElectionFinish = async (election, candidates) => {
+    await mailService.sendElectionFinishMail(election, candidates);
+  };
+
+  // TODO: Initial requirement election status is 'deployed'
+  // TOOD: error handling
+  const election = await get({}, { id });
+
+  // TODO: Error handling
+  const candidates = await queryBlockchainAboutResult(election.smartContract.abi, election.smartContract.address);
+  await mailUsersAboutElectionFinish(election, candidates);
+  await setElectionAsFinishedInDB(id);
+
+  // TODO: I must return false, if one of the avoe methods fails
+  return true;
+}
+
 module.exports = {
-  create, list, get, update, remove, setElectionInPublicKeyRegisterationStage, deployElection,
+  create,
+  list,
+  get,
+  update,
+  remove,
+  setElectionInPublicKeyRegisterationStage,
+  deployElection,
+  finish,
 };

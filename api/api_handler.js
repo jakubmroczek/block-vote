@@ -37,6 +37,8 @@ const resolvers = {
     setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(election.setElectionInPublicKeyRegisterationStage),
 
     deployElection: mustBeSignedIn(election.deployElection),
+
+    finishElection: mustBeSignedIn(election.finish),
   },
 };
 
@@ -46,6 +48,7 @@ const server = new ApolloServer({
   context: getContext,
   formatError: (error) => {
     console.log(error);
+    console.log(error.extensions.exception.stacktrace);
     return error;
   },
 });

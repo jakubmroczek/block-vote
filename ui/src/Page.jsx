@@ -28,7 +28,6 @@ export default class Page extends React.Component {
 
   render() {
     const { user } = this.state;
-    
     if (user.signedIn) {
       return (
         <>

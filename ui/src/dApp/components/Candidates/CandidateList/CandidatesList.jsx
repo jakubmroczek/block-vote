@@ -27,9 +27,9 @@ export class CandidatesList extends React.Component {
   }
 
   handleToggle = candidate => () => {
-    // TODO: rewrite to tripple if
+    // TODO: rewrite to tripple if    
     let newCandidate = null;
-    if (candidate !== this.state.selectedCandidate) {
+    if (candidate !== this.state.selectedCandidate) {      
       this.props.candidateSelected(candidate);
       newCandidate = candidate;
     } else {
