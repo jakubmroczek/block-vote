@@ -109,7 +109,7 @@ export default class UserPanel extends React.Component {
 
     // Must be deployed
     return (
-      <DeployedElectionView />
+      <DeployedElectionView id={id}/>
     );
   }
 }

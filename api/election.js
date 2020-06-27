@@ -150,6 +150,9 @@ async function finish(_, { id }) {
   const result = queryBlockchainAboutResult(election);
   mailUsersAboutElectionFinish(election);
   setElectionAsFinishedInDB(election);
+
+  // TODO: I must return false, if one of the avoe methods fails
+  return true;
 }
 
 module.exports = {
