@@ -37,6 +37,8 @@ const resolvers = {
     setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(election.setElectionInPublicKeyRegisterationStage),
 
     deployElection: mustBeSignedIn(election.deployElection),
+
+    finishElection: mustBeSignedIn(election.finish),
   },
 };
 

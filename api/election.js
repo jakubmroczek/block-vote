@@ -44,8 +44,8 @@ async function get(_, { id }) {
 async function update(_, { id, changes }) {
   const db = getDb();
   const filter = { _id: mongo.ObjectID(id) };
-  
-  //TODO: Fix problem with handling nulls e.g 
+
+  // TODO: Fix problem with handling nulls e.g
   if (changes.title
     || changes.candidates
     || changes.participants
@@ -82,7 +82,7 @@ function generateSecretTokens(quantity) {
       length: 32,
       numbers: true,
     });
-    const index = secretTokens.indexOf(secretToken);        
+    const index = secretTokens.indexOf(secretToken);
     if (index === -1) {
       i -= 1;
       secretTokens.push(secretToken);
@@ -101,12 +101,13 @@ async function setElectionInPublicKeyRegisterationStage(_, { id }) {
 
   const { length } = participants;
   const secretTokens = generateSecretTokens(length);
-  
+
   const changes = { status, participants, secretTokens };
   const savedElection = await update({}, { id, changes });
   return savedElection;
 }
 
+// TODO: Verify if the elction is owned by the user
 async function deployElection(_, { id }) {
   // Returns abi and bytecode
   const smartContract = blockchainUtils.compile();
@@ -115,6 +116,49 @@ async function deployElection(_, { id }) {
   return updatedElection;
 }
 
+// TODO: Verify if the elction is owned by the user
+// TODO: When 3 layered architecture, move to the service
+async function finish(_, { id }) {
+  // Change Election state to be finished
+  // I must mail the users, about election result
+  // How do I get the election results? -> I should query the blockchain from the backend
+  // - it is possible and I will do this
+
+  // Get election
+
+  const setElectionAsFinishedInDB = (election) => {
+    console.log('marked election as finished');
+  };
+
+  // Returns struct with candidates and votes line in the Elecitno.sol
+  const queryBlockchainAboutResult = (election) => {
+    console.log('queryin the blockchain');
+  };
+
+  const mailUsersAboutElectionFinish = (election, result) => {
+    console.log('mailing the voters');
+  };
+
+  // TOOD: error handling
+
+  console.log('finishing the election');
+
+
+  const election = await get({}, { id });
+
+  // TODO: Error handling
+  const result = queryBlockchainAboutResult(election);
+  mailUsersAboutElectionFinish(election);
+  setElectionAsFinishedInDB(election);
+}
+
 module.exports = {
-  create, list, get, update, remove, setElectionInPublicKeyRegisterationStage, deployElection,
+  create,
+  list,
+  get,
+  update,
+  remove,
+  setElectionInPublicKeyRegisterationStage,
+  deployElection,
+  finish,
 };

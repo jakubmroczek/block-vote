@@ -56,7 +56,7 @@ class ElectionAPI {
   // TODO: Better describtion response from the backend
   async blockchainInit(response) {
     const { smartContract } = response;
-    const { abi,address } = smartContract;
+    const { abi, address } = smartContract;
     const contractABI = JSON.parse(abi);
 
     // TODO: Get this from the metamask
