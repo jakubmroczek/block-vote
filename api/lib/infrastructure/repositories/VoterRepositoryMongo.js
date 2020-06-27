@@ -3,24 +3,18 @@ const MongooseVoter = require('../orm/mongoose/schemas/Voter.js');
 const VoterRepository = require('../../domain/VoterRepository.js');
 
 module.exports = class extends VoterRepository {
-
+  // eslint-disable-next-line class-methods-use-this
   async persist(voterEntity) {
-    const { firstName, lastName, email, password } = userEntity;
-    const mongooseUser = new MongooseUser({ firstName, lastName, email, password });
-    await mongooseUser.save();
-    return new User(mongooseUser.id, mongooseUser.firstName, mongooseUser.lastName, mongooseUser.email, mongooseUser.password);
+    const { publicKey, electionIDs } = voterEntity;
+    const mongooseVoter = new MongooseVoter({ publicKey, electionIDs });
+    await mongooseVoter.save();
+    return new Voter(mongooseVoter.id, mongooseVoter.publicKey, mongooseVoter.electionIDs);
   }
 
-  async merge(voterEntity) {
-    const { id, firstName, lastName, email, password } = userEntity;
-    const mongooseUser = MongooseUser.findByIdAndUpdate(id, { firstName, lastName, email, password });
-    return new User(mongooseUser.id, mongooseUser.firstName, mongooseUser.lastName, mongooseUser.email, mongooseUser.password);
-  }
-
-  //TODO: Check if this should not be the voterId
+  // TODO: Check if this should not be the voterId
+  // eslint-disable-next-line class-methods-use-this
   async get(publicKey) {
-    const mongooseUser = await MongooseUser.findById(userId);
-    return new User(mongooseUser.id, mongooseUser.firstName, mongooseUser.lastName, mongooseUser.email, mongooseUser.password);
+    const mongooseVoter = await MongooseVoter.findByPublicKey(publicKey);
+    return new Voter(mongooseVoter.id, mongooseVoter.publicKey, mongooseVoter.electionIDs);
   }
-
 };
