@@ -80,40 +80,40 @@ class ElectionAPI {
 
     // TODO: Error handling
     // TOOD: rename to promise
-    const candidates = this.electionInstance.methods.getCandidates().call((err, ethereumCandidates) => {
-      const candidatesArray = [];
-      for (let i = 0; i < ethereumCandidates.length; i += 1) {
-        candidatesArray.push(
-          {
-            name: ethereumCandidates[i].name,
-            surname: ethereumCandidates[i].surname,
-            id: ethereumCandidates[i].id,
-            index: i,
-          },
-        );
-      }
-      return candidatesArray;
-    });
+    const candidates = this.electionInstance.methods.getCandidates().call();
 
     // TODO: Error handling
-    const electionTitle = this.electionInstance.methods.getElectionTitle().call((err, title) => title);
+    const electionTitle = this.electionInstance.methods.getElectionTitle().call();
 
     return Promise.all([candidates, electionTitle])
-      .then(values => ({
-        candidates: values[0],
-        electionTitle: values[1],
-      }));
+      .then((values) => {
+        const candidates = [];
+        for (let i = 0; i < values[0].length; i += 1) {
+          candidates.push(
+            {
+              name: values[0][i].name,
+              surname: values[0][i].surname,
+              index: i,
+            },
+          );
+        }
+
+        return {
+          candidates,
+          electionTitle: values[1],
+        };
+      });
   }
 
-  async vote(candidateIndex) {
+  async vote(candidate) {
     // TODO: Encapsulate this in a function and call only once
     await this.metaMaskInit();
     const publicKey = window.web3.eth.defaultAccount;
     const response = await this.fetchCompiledSmartContract(publicKey);
     await this.blockchainInit(response);
 
-    return this.electionInstance.methods.vote(candidateIndex).send({ from: publicKey })
-      .catch(error => console.log(error));
+    return this.electionInstance.methods.vote(candidate.index).send({ from: publicKey })
+    .catch(error => console.log(error));
   }
 
   async isUserRegistered(onFailure) {

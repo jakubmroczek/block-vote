@@ -3,7 +3,6 @@ const generator = require('generate-password');
 const { getDb } = require('./db.js');
 
 const blockchainUtils = require('./blockchain_utils.js');
-const mailService = require('./mail_service.js');
 
 const COLLECTION = 'elections';
 
@@ -126,6 +125,8 @@ async function finish(_, { id }) {
   // - it is possible and I will do this
 
   // Get election
+  // It is here becaouse of the circular dependency
+  const mailService = require('./mail_service.js');
 
   const setElectionAsFinishedInDB = async () => {
     const changes = { status: 'Finished' };
