@@ -18,8 +18,8 @@ function getContext({ req }) {
 
 const resolvers = {
   Query: {
-    // getElection: mustBeSignedIn(election.get),
-    getElection: election.get,
+    getElection: mustBeSignedIn(election.get),
+    // getElection: election.get,
 
     listElection: mustBeSignedIn(election.list),
 

@@ -19,10 +19,10 @@ const htmlForm = (link, secretToken) => `
       </p>
 `;
 
-const mailTemplate = (to, html) => ({
+const mailTemplate = (to, subject, html) => ({
   from: process.env.GMAIL_USER,
   to,
-  subject: 'Register your public key',
+  subject,
   html,
 });
 
@@ -30,7 +30,8 @@ function generateMail(participant, secretToken, link) {
   const { email } = participant;
   // TODO: From where to we take the voting link?
   const html = htmlForm(link, secretToken);
-  return mailTemplate(email, html);
+  const subject = 'Register your public key';
+  return mailTemplate(email, subject, html);
 }
 
 function sendEmail(mailOptions) {
@@ -77,6 +78,26 @@ async function sendRegisterKeyMail(_, { id }) {
   return mailEveryone(participants, secretTokens, link);
 }
 
+// Candidates the candidates from the blockchain along with their vote counters
+// TODO: Pass the election title here
+async function sendElectionFinishMail(election, candidates) {
+  // TODO: Introduce better template
+  const html = `<p>The election results: <br> ${candidates} </p>`;
+  // TODO: Add info about the elction title
+  const subject = 'The election results';
+
+  const { participants } = election;
+
+  participants.forEach((p) => {
+    const mail = mailTemplate(p.email, subject, html);
+    sendEmail(mail);
+  });
+
+  // TODO; Error handling
+  return true;
+}
+
 module.exports = {
   sendRegisterKeyMail,
+  sendElectionFinishMail,
 };

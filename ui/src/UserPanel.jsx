@@ -94,6 +94,13 @@ export default class UserPanel extends React.Component {
     }
 
     const { _id: id, status } = election;
+    //TODO: Refactor this code
+    if (status === 'Finished') {
+      return (
+        <EditElectionInfo id={id} />
+      );
+    }
+
     if (status === 'New') {
       return (
         <EditElectionInfo id={id} />
@@ -107,10 +114,13 @@ export default class UserPanel extends React.Component {
       );
     }
 
-    // Must be deployed
-    return (
-      <DeployedElectionView id={id}/>
-    );
+    if (status === 'Deployed') {
+      return (
+        <DeployedElectionView id={id} />
+      );
+    }
+
+    // TODO: How should we handle the finished elction - current apporach we do not display them
   }
 }
 

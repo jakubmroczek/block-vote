@@ -42,15 +42,11 @@ async function queryCandidates(abi, address) {
   // TODO: Optional: the user can pass this as a parameter.
   const web3 = new Web3('http://localhost:8545');
 
-  console.log(abi);
-  
-
-  const dapptokenContract = new web3.eth.Contract(abi, address);
-  this.electionInstance = dapptokenContract;
+  const contractABI = JSON.parse(abi);  
+  const contract = new web3.eth.Contract(contractABI, address);
 
   //TODO: Only smart contract owner should call this method.
-
-  return this.electionInstance.methods.getCandidates().call((err, ethereumCandidates) => {
+  return contract.methods.getCandidates().call((err, ethereumCandidates) => {      
     const candidatesArray = [];
     for (let i = 0; i < ethereumCandidates.length; i += 1) {
       candidatesArray.push(

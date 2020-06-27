@@ -3,6 +3,7 @@ const generator = require('generate-password');
 const { getDb } = require('./db.js');
 
 const blockchainUtils = require('./blockchain_utils.js');
+const mailService = require('./mail_service.js');
 
 const COLLECTION = 'elections';
 
@@ -141,8 +142,8 @@ async function finish(_, { id }) {
   };
 
   // candidates are the data from the blockchain
-  const mailUsersAboutElectionFinish = (election, candidates) => {
-    console.log('mailing the voters');
+  const mailUsersAboutElectionFinish = async (election, candidates) => {
+    await mailService.sendElectionFinishMail(election, candidates);
   };
 
   // TODO: Initial requirement election status is 'deployed'
@@ -150,15 +151,9 @@ async function finish(_, { id }) {
   const election = await get({}, { id });
 
   // TODO: Error handling
-  const candidates = queryBlockchainAboutResult(
-    election.smartContract.abi, election.smartContract.address);
-
-    console.log('blockchain candidates');
-    console.log(candidates);
-    
-
-  mailUsersAboutElectionFinish(election, candidates);
-  setElectionAsFinishedInDB(id);
+  const candidates = await queryBlockchainAboutResult(election.smartContract.abi, election.smartContract.address);
+  await mailUsersAboutElectionFinish(election, candidates);
+  await setElectionAsFinishedInDB(id);
 
   // TODO: I must return false, if one of the avoe methods fails
   return true;
