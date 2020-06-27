@@ -135,23 +135,29 @@ async function finish(_, { id }) {
   };
 
   // Returns struct with candidates and votes line in the Elecitno.sol
-  const queryBlockchainAboutResult = (election) => {
-    console.log('queryin the blockchain');
+  const queryBlockchainAboutResult = async (abi, address) => {
+    const candidates = await blockchainUtils.queryCandidates(abi, address);
+    return candidates;
   };
 
-  const mailUsersAboutElectionFinish = (election, result) => {
+  // candidates are the data from the blockchain
+  const mailUsersAboutElectionFinish = (election, candidates) => {
     console.log('mailing the voters');
   };
 
+  // TODO: Initial requirement election status is 'deployed'
   // TOOD: error handling
-
-  console.log('finishing the election');
-
   const election = await get({}, { id });
 
   // TODO: Error handling
-  const result = queryBlockchainAboutResult(election);
-  mailUsersAboutElectionFinish(election);
+  const candidates = queryBlockchainAboutResult(
+    election.smartContract.abi, election.smartContract.address);
+
+    console.log('blockchain candidates');
+    console.log(candidates);
+    
+
+  mailUsersAboutElectionFinish(election, candidates);
   setElectionAsFinishedInDB(id);
 
   // TODO: I must return false, if one of the avoe methods fails

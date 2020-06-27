@@ -28,13 +28,13 @@ export default class Page extends React.Component {
 
   render() {
     const { user } = this.state;
-    return (
-      <>
-        <UserContext.Provider value={user}>
-          <Contents onUserChange={this.onUserChange} />
-        </UserContext.Provider>
-      </>
-    );
+    // return (
+    //   <>
+    //     <UserContext.Provider value={user}>
+    //       <Contents onUserChange={this.onUserChange} />
+    //     </UserContext.Provider>
+    //   </>
+    // );
   
     if (user.signedIn) {
       return (
