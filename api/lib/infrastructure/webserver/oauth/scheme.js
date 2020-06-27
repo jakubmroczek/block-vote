@@ -4,6 +4,6 @@ const AuthorizationController = require('../../../interfaces/controllers/Authori
 
 module.exports = () => {
   return {
-    authenticate: AuthorizationController.verifyAccessToken
+    authenticate: AuthorizationController.verifyAccessToken,
   };
 };

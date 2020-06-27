@@ -10,12 +10,14 @@ module.exports = (() => {
 
   const environment = {
     database: {
-      dialect: process.env.DATABASE_DIALECT || constants.SUPPORTED_DATABASE.MONGO,
-      url: process.env.DATABASE_URI || '',
+      dialect: constants.SUPPORTED_DATABASE.MONGO,
+      //TODO: Add this to constants?
+      url: process.env.DATABASE_URI 
     }
   };
 
   if (process.env.NODE_ENV === 'test') {
+    //TODO: Looks that I deleted the IN_MEMORY db
     environment.database = {
       driver: constants.SUPPORTED_DATABASE.IN_MEMORY
     }
