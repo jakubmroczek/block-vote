@@ -13,7 +13,7 @@ module.exports = class extends VoterRepository {
 
   // TODO: Check if this should not be the voterId
   // eslint-disable-next-line class-methods-use-this
-  async get(publicKey) {
+  async getByPublicKey(publicKey) {
     const mongooseVoter = await MongooseVoter.findByPublicKey(publicKey);
     return new Voter(mongooseVoter.id, mongooseVoter.publicKey, mongooseVoter.electionIDs);
   }

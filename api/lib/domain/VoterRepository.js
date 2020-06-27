@@ -5,8 +5,8 @@ module.exports = class {
   }
 
   // TODO: Maybe I should use the voter id here instead  
-  get(publicKey) {
+  getByPublicKey(publicKey) {
     throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
   }
-
+  
 };
