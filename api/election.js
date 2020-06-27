@@ -50,7 +50,7 @@ async function update(_, { id, changes }) {
     || changes.candidates
     || changes.participants
     || changes.secretTokens
-    || changes.smartContract.address) {
+    || changes.smartContract) {
     const election = await db.collection(COLLECTION).findOne(filter);
     Object.assign(election, changes);
   }
@@ -126,8 +126,12 @@ async function finish(_, { id }) {
 
   // Get election
 
-  const setElectionAsFinishedInDB = (election) => {
-    console.log('marked election as finished');
+  const setElectionAsFinishedInDB = async () => {
+    const changes = { status: 'Finished' };
+    // TODO: How to check if this was successful
+    const result = await update({}, { id, changes });
+    //TODO: Not sure if this is okay
+    return result !== null;
   };
 
   // Returns struct with candidates and votes line in the Elecitno.sol
@@ -143,13 +147,12 @@ async function finish(_, { id }) {
 
   console.log('finishing the election');
 
-
   const election = await get({}, { id });
 
   // TODO: Error handling
   const result = queryBlockchainAboutResult(election);
   mailUsersAboutElectionFinish(election);
-  setElectionAsFinishedInDB(election);
+  setElectionAsFinishedInDB(id);
 
   // TODO: I must return false, if one of the avoe methods fails
   return true;
