@@ -1,14 +1,14 @@
 module.exports = class {
 
-  persist(domainUser) {
+  async persist(domainUser) {
     throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
   }
 
-  merge(domainUser) {
+  async merge(domainUser) {
     throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
   }
 
-  getByEmail(email) {
+  async findByEmail(email) {
     throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
   }
 
