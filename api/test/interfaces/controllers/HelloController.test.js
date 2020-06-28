@@ -1,7 +1,7 @@
-const SayHello = require('../../../lib/application/use_cases/SayHello');
-const HelloController = require('../../../lib/interfaces/controllers/HelloController');
+const SayHello = require('../..//application/use_cases/SayHello');
+const HelloController = require('../..//interfaces/controllers/HelloController');
 
-jest.mock('../../../lib/application/use_cases/SayHello');
+jest.mock('../..//application/use_cases/SayHello');
 
 describe('#sayHelloWorld', () => {
 
