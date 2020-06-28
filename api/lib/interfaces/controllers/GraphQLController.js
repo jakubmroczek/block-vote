@@ -75,7 +75,15 @@ async function updateElection(_1, { id, changes }, { user, serviceLocator }) {
 
 async function registerPublicKey(_1, { id, secretToken, publicKey }, { user, serviceLocator }) {
   //   TODO: Error handling
-  const result = await RegisterPublicKey(id, secretToken, publicKey, serviceLocator);
+    console.log('registering pbulic key')
+    console.log(id)
+    console.log(secretToken);
+    console.log(publicKey);
+    
+    ;
+    
+
+  const result = await RegisterPublicKey(secretToken, publicKey, id, serviceLocator);
   return result;
 }
 

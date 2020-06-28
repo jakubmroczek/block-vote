@@ -7,9 +7,13 @@ function isSecretTokenValid(secretToken, election) {
 }
 
 // TODO: electionIDs is a one string, but in the future it wil be an array
-module.exports = async (secretToken, publicKey, electionIDs, { voterRepository, electionRepository }) => {
-  const voter = new Voter(null, publicKey, electionIDs);
-  const election = electionRepository.get(electionIDs);
+module.exports = async (secretToken, publicKey, id, { voterRepository, electionRepository }) => {
+  const voter = new Voter(null, publicKey, id);
+  console.log('election ids');
+  
+  console.log(id);
+  
+  const election = await electionRepository.get(id);
 
   // Unsure if this should be in this layer
   if (!isSecretTokenValid(secretToken, election)) {
@@ -22,6 +26,7 @@ module.exports = async (secretToken, publicKey, electionIDs, { voterRepository, 
   if (index > -1) {
     election.secretTokens.splice(index, 1);
   }
+  election.publicKeys.push(publicKey);
 
   await electionRepository.merge(election);
 

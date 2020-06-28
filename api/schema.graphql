@@ -82,7 +82,7 @@ type Mutation {
     createElection : Election!
     updateElection(id: ID!, changes: ElectionUpdateInputs!) : Election!
 
-    registerPublicKey(electionID: ID!, secretToken: String!, publicKey: String!) : Boolean!
+    registerPublicKey(id: ID!, secretToken: String!, publicKey: String!) : Boolean!
 
     setElectionIntoPublicKeyWaitingStage(id: ID!) : Election!
 
