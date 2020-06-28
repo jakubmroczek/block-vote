@@ -33,9 +33,9 @@ function getContext({ req }) {
 // TODO: Add extra checks so that user can not query election that are not theirs
 
 // TODO: Temporal resolvers - move this into a proper place
-async function getElection(_1, { electionID }, { user, serviceLocator }) {
+async function getElection(_1, { id }, { user, serviceLocator }) {
   // TODO: What if not found
-  const election = await GetElection(electionID, serviceLocator);
+  const election = await GetElection(id, serviceLocator);
   return election;
 }
 
@@ -68,8 +68,8 @@ async function createElection(_1, _2, { user, serviceLocator }) {
 }
 
 
-async function updateElection(_1, { electionID, changes }, { user, serviceLocator }) {
-  const election = await UpdateElection(electionID, changes, serviceLocator);
+async function updateElection(_1, { id, changes }, { user, serviceLocator }) {
+  const election = await UpdateElection(id, changes, serviceLocator);
   return election;
 }
 
