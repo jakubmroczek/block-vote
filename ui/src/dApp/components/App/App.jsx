@@ -26,7 +26,6 @@ class App extends React.Component {
 
   componentDidMount() {
     this.setState({ appplicationState: 'connectingToBlockchain' });
-
     const onFailure = () => {
       // TODO: add a new flag for the problem
       this.setState({ appplicationState: 'unregisteredUser' });
@@ -50,18 +49,23 @@ class App extends React.Component {
         } else {
           // TODO: BEtter error handling
           new ElectionAPI()
-            .getElection(onFailure
-              .then((election) => {
-                this.setState({
-                  appplicationState: 'connectedToBlockchain',
-                  title: election.electionTitle,
-                  candidates: election.candidtes,
-                });
-              })
-              .catch(error => console.log(error)));
+            .getElection(onFailure)
+            .then((election) => {
+              console.log(election);
+              
+              this.setState({
+                appplicationState: 'connectedToBlockchain',
+                title: election.electionTitle,
+                candidates: election.candidates,
+              });
+            })
+            .catch(error => console.log(error));
         }
       })
-      .catch(error => console.log(error));
+      .catch((error) => {
+        console.log('erro in first catch');
+        console.log(error);
+      });
   }
 
   render() {

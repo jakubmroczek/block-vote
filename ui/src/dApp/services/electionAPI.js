@@ -45,7 +45,8 @@ class ElectionAPI {
       }
     }`;
 
-    const response = await graphQLFetch(query, { publicKey });
+    const response = await graphQLFetch(query, { publicKey });    
+
     if (response) {
       return response.getVoterElection;
     }

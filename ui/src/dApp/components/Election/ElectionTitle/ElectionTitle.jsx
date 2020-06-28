@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-function ElectionTitle({ electionTitle }) {
+function ElectionTitle({ title }) {
   return (
-    <h1>{electionTitle}</h1>
+    <h1>{title}</h1>
   );
 }
 
