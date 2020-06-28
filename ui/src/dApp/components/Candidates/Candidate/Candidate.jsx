@@ -7,10 +7,14 @@ export default function Candidate(props) {
   return (
     <>
       <tr>
-        <td>{props.nameAndSurname}</td>
-        <td>{props.nameAndSurname}</td>
+        <td>{props.name}</td>
+        <td>{props.surname}</td>
         <td>
-          <Form.Check aria-label="option 1" />
+          <Form.Check
+            aria-label="option 1"
+            checked={props.checked}
+            onChange={props.onChange}
+          />
           {/* <Checkbox
           edge="end"
           onChange={props.onChange}

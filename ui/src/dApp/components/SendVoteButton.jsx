@@ -33,7 +33,7 @@ class SendVoteButton extends React.Component {
   render() {
     return (
       <div>
-        <Button variant="outlined" onClick={this.onClick}>
+        <Button variant="outline-success" onClick={this.onClick}>
           Vote
         </Button>
       </div>

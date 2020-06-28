@@ -11,7 +11,9 @@ function Election() {
     <Card className="text-center">
       <ElectionTitle />
       <CandidatesList />
-      <SendVoteButton />
+      <Card.Footer>
+        <SendVoteButton />
+      </Card.Footer>
     </Card>
   );
 }
