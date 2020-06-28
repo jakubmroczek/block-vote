@@ -8,11 +8,7 @@ function isSecretTokenValid(secretToken, election) {
 
 // TODO: electionIDs is a one string, but in the future it wil be an array
 module.exports = async (secretToken, publicKey, id, { voterRepository, electionRepository }) => {
-  const voter = new Voter(null, publicKey, id);
-  console.log('election ids');
-  
-  console.log(id);
-  
+  const voter = new Voter(null, publicKey, id);  
   const election = await electionRepository.get(id);
 
   // Unsure if this should be in this layer
