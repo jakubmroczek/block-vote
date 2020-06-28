@@ -3,23 +3,19 @@ import * as React from 'react';
 import { Form } from 'react-bootstrap';
 
 // TODO: Change props to name, surnmae not nameAndSurname
-export default function Candidate(props) {
+export default function Candidate({ index, name, surname, checked, onChange }) {
   return (
     <>
       <tr>
-        <td>{props.name}</td>
-        <td>{props.surname}</td>
+        <td>{name}</td>
+        <td>{surname}</td>
         <td>
           <Form.Check
+            name={index}
             aria-label="option 1"
-            checked={props.checked}
-            onChange={props.onChange}
+            checked={checked}
+            onChange={onChange}
           />
-          {/* <Checkbox
-          edge="end"
-          onChange={props.onChange}
-          checked={props.checked}
-        /> */}
         </td>
       </tr>
     </>

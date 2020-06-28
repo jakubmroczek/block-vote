@@ -5,7 +5,6 @@ import ElectionFetching from './ElectionFetching.jsx';
 import ErrorMessage from './ErrorMessage.jsx';
 import ElectionAPI from '../../services/electionAPI.js';
 
-
 class App extends React.Component {
   // TODO: Move error to distinc class/function
   unregisterdVoterErrorTitle = 'Unregistered public key'

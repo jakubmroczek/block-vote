@@ -3,8 +3,10 @@ import { Table } from 'react-bootstrap';
 
 // TODO: Rename to CandidateRow and move it here
 import Candidate from '../Candidate/Candidate.jsx';
+import SendVoteButton from '../../SendVoteButton.jsx'
+import ElectionAPI from '../../../services/electionAPI.js';
 
-export class CandidatesList extends React.Component {
+export default class CandidatesList extends React.Component {
   constructor(props) {
     super(props);
 
@@ -12,43 +14,61 @@ export class CandidatesList extends React.Component {
     this.state = {
       selectedCandidate: null,
     };
+
+    this.onClick = this.onClick.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
   }
 
-  handleToggle = candidate => () => {
-    // TODO: rewrite to tripple if
-    let newCandidate = null;
-    if (candidate !== this.state.selectedCandidate) {
-      this.props.candidateSelected(candidate);
-      newCandidate = candidate;
-    } else {
-      this.props.candidateUnselected();
-    }
+  onClick() {
+    const { selectedCandidate } = this.state;
 
+    // TODO: should it be comparet in this way?
+    if (selectedCandidate !== null) {
+      // TODO: Should this logic be here?
+      // I must get candidateId somehow
+      // TODO: Catch error
+      new ElectionAPI()
+        .vote(selectedCandidate)
+        .then(() => {
+          window.location.reload(false);
+        })
+        .catch(error => console.log(error));
+    } else {
+      alert('Please select a candidate before voting');
+    }
+  }
+
+  handleToggle(index) {
+    const { candidates } = this.props;
+    const candidate = candidates[index] !== this.state.selectedCandidate ?  candidates[index] : null;
+    
     this.setState({
-      selectedCandidate: newCandidate,
+      selectedCandidate: candidate,
     });
   }
 
-  render() {
-    const rows = this.props.candidates.map((candidate, index) => (
+  render() {    
+    const { candidates } = this.props;
+    const rows = candidates.map((candidate, index) => (
       <Candidate
         key={index}
+        index={index}
         name={candidate.name}
         surname={candidate.surname}
-        onChange={this.handleToggle(candidate)}
+        onChange={e => this.handleToggle(e.target.name)}
         checked={candidate === this.state.selectedCandidate}
       />
     ));
 
     return (
-      <Table bordered condensed hover responsive className="text-left">
-        <tbody>
-          {rows}
-        </tbody>
-      </Table>
+      <>
+        <Table bordered condensed hover responsive className="text-left">
+          <tbody>
+            {rows}
+          </tbody>
+        </Table>
+        <SendVoteButton onClick={this.onClick} />
+      </>
     );
   }
 }
-
-// TODO: Fix this
-export default CandidatesList;
