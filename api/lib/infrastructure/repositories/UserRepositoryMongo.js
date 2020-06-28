@@ -1,5 +1,3 @@
-'use strict';
-
 const User = require('../../domain/User');
 const MongooseUser = require('../orm/mongoose/schemas/User');
 const UserRepository = require('../../domain/UserRepository');
