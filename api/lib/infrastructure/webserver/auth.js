@@ -6,7 +6,7 @@ const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const { AuthenticationError } = require('apollo-server-express');
 
-const user = require('./user.js');
+// const user = require('./user.js');
 
 const routes = new Router();
 
@@ -39,13 +39,17 @@ function mustBeSignedIn(resolver) {
 }
 
 async function isNewUser(username) {
-  const dbUser = await user.get(username);
-  return dbUser === null;
+    // TODO: Move me to a proper layer
+    return false;
+//   const dbUser = await user.get(username);
+//   return dbUser === null;
 }
 
 async function createNewUseAccount(username) {
-  const dbUser = await user.create(username);
-  return dbUser;
+    // TODO: Move me to a proper layer
+    // TODO: Implemment me!
+    //   const dbUser = await user.create(username);
+//   return dbUser;
 }
 
 // TODO: I do not like this name

@@ -1,12 +1,10 @@
 require('dotenv').config();
 const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
-const election = require('./election.js');
-const mailService = require('./mail_service.js');
-const auth = require('../../infrastructure/webserver/auth.js');
-const voter = require('./voter.js');
 
-const { mustBeSignedIn } = auth;
+const auth = require('../../infrastructure/webserver/auth.js');
+
+// const { mustBeSignedIn } = auth;
 
 function getContext({ req }) {
   const user = auth.getUser(req);
@@ -18,27 +16,27 @@ function getContext({ req }) {
 
 const resolvers = {
   Query: {
-    getElection: mustBeSignedIn(election.get),
+    // getElection: mustBeSignedIn(election.get),
 
-    listElection: mustBeSignedIn(election.list),
+    // listElection: mustBeSignedIn(election.list),
 
-    sendRegisterPublicKeysMail: mustBeSignedIn(mailService.sendRegisterKeyMail),
+    // sendRegisterPublicKeysMail: mustBeSignedIn(mailService.sendRegisterKeyMail),
 
-    getVoterElection: voter.getElection,
+    // getVoterElection: voter.getElection,
   },
   Mutation: {
-    createElection: mustBeSignedIn(election.create),
-    updateElection: mustBeSignedIn(election.update),
-    removeElection: mustBeSignedIn(election.remove),
+    // createElection: mustBeSignedIn(election.create),
+    // updateElection: mustBeSignedIn(election.update),
+    // removeElection: mustBeSignedIn(election.remove),
 
     // TODO: Make the api name the same as the resolver
-    registerPublicKey: voter.tryRegisterPublicKey,
+    // registerPublicKey: voter.tryRegisterPublicKey,
 
-    setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(election.setElectionInPublicKeyRegisterationStage),
+    // setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(election.setElectionInPublicKeyRegisterationStage),
 
-    deployElection: mustBeSignedIn(election.deployElection),
+    // deployElection: mustBeSignedIn(election.deployElection),
 
-    finishElection: mustBeSignedIn(election.finish),
+    // finishElection: mustBeSignedIn(election.finish),
   },
 };
 
