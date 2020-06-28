@@ -1,20 +1,8 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { Table } from 'react-bootstrap';
 
-import List from '@material-ui/core/List';
-
-import { styled } from '@material-ui/core/styles';
-import { candidateSelected, candidateUnselected } from '../../../actions';
-
-// TODO: Fix this import
+// TODO: Rename to CandidateRow and move it here
 import { Candidate } from '../Candidate/Candidate.jsx';
-
-const MyList = styled(List)({
-  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-  background: 'paper',
-  padding: '100px',
-  marigin: '5px',
-});
 
 export class CandidatesList extends React.Component {
   constructor(props) {
@@ -27,9 +15,9 @@ export class CandidatesList extends React.Component {
   }
 
   handleToggle = candidate => () => {
-    // TODO: rewrite to tripple if    
+    // TODO: rewrite to tripple if
     let newCandidate = null;
-    if (candidate !== this.state.selectedCandidate) {      
+    if (candidate !== this.state.selectedCandidate) {
       this.props.candidateSelected(candidate);
       newCandidate = candidate;
     } else {
@@ -43,16 +31,27 @@ export class CandidatesList extends React.Component {
 
   render() {
     return (
-      <MyList dense>
-        {this.props.candidates.map((candidate, index) => (
-          <Candidate
-            key={index}
-            nameAndSurname={`${candidate.name} ${candidate.surname}`}
-            onChange={this.handleToggle(candidate)}
-            checked={candidate === this.state.selectedCandidate}
-          />
-        ))}
-      </MyList>
+      <Table bordered condensed hover responsive className="text-left">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Choose</th>
+          </tr>
+        </thead>
+        <tbody>
+          {/* TODO: Move this to render */}
+          {this.props.candidates.map((candidate, index) => (
+            <Candidate
+              key={index}
+              nameAndSurname={`${candidate.name} ${candidate.surname}`}
+              onChange={this.handleToggle(candidate)}
+              checked={candidate === this.state.selectedCandidate}
+            />
+          ))}
+        </tbody>
+
+      </Table>
     );
   }
 }

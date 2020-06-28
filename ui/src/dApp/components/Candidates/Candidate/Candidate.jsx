@@ -1,29 +1,23 @@
 import * as React from 'react';
 
-import {
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-  Checkbox,
-} from '@material-ui/core';
+import { Form } from 'react-bootstrap';
 
-// TODO: Refactor this
-const object = { variant: 'h5', padding: '100px' };
-
-export function Candidate(props) {
+// TODO: Change props to name, surnmae not nameAndSurname
+export default function Candidate(props) {
   return (
-    <ListItem key={props.index}>
-      <ListItemText
-        primary={props.nameAndSurname}
-        primaryTypographyProps={object}
-      />
-      <ListItemSecondaryAction>
-        <Checkbox
+    <>
+      <tr>
+        <td>{props.nameAndSurname}</td>
+        <td>{props.nameAndSurname}</td>
+        <td>
+          <Form.Check aria-label="option 1" />
+          {/* <Checkbox
           edge="end"
           onChange={props.onChange}
           checked={props.checked}
-        />
-      </ListItemSecondaryAction>
-    </ListItem>
+        /> */}
+        </td>
+      </tr>
+    </>
   );
 }
