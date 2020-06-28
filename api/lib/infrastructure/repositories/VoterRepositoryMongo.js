@@ -3,10 +3,6 @@ const MongooseVoter = require('../orm/mongoose/schemas/Voter.js');
 const VoterRepository = require('../../domain/VoterRepository.js');
 
 module.exports = class extends VoterRepository {
-    constructor() {
-        super();
-    }
-    
     // eslint-disable-next-line class-methods-use-this
   async persist(voterEntity) {
     const { publicKey, electionIDs } = voterEntity;

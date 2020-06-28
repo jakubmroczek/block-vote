@@ -18,9 +18,9 @@ function getContext({ req }) {
 }
 
 // TODO: Temporal resolvers - move this into a proper place
-function _getElection(_, {}, { user, serviceLocator}) {
+async function _getElection(_, {}, { user, serviceLocator}) {
     console.log('hello get election');   
-    console.log(serviceLocator)
+    console.log(await serviceLocator.userRepository.getByEmail('asfdadfas'))
     console.log(user);    
 }
 
