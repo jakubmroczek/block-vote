@@ -3,7 +3,7 @@ const path = require('path');
 const solc = require('solc');
 
 function readElectionSmartContractSourceCode() {
-  const smartContractPath = path.join(__dirname, '../../../');
+  const smartContractPath = path.join(__dirname, '../../');
   return fs.readFileSync(path.resolve(smartContractPath, 'contracts', 'Election.sol'), 'utf8');
 }
 
