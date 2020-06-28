@@ -6,43 +6,106 @@ const auth = require('../../infrastructure/webserver/auth.js');
 
 const { mustBeSignedIn } = auth;
 
+// Use cases
+const GetElection = require('../../application/use_cases/GetElection.js');
+const ListUserElections = require('../../application/use_cases/ListUserElections.js');
+const SendRegisterationMail = require('../../application/use_cases/SendRegisterationMail.js');
+// TODO: Consider rename, along with the frontend code
+const ListPublicKeyElections = require('../../application/use_cases/ListPublicKeyElections.js');
+const CreateElection = require('../../application/use_cases/CreateElection.js');
+const UpdateElection = require('../../application/use_cases/UpdateElection.js');
+const RegisterPublicKey = require('../../application/use_cases/RegisterPublicKey.js');
+const SetElectionInRegisteration = require('../../application/use_cases/SetElectionInRegisteration.js');
+
 // TODO: Where should I get from this context?
 function getContext({ req }) {
   const user = auth.getUser(req);
   // TODO: Fix this username mismatch
   const { email } = user;
-  user.username = email;  
+  user.username = email;
   const { app } = req;
   const { serviceLocator } = app;
   return { user, serviceLocator };
 }
 
+// TODO: Add extra checks so that user can not query election that are not theirs
+
 // TODO: Temporal resolvers - move this into a proper place
-async function _getElection(_, {}, { user, serviceLocator}) {
-    console.log('hello get election');   
-    console.log(await serviceLocator.userRepository.getByEmail('asfdadfas'))
-    console.log(user);    
+async function getElection(_1, { electionID }, { user, serviceLocator }) {
+  // TODO: What if not found
+  const election = await GetElection(electionID, serviceLocator);
+  return election;
 }
+
+async function listElection(_1, _2, { user, serviceLocator }) {
+  // TODO: What if not found
+  // TODO: shoul this be a domain user?
+  const elections = await ListUserElections(user, serviceLocator);
+  return elections;
+}
+
+async function sendRegisterationMail(_1, { electionID }, { user, serviceLocator }) {
+  // TODO: What if error
+  // TODO: shoul this be a domain user?
+  const response = await SendRegisterationMail(electionID, serviceLocator);
+  return response;
+}
+
+// TODO: Check if there is no problem with the contexts
+async function listPublicKeyElections(_1, { publicKey }, { serviceLocator }) {
+  // TODO: What if not found
+  const elections = await ListPublicKeyElections(publicKey, serviceLocator);
+  return elections;
+}
+
+// Mutations
+
+async function createElection(_1, _2, { user, serviceLocator }) {
+  const election = await CreateElection(user, serviceLocator);
+  return election;
+}
+
+
+async function updateElection(_1, { electionID, changes }, { user, serviceLocator }) {
+  const election = await UpdateElection(electionID, changes, serviceLocator);
+  return election;
+}
+
+async function registerPublicKey(_1, { electionID, secretToken, publicKey }, { user, serviceLocator }) {
+  //   TODO: Error handling
+  const result = await RegisterPublicKey(electionID, secretToken, publicKey, serviceLocator);
+  return result;
+}
+
+// TODO: Rename me!
+async function setElectionInPublicKeyRegisterationStage(_1, { electionID }, { user, serviceLocator }) {
+  const result = await SetElectionInRegisteration(electionID, serviceLocator);
+  return result;
+}
+
+// deployElection: mustBeSignedIn(election.deployElection),
+
+// finishElection: mustBeSignedIn(election.finish),
 
 const resolvers = {
   Query: {
-    getElection: mustBeSignedIn(_getElection),
+    getElection: mustBeSignedIn(getElection),
 
-    // listElection: mustBeSignedIn(election.list),
+    listElection: mustBeSignedIn(listElection),
 
-    // sendRegisterPublicKeysMail: mustBeSignedIn(mailService.sendRegisterKeyMail),
+    sendRegisterPublicKeysMail: mustBeSignedIn(sendRegisterationMail),
 
-    // getVoterElection: voter.getElection,
+    getVoterElection: listPublicKeyElections,
   },
   Mutation: {
-    // createElection: mustBeSignedIn(election.create),
-    // updateElection: mustBeSignedIn(election.update),
-    // removeElection: mustBeSignedIn(election.remove),
+    createElection: mustBeSignedIn(createElection),
+
+    updateElection: mustBeSignedIn(updateElection),
 
     // TODO: Make the api name the same as the resolver
-    // registerPublicKey: voter.tryRegisterPublicKey,
+    registerPublicKey,
 
-    // setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(election.setElectionInPublicKeyRegisterationStage),
+    setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(setElectionInPublicKeyRegisterationStage),
 
     // deployElection: mustBeSignedIn(election.deployElection),
 

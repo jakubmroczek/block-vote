@@ -81,7 +81,6 @@ type Query {
 type Mutation {
     createElection : Election!
     updateElection(id: ID!, changes: ElectionUpdateInputs!) : Election!
-    removeElection(id: ID!) : Boolean!
 
     registerPublicKey(electionID: ID!, secretToken: String!, publicKey: String!) : Boolean!
 
