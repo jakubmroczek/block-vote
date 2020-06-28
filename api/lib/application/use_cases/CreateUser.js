@@ -1,6 +1,7 @@
 const User = require('../../domain/User');
 
-module.exports = (firstName, lastName, email, password, { userRepository }) => {
-  const user = new User(null, firstName, lastName, email, password);
+module.exports = (email, { userRepository }) => {
+  const electionIDs = [];
+  const user = new User(null, email, electionIDs);
   return userRepository.persist(user);
 };

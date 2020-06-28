@@ -1,12 +1,12 @@
-//TODO: Find a better place for me!
-//TODO: Adjust me to the new architecture
+// TODO: Find a better place for me!
+// TODO: Adjust me to the new architecture
 const Router = require('express');
 const bodyParser = require('body-parser');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const { AuthenticationError } = require('apollo-server-express');
 
-// const user = require('./user.js');
+const CreateUser = require('../../application/use_cases/CreateUser.js');
 
 const routes = new Router();
 
@@ -41,23 +41,26 @@ function mustBeSignedIn(resolver) {
 
 // TODO: Move to use cases ?
 // TODO: Add support for email, instead of usernmae
-async function isNewUser(email, { userRepository } ) {
-    const user = await userRepository.findByEmail(email);
-    return user.id === null;
+async function isNewUser(email, { userRepository }) {
+  const user = await userRepository.findByEmail(email);
+  return user.id === null;
 }
 
-async function createNewUseAccount(username) {
-    // TODO: Move me to a proper layer
-    // TODO: Implemment me!
-    //   const dbUser = await user.create(username);
-//   return dbUser;
+// TODO: Move to use cases or controller?
+// TODO: Add support for email, instead of usernmae
+// TODO: Get serviceLocator here
+async function createNewUseAccount(email, { userRepository }) {
+  // TODO: Move me to a proper layer
+  // TODO: Error handling?
+  const domainUser = await CreateUser(email, { userRepository });
+  return domainUser;
 }
 
 // TODO: I do not like this name
 async function registerIfNewUser(username, serviceLocator) {
   if (await isNewUser(username, serviceLocator)) {
     // TODO: Handle the database error
-    await createNewUseAccount(username);
+    await createNewUseAccount(username, serviceLocator);
   }
 }
 
