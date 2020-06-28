@@ -8,8 +8,12 @@ module.exports = class {
       throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
     }
   
+    list(electionIDs) {
+        throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
+    }
+
     get(electionId) {
       throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
     }
-    
+
   };
