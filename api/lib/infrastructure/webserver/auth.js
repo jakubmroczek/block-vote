@@ -43,16 +43,17 @@ function mustBeSignedIn(resolver) {
 // TODO: Add support for email, instead of usernmae
 async function isNewUser(email, { userRepository }) {
   const user = await userRepository.findByEmail(email);
-  return user.id === null;
+  const userExists = (user.id === null);
+  return userExists;
 }
 
-// TODO: Move to use cases or controller?
+// TODO: Move to usep cases or controller?
 // TODO: Add support for email, instead of usernmae
 // TODO: Get serviceLocator here
 async function createNewUseAccount(email, { userRepository }) {
   // TODO: Move me to a proper layer
-  // TODO: Error handling?
-  const domainUser = await CreateUser(email, { userRepository });
+  // TODO: Error handling?  
+  const domainUser = await CreateUser(email, { userRepository });  
   return domainUser;
 }
 
