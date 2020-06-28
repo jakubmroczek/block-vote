@@ -74,7 +74,7 @@ function mailEveryone(_id, participants, secretTokens) {
 module.exports = async (electionID, { electionRepository }) => {
   // TODO: Error handlind
   const election = await electionRepository.get(electionID);
-  const { _id, participants, secretTokens } = election;
+  const { id, participants, secretTokens } = election;
 
-  return mailEveryone(_id, participants, secretTokens);
+  return mailEveryone(id, participants, secretTokens);
 };
