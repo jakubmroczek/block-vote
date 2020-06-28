@@ -1,18 +1,18 @@
-'use strict';
-
 const bootstrap = require('./lib/infrastructure/config/bootstrap');
 const createServer = require('./lib/infrastructure/webserver/server');
 
 // Start the server
 const start = async () => {
-
   try {
     await bootstrap.init();
 
-    const server = await createServer();
-    await server.start();
+    const app = await createServer();
 
-    console.log('Server running at:', server.info.uri);
+    const port = process.env.API_SERVER_PORT || 3000;
+
+    await app.listen(port, () => {
+      console.log(`Server running at: ${port}`);
+    });
   } catch (err) {
     console.log(err);
     process.exit(1);
