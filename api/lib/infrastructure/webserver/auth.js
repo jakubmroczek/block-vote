@@ -30,20 +30,20 @@ function getUser(req) {
 
 function mustBeSignedIn(resolver) {
   return (root, args, context) => {
-    //TODO: UNCOMMNET ME!!!
-    // if (!user || !user.signedIn) {
-    //   console.log(user);
-    //   throw new AuthenticationError('You must be signed in');
-    // }
+    const { user } = context;
+    if (!user || !user.signedIn) {
+      console.log(user);
+      throw new AuthenticationError('You must be signed in');
+    }
     return resolver(root, args, context);
   };
 }
 
-async function isNewUser(username) {
-    // TODO: Move me to a proper layer
-    return false;
-//   const dbUser = await user.get(username);
-//   return dbUser === null;
+// TODO: Move to use cases ?
+// TODO: Add support for email, instead of usernmae
+async function isNewUser(email, { userRepository } ) {
+    const user = await userRepository.findByEmail(email);
+    return user.id === null;
 }
 
 async function createNewUseAccount(username) {
@@ -54,8 +54,8 @@ async function createNewUseAccount(username) {
 }
 
 // TODO: I do not like this name
-async function registerIfNewUser(username) {
-  if (await isNewUser(username)) {
+async function registerIfNewUser(username, serviceLocator) {
+  if (await isNewUser(username, serviceLocator)) {
     // TODO: Handle the database error
     await createNewUseAccount(username);
   }
@@ -85,7 +85,10 @@ routes.post('/signin', async (req, res) => {
   // TODO: Refactor this code, too many things does happen here
   // We use the email as the username
   //! !!! Email is the username
-  await registerIfNewUser(email);
+  const { app } = req;
+  const { parent } = app;
+  const { serviceLocator } = parent;
+  await registerIfNewUser(email, serviceLocator);
 
   res.json(credentials);
 });

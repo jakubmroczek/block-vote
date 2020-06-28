@@ -1,5 +1,4 @@
-'use strict';
-
-module.exports = (userId, { userRepository }) => {
-  return userRepository.get(userId);
+module.exports = async (email, { userRepository }) => {
+  const domainUser = await userRepository.findByEmail(email);
+  return domainUser;
 };
