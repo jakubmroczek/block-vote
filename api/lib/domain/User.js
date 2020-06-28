@@ -1,11 +1,9 @@
 module.exports = class {
 
-  constructor(id = null, firstName, lastName, email, password) {
+  constructor(id = null, email, electionIDs) {
     this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
     this.email = email;
-    this.password = password;
+    this.electionIDs = electionIDs;
   }
 
 };

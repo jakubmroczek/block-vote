@@ -1,10 +1,9 @@
 const mongoose = require('../mongoose');
 
 const userSchema = new mongoose.Schema({
-  firstName: String,
-  lastName: String,
   email: String,
-  password: String,
+  //TODO: Change this to mongo ids
+  electionIDs: [String],
 });
 
 module.exports = mongoose.model('User', userSchema);

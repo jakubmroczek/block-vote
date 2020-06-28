@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = async (email, password, { userRepository, accessTokenManager }) => {
   const user = userRepository.getByEmail(email);
 
