@@ -4,8 +4,7 @@
   "description": "MERN stack electronic voting project API",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -e js,graphql -w . -w .env server.js",
-    "start-new": "nodemon -e js,graphql -w . -w .env index.js",
+    "start": "nodemon -e js,graphql -w . -w .env index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "#lint-fix": "Runs ESLint on all relevant files with auto-fixing",
     "lint-fix": "eslint . --ext js,jsx --ignore-pattern public --fix"
