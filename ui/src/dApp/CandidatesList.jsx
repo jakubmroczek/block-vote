@@ -3,7 +3,9 @@ import { Button, Table, Form } from 'react-bootstrap';
 
 import ElectionAPI from './electionAPI.js';
 
-function CandidateRow({ index, name, surname, checked, onChange }) {
+function CandidateRow({
+  index, name, surname, checked, onChange,
+}) {
   return (
     <>
       <tr>

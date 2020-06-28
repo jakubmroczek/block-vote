@@ -51,7 +51,7 @@ class App extends React.Component {
             .getElection(onFailure)
             .then((election) => {
               console.log(election);
-              
+
               this.setState({
                 appplicationState: 'connectedToBlockchain',
                 title: election.electionTitle,

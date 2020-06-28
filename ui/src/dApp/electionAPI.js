@@ -45,7 +45,7 @@ export default class ElectionAPI {
       }
     }`;
 
-    const response = await graphQLFetch(query, { publicKey });    
+    const response = await graphQLFetch(query, { publicKey });
 
     if (response) {
       return response.getVoterElection;
@@ -114,7 +114,7 @@ export default class ElectionAPI {
     await this.blockchainInit(response);
 
     return this.electionInstance.methods.vote(candidate.index).send({ from: publicKey })
-    .catch(error => console.log(error));
+      .catch(error => console.log(error));
   }
 
   async isUserRegistered(onFailure) {
