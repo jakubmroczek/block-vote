@@ -1,10 +1,13 @@
-const createServer = async () => {
-  require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const { connectToDb } = require('./db.js');
-const { installHandler } = require('./api_handler.js');
-const auth = require('./auth.js');
+
+// TODO: Export this an an anonymous function
+const { installHandler } = require('../../interfaces/controllers/GraphQLController.js');
+
+// TODO: Move this to a proper place, right now it is because I do not have a better idea.
+const auth = require('../webserver/auth.js');
+
+const createServer = async () => {
   const app = express();
   app.use(cookieParser());
   
