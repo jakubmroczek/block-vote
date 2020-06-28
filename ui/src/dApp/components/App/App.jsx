@@ -1,9 +1,10 @@
 import React from 'react';
 
-// TODO: Fix this
 import Election from '../Election/Election/Election.jsx';
 import ElectionFetching from './ElectionFetching.jsx';
 import ErrorMessage from './ErrorMessage.jsx';
+import ElectionAPI from '../../services/electionAPI.js';
+
 
 class App extends React.Component {
   // TODO: Move error to distinc class/function
@@ -16,9 +17,51 @@ class App extends React.Component {
   userHasAlreadyVotedErrorMessage =
     'You have already voted so you unable to see the list of candites right now. Wait please for the final results publication'
 
+  constructor() {
+    super();
+    this.state = {
+      appplicationState: '',
+    };
+  }
+
   componentDidMount() {
-    const { connectToBlockchain } = this.props;
-    connectToBlockchain();
+    this.setState({ appplicationState: 'connectingToBlockchain' });
+
+    const onFailure = () => {
+      // TODO: add a new flag for the problem
+      this.setState({ appplicationState: 'unregisteredUser' });
+    };
+
+    const successfulConnectionConditions = [
+      new ElectionAPI().isUserRegistered(onFailure),
+      new ElectionAPI().hasUserAlreadyVoted(onFailure),
+    ];
+
+    // TODO: Error handling
+    Promise.all(successfulConnectionConditions)
+      .then((values) => {
+        const isUserRegistered = values[0];
+        const userVoted = values[1];
+
+        if (!isUserRegistered) {
+          this.setState({ appplicationState: 'unregisteredUser' });
+        } else if (userVoted) {
+          this.setState({ appplicationState: 'userHasAlreadyVoted' });
+        } else {
+          // TODO: BEtter error handling
+          new ElectionAPI()
+            .getElection(onFailure
+              .then((election) => {
+                this.setState({
+                  appplicationState: 'connectedToBlockchain',
+                  title: election.electionTitle,
+                  candidates: election.candidtes,
+                });
+              })
+              .catch(error => console.log(error)));
+        }
+      })
+      .catch(error => console.log(error));
   }
 
   render() {
@@ -27,7 +70,8 @@ class App extends React.Component {
 
     // TODO: Refactor the state, let it hold a flag indicating wether it is okay and not
     // move the messages to the reducer
-    const { appplicationState } = this.props;
+    // TODO: Handle nulls for titile and candidates
+    const { appplicationState, title, candidates } = this.state;
     return (
       <div>
         {appplicationState === 'unregisteredUser' && (
@@ -40,7 +84,7 @@ class App extends React.Component {
           <ElectionFetching />
         )}
         {appplicationState === 'connectedToBlockchain' && (
-          <Election />
+          <Election title={title} candidates={candidates} />
         )}
         {appplicationState === 'userHasAlreadyVoted' && (
           <ErrorMessage

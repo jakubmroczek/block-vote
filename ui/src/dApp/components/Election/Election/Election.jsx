@@ -1,10 +1,10 @@
 import * as React from 'react';
+
 import { Card } from 'react-bootstrap';
 
-// TODO: Fix this
-import ElectionTitle from '../../../containers/Election/ElectionTitle/ElectionTitle.js';
-import CandidatesList from '../../../containers/Candidates/CandidatesList/CandidateList.js';
-import SendVoteButton from '../../../containers/SendVoteButton.js';
+import ElectionTitle from '../../Election/ElectionTitle/ElectionTitle.jsx';
+import CandidatesList from '../../Candidates/CandidateList/CandidatesList.jsx';
+import SendVoteButton from '../../SendVoteButton.jsx'
 
 function Election() {
   return (
