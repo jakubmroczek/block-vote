@@ -1,7 +1,7 @@
 import Web3 from 'web3';
-import graphQLFetch from '../../graphQLFetch.js';
+import graphQLFetch from '../graphQLFetch.js';
 
-class ElectionAPI {
+export default class ElectionAPI {
   web3Provider = null;
 
   web3 = null;
@@ -152,5 +152,3 @@ class ElectionAPI {
       .then(res => res);
   }
 }
-
-export default ElectionAPI;

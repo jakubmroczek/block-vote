@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Card } from 'react-bootstrap';
 
-import CandidatesList from '../../Candidates/CandidateList/CandidatesList.jsx';
+import CandidatesList from './CandidatesList.jsx';
 
 function ElectionTitle({ title }) {
   return (

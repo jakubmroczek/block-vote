@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Table, Form } from 'react-bootstrap';
 
-import ElectionAPI from '../../../services/electionAPI.js';
+import ElectionAPI from './electionAPI.js';
 
 function CandidateRow({ index, name, surname, checked, onChange }) {
   return (
