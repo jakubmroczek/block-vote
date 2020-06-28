@@ -16,6 +16,8 @@ const CreateElection = require('../../application/use_cases/CreateElection.js');
 const UpdateElection = require('../../application/use_cases/UpdateElection.js');
 const RegisterPublicKey = require('../../application/use_cases/RegisterPublicKey.js');
 const SetElectionInRegisteration = require('../../application/use_cases/SetElectionInRegisteration.js');
+const DeployElectionOnBlockchain = require('../../application/use_cases/DeployElectionOnBlockchain.js');
+const FinishElection = require('../../application/use_cases/FinishElection.js');
 
 // TODO: Where should I get from this context?
 function getContext({ req }) {
@@ -83,9 +85,17 @@ async function setElectionInPublicKeyRegisterationStage(_1, { electionID }, { us
   return result;
 }
 
-// deployElection: mustBeSignedIn(election.deployElection),
+async function deployElection(_1, { electionID }, { user, serviceLocator }) {
+  // TODO: Error handling
+  const result = await DeployElectionOnBlockchain(electionID, serviceLocator);
+  return result;
+}
 
-// finishElection: mustBeSignedIn(election.finish),
+async function finish(_1, { electionID }, { user, serviceLocator }) {
+  // TODO: Error handling
+  const result = await FinishElection(electionID, serviceLocator);
+  return result;
+}
 
 const resolvers = {
   Query: {
@@ -107,9 +117,9 @@ const resolvers = {
 
     setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(setElectionInPublicKeyRegisterationStage),
 
-    // deployElection: mustBeSignedIn(election.deployElection),
+    deployElection: mustBeSignedIn(deployElection),
 
-    // finishElection: mustBeSignedIn(election.finish),
+    finishElection: mustBeSignedIn(finish),
   },
 };
 
