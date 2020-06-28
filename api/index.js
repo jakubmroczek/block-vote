@@ -1,5 +1,5 @@
-const bootstrap = require('./lib/infrastructure/config/bootstrap');
-const createServer = require('./lib/infrastructure/webserver/server');
+const bootstrap = require('./infrastructure/config/bootstrap');
+const createServer = require('./infrastructure/webserver/server');
 
 // Start the server
 const start = async () => {
