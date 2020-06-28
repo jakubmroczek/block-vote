@@ -1,18 +1,15 @@
 import * as React from 'react';
-import { Card, CardContent, Typography } from '@material-ui/core';
-import { StyleCardHeader } from '../Common/StyledCardHeader.js';
+import { Card } from 'react-bootstrap';
 
 function ErrorMessage({ messageTitle, message }) {
   return (
-    <Card>
-      <StyleCardHeader title={messageTitle} />
-      <CardContent variant="h1">
-        <Typography>
-          {' '}
-          {message}
-          {' '}
-        </Typography>
-      </CardContent>
+    <Card className="text-center">
+      <Card.Header as="h5">{messageTitle}</Card.Header>
+      <Card.Body>
+        {' '}
+        {message}
+        {' '}
+      </Card.Body>
     </Card>
   );
 }

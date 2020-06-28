@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { Card, CardContent } from '@material-ui/core';
-import { StyleCardHeader } from '../Common/StyledCardHeader.js';
+import { Card } from 'react-bootstrap';
 import CircularDeterminate from './CircularDeterminate.jsx';
 
 // TODO: Move title to the constants
 function ElectionFetching() {
   return (
-    <Card>
-      <StyleCardHeader title="Connecting to the blockchain" />
-      <CardContent variant="h1">
+    <Card className="text-center">
+      <Card.Header as="h5">Connecting to the blockchain</Card.Header>
+      <Card.Body>
         <CircularDeterminate />
-      </CardContent>
+      </Card.Body>
     </Card>
   );
 }

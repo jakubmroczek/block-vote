@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card } from '@material-ui/core';
+import { Card } from 'react-bootstrap';
 
 // TODO: Fix this
 import ElectionTitle from '../../../containers/Election/ElectionTitle/ElectionTitle.js';
@@ -8,10 +8,12 @@ import SendVoteButton from '../../../containers/SendVoteButton.js';
 
 function Election() {
   return (
-    <Card>
+    <Card className="text-center">
       <ElectionTitle />
       <CandidatesList />
-      <SendVoteButton />
+      <Card.Footer>
+        <SendVoteButton />
+      </Card.Footer>
     </Card>
   );
 }
