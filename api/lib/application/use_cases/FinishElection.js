@@ -38,9 +38,13 @@ module.exports = async (electionID, { electionRepository }) => {
   election.status = 'Finished';
 
   // TODO: Error handling
-  await election.merge(election);
+  await electionRepository.merge(election);
 
   // TODO: Is this okay? Can I mix use cases in DDD
   const SendElectionFinishMail = require('./SendElectionFinishMail.js');
+
+  //TODO: Returns nothig, improve error hanlding
   await SendElectionFinishMail(electionID, candidates, { electionRepository });
+
+  return true;
 };

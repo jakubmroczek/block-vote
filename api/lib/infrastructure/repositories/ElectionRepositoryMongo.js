@@ -33,6 +33,6 @@ module.exports = class extends ElectionRepository {
   async get(electionId) {
     const mongooseElection = await MongooseElection.findById(electionId);
     return new Election(mongooseElection.id, mongooseElection.status, mongooseElection.title, mongooseElection.candidates, mongooseElection.participants,
-      mongooseElection.publicKeys, mongooseElection.secretTokens);
+      mongooseElection.publicKeys, mongooseElection.secretTokens, mongooseElection.smartContract);
   }
 };

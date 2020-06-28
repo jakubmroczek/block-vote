@@ -56,8 +56,8 @@ async function sendRegisterationMail(_1, { id }, { user, serviceLocator }) {
 // TODO: Check if there is no problem with the contexts
 async function listPublicKeyElections(_1, { publicKey }, { serviceLocator }) {
   // TODO: What if not found
-  const elections = await ListPublicKeyElections(publicKey, serviceLocator);
-  return elections;
+  const election = await ListPublicKeyElections(publicKey, serviceLocator);  
+  return election;
 }
 
 // Mutations
@@ -67,22 +67,13 @@ async function createElection(_1, _2, { user, serviceLocator }) {
   return election;
 }
 
-
 async function updateElection(_1, { id, changes }, { user, serviceLocator }) {
   const election = await UpdateElection(id, changes, serviceLocator);
   return election;
 }
 
 async function registerPublicKey(_1, { id, secretToken, publicKey }, { user, serviceLocator }) {
-  //   TODO: Error handling
-    console.log('registering pbulic key')
-    console.log(id)
-    console.log(secretToken);
-    console.log(publicKey);
-    
-    ;
-    
-
+  //   TODO: Error handlin
   const result = await RegisterPublicKey(secretToken, publicKey, id, serviceLocator);
   return result;
 }
@@ -101,7 +92,7 @@ async function deployElection(_1, { id }, { user, serviceLocator }) {
 
 async function finish(_1, { id }, { user, serviceLocator }) {
   // TODO: Error handling
-  const result = await FinishElection(id, serviceLocator);
+  const result = await FinishElection(id, serviceLocator);  
   return result;
 }
 

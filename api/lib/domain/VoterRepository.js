@@ -1,11 +1,11 @@
 module.exports = class {
 
-  persist(domainVoter) {
+  async persist(domainVoter) {
     throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
   }
 
   // TODO: Maybe I should use the voter id here instead  
-  getByPublicKey(publicKey) {
+  async findByPublicKey(publicKey) {
     throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
   }
   
