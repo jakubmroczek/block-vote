@@ -1,8 +1,10 @@
 const nodemailer = require('nodemailer');
-const election = require('./election.js');
+//Remove this, use constants
 require('dotenv').config();
 
+// TODO: Get this from the constants
 const transporter = nodemailer.createTransport({
+
   service: 'gmail',
   auth: {
     user: process.env.GMAIL_USER,
@@ -45,7 +47,9 @@ function sendEmail(mailOptions) {
   });
 }
 
-function mailEveryone(participants, secretTokens, link) {
+function mailEveryone(_id, participants, secretTokens) {
+  const link = process.env.UI_VOTING_ENDPOINT + _id;
+
   if (participants.length !== secretTokens.length) {
     // TODO: Handle the error if there is not enough public keys
     throw 'Not enugh secret tokens generated for the public key';
@@ -67,37 +71,10 @@ function mailEveryone(participants, secretTokens, link) {
   return true;
 }
 
-// TODO: Each user should have a unique link?
-async function sendRegisterKeyMail(_, { id }) {
-  const electionDB = await election.get({}, { id });
-  const { _id, participants, secretTokens } = electionDB;
+module.exports = async (electionID, { electionRepository }) => {
+  // TODO: Error handlind
+  const election = await electionRepository.get(electionID);
+  const { id, participants, secretTokens } = election;
 
-  // TODO: Move it to the distinct service
-  const link = process.env.UI_VOTING_ENDPOINT + _id;
-
-  return mailEveryone(participants, secretTokens, link);
-}
-
-// Candidates the candidates from the blockchain along with their vote counters
-// TODO: Pass the election title here
-async function sendElectionFinishMail(election, candidates) {
-  // TODO: Introduce better template
-  const html = `<p>The election results: <br> ${candidates} </p>`;
-  // TODO: Add info about the elction title
-  const subject = 'The election results';
-
-  const { participants } = election;
-
-  participants.forEach((p) => {
-    const mail = mailTemplate(p.email, subject, html);
-    sendEmail(mail);
-  });
-
-  // TODO; Error handling
-  return true;
-}
-
-module.exports = {
-  sendRegisterKeyMail,
-  sendElectionFinishMail,
+  return mailEveryone(id, participants, secretTokens);
 };

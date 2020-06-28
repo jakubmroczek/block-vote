@@ -8,11 +8,12 @@ export default function RegisterPublicKeyPanel(props) {
 
   const register = async (secretToken, publicKey) => {
     const query = `mutation 
-        registerPublicKey($electionID: ID!, $secretToken: String!, $publicKey: String!) {
-            registerPublicKey(electionID: $electionID, secretToken: $secretToken, publicKey: $publicKey) 
+        registerPublicKey($id: ID!, $secretToken: String!, $publicKey: String!) {
+            registerPublicKey(id: $id, secretToken: $secretToken, publicKey: $publicKey) 
     }`;
 
-    const response = await graphQLFetch(query, { electionID, secretToken, publicKey });
+    const id = electionID;
+    const response = await graphQLFetch(query, { id, secretToken, publicKey });
     // TODO: Error handling
     alert(JSON.stringify(response));
   };
