@@ -12,8 +12,14 @@ function buildBeans() {
     userSerializer: new UserSerializer(),
   };
 
-  const UserRepositoryMongo = require('../repositories/UserRepositoryMongo');
+  const UserRepositoryMongo = require('../repositories/UserRepositoryMongo.js');
   beans.userRepository = new UserRepositoryMongo();
+
+  const ElectionRepositoryMongo = require('../repositories/ElectionRepositoryMongo.js')
+  beans.electionRepository = new ElectionRepositoryMongo();
+
+  const VoterRepositoryMongo = require('../repositories/VoterRepositoryMongo.js')
+  beans.voterRepository = new VoterRepositoryMongo();
 
   return beans;
 }

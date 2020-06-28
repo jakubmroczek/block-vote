@@ -4,6 +4,9 @@ const MongooseUser = require('../orm/mongoose/schemas/User');
 const UserRepository = require('../../domain/UserRepository');
 
 module.exports = class extends UserRepository {
+  constructor() {
+    super();
+}
 
   async persist(userEntity) {
     const { firstName, lastName, email, password } = userEntity;

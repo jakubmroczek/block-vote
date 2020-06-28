@@ -4,19 +4,29 @@ const { ApolloServer } = require('apollo-server-express');
 
 const auth = require('../../infrastructure/webserver/auth.js');
 
-// const { mustBeSignedIn } = auth;
+const { mustBeSignedIn } = auth;
 
+// TODO: Where should I get from this context?
 function getContext({ req }) {
   const user = auth.getUser(req);
   // TODO: Fix this username mismatch
   const { email } = user;
-  user.username = email;
-  return { user };
+  user.username = email;  
+  const { app } = req;
+  const { serviceLocator } = app;
+  return { user, serviceLocator };
+}
+
+// TODO: Temporal resolvers - move this into a proper place
+function _getElection(_, {}, { user, serviceLocator}) {
+    console.log('hello get election');   
+    console.log(serviceLocator)
+    console.log(user);    
 }
 
 const resolvers = {
   Query: {
-    // getElection: mustBeSignedIn(election.get),
+    getElection: mustBeSignedIn(_getElection),
 
     // listElection: mustBeSignedIn(election.list),
 

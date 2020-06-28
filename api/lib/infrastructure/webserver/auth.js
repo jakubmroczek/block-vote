@@ -29,12 +29,13 @@ function getUser(req) {
 }
 
 function mustBeSignedIn(resolver) {
-  return (root, args, { user }) => {
-    if (!user || !user.signedIn) {
-      console.log(user);
-      throw new AuthenticationError('You must be signed in');
-    }
-    return resolver(root, args, { user });
+  return (root, args, context) => {
+    //TODO: UNCOMMNET ME!!!
+    // if (!user || !user.signedIn) {
+    //   console.log(user);
+    //   throw new AuthenticationError('You must be signed in');
+    // }
+    return resolver(root, args, context);
   };
 }
 
