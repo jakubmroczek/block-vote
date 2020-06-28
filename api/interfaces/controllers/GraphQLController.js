@@ -31,6 +31,17 @@ function getContext({ req }) {
 }
 
 // TODO: Add extra checks so that user can not query election that are not theirs
+function mustOwnElection(resolver) {
+  return (root, args, context) => {
+    // The election id
+    const { id } = args;
+    const { user } = context;
+
+    // TODO: Add use case to check if the owner owns the election
+
+    return resolver(root, args, context);
+  };
+}
 
 // TODO: Temporal resolvers - move this into a proper place
 async function getElection(_1, { id }, { user, serviceLocator }) {
