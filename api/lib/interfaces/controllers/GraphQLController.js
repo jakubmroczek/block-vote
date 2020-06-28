@@ -46,10 +46,10 @@ async function listElection(_1, _2, { user, serviceLocator }) {
   return elections;
 }
 
-async function sendRegisterationMail(_1, { electionID }, { user, serviceLocator }) {
+async function sendRegisterationMail(_1, { id }, { user, serviceLocator }) {
   // TODO: What if error
   // TODO: shoul this be a domain user?
-  const response = await SendRegisterationMail(electionID, serviceLocator);
+  const response = await SendRegisterationMail(id, serviceLocator);
   return response;
 }
 
@@ -73,27 +73,27 @@ async function updateElection(_1, { id, changes }, { user, serviceLocator }) {
   return election;
 }
 
-async function registerPublicKey(_1, { electionID, secretToken, publicKey }, { user, serviceLocator }) {
+async function registerPublicKey(_1, { id, secretToken, publicKey }, { user, serviceLocator }) {
   //   TODO: Error handling
-  const result = await RegisterPublicKey(electionID, secretToken, publicKey, serviceLocator);
+  const result = await RegisterPublicKey(id, secretToken, publicKey, serviceLocator);
   return result;
 }
 
 // TODO: Rename me!
-async function setElectionInPublicKeyRegisterationStage(_1, { electionID }, { user, serviceLocator }) {
-  const result = await SetElectionInRegisteration(electionID, serviceLocator);
+async function setElectionInPublicKeyRegisterationStage(_1, { id }, { user, serviceLocator }) {
+  const result = await SetElectionInRegisteration(id, serviceLocator);
   return result;
 }
 
-async function deployElection(_1, { electionID }, { user, serviceLocator }) {
+async function deployElection(_1, { id }, { user, serviceLocator }) {
   // TODO: Error handling
-  const result = await DeployElectionOnBlockchain(electionID, serviceLocator);
+  const result = await DeployElectionOnBlockchain(id, serviceLocator);
   return result;
 }
 
-async function finish(_1, { electionID }, { user, serviceLocator }) {
+async function finish(_1, { id }, { user, serviceLocator }) {
   // TODO: Error handling
-  const result = await FinishElection(electionID, serviceLocator);
+  const result = await FinishElection(id, serviceLocator);
   return result;
 }
 
