@@ -1,7 +1,7 @@
 import Web3 from 'web3';
-import graphQLFetch from '../../graphQLFetch.js';
+import graphQLFetch from '../graphQLFetch.js';
 
-class ElectionAPI {
+export default class ElectionAPI {
   web3Provider = null;
 
   web3 = null;
@@ -46,6 +46,7 @@ class ElectionAPI {
     }`;
 
     const response = await graphQLFetch(query, { publicKey });
+
     if (response) {
       return response.getVoterElection;
     }
@@ -113,7 +114,7 @@ class ElectionAPI {
     await this.blockchainInit(response);
 
     return this.electionInstance.methods.vote(candidate.index).send({ from: publicKey })
-    .catch(error => console.log(error));
+      .catch(error => console.log(error));
   }
 
   async isUserRegistered(onFailure) {
@@ -151,5 +152,3 @@ class ElectionAPI {
       .then(res => res);
   }
 }
-
-export default ElectionAPI;

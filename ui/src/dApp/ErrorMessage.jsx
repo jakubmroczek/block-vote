@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Card } from 'react-bootstrap';
 
-function ErrorMessage({ messageTitle, message }) {
+export default function ErrorMessage({ messageTitle, message }) {
   return (
     <Card className="text-center">
       <Card.Header as="h5">{messageTitle}</Card.Header>
@@ -13,6 +13,3 @@ function ErrorMessage({ messageTitle, message }) {
     </Card>
   );
 }
-
-// TODO: Is this needed
-export default ErrorMessage;

@@ -1,18 +1,14 @@
 import * as React from 'react';
-import { Card } from 'react-bootstrap';
-import CircularDeterminate from './CircularDeterminate.jsx';
+import { Card, Spinner } from 'react-bootstrap';
 
 // TODO: Move title to the constants
-function ElectionFetching() {
+export default function ElectionFetching() {
   return (
     <Card className="text-center">
       <Card.Header as="h5">Connecting to the blockchain</Card.Header>
       <Card.Body>
-        <CircularDeterminate />
+        <Spinner animation="border" />
       </Card.Body>
     </Card>
   );
 }
-
-// TODO: Is this needed
-export default ElectionFetching;
