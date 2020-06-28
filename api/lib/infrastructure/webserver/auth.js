@@ -43,8 +43,7 @@ function mustBeSignedIn(resolver) {
 // TODO: Add support for email, instead of usernmae
 async function isNewUser(email, { userRepository }) {
   const user = await userRepository.findByEmail(email);
-  const userExists = (user.id === null);
-  return userExists;
+  return user === null;
 }
 
 // TODO: Move to usep cases or controller?
