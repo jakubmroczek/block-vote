@@ -1,11 +1,11 @@
 type Candidate {
-    _id: ID!
+    id: ID!
     name: String!
     surname: String!
 }
 
 type Participant {
-    _id: ID!    
+    id: ID!    
     email: String!
     secretToken: String
 }
@@ -39,7 +39,7 @@ type SmartContract {
 }
 
 type Election { 
-    _id: ID!
+    id: ID!
     status: Status!
     title: String!
     candidates: [Candidate!]!

@@ -30,7 +30,7 @@ module.exports = class extends ElectionRepository {
 
   // eslint-disable-next-line class-methods-use-this
   async get(electionId) {
-    const mongooseElection = await MongooseElection.findById(electionId);
+    const mongooseElection = await MongooseElection.findById(electionId);    
     return new Election(mongooseElection.id, mongooseElection.status, mongooseElection.title, mongooseElection.candidates, mongooseElection.participants,
       mongooseElection.publicKeys, mongooseElection.secretTokens);
   }

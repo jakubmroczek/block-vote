@@ -71,7 +71,7 @@ export default class ElectionSetUpPanel extends React.Component {
     const query = `mutation 
         updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
           updateElection(id: $id, changes: $changes) {
-            _id      
+            id      
           }
     }`;
 

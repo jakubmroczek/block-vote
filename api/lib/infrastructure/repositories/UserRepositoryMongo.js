@@ -13,7 +13,7 @@ module.exports = class extends UserRepository {
 
   async merge(userEntity) {
     const { id, email, electionIDs } = userEntity;
-    const mongooseUser = MongooseUser.findByIdAndUpdate(id,  { email, electionIDs } );
+    const mongooseUser = await MongooseUser.findByIdAndUpdate(id, { email, electionIDs } );
     return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionIDs);
   }
 

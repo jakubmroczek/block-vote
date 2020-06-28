@@ -24,7 +24,7 @@ function CreateElectionItem({ onElectionCreated }) {
   const createElection = async () => {
     const query = `mutation {
       createElection {
-        _id
+        id
         status
       }
     }`;
@@ -63,7 +63,7 @@ export default class UserPanel extends React.Component {
   async read() {
     const query = `query {
       listElection {
-        _id
+        id
         status
         participants {
           email
@@ -93,7 +93,7 @@ export default class UserPanel extends React.Component {
       );
     }
 
-    const { _id: id, status } = election;
+    const { id, status } = election;
     //TODO: Refactor this code
     if (status === 'Finished') {
       return (

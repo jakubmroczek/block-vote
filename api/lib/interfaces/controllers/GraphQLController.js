@@ -42,7 +42,7 @@ async function getElection(_1, { electionID }, { user, serviceLocator }) {
 async function listElection(_1, _2, { user, serviceLocator }) {
   // TODO: What if not found
   // TODO: shoul this be a domain user?
-  const elections = await ListUserElections(user, serviceLocator);
+  const elections = await ListUserElections(user, serviceLocator);    
   return elections;
 }
 
@@ -63,7 +63,7 @@ async function listPublicKeyElections(_1, { publicKey }, { serviceLocator }) {
 // Mutations
 
 async function createElection(_1, _2, { user, serviceLocator }) {
-  const election = await CreateElection(user, serviceLocator);
+  const election = await CreateElection(user, serviceLocator);    
   return election;
 }
 
