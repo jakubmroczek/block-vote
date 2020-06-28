@@ -1,9 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+const solc = require('solc');
 
 function readElectionSmartContractSourceCode() {
-  // TODO: Fix the path
-  return fs.readFileSync(path.resolve(__dirname, 'contracts', 'Election.sol'), 'utf8');
+  const smartContractPath = path.join(__dirname, '../../../');
+  return fs.readFileSync(path.resolve(smartContractPath, 'contracts', 'Election.sol'), 'utf8');
 }
 
 // Compiles the eleciton with the solc and returns the whole solc output
@@ -36,10 +37,8 @@ function compile() {
 
 module.exports = async (electionID, { electionRepository }) => {
   const election = await electionRepository.get(electionID);
-
   election.status = 'Deployed';
   election.smartContract = compile();
-
   const result = await electionRepository.merge(election);
   return result;
 };

@@ -20,17 +20,18 @@ module.exports = class extends ElectionRepository {
   async merge(domainElection) {
     const {
       id, status, title, candidates, participants, publicKeys, secretTokens,
-    } = domainElection;    
+      smartContract,
+    } = domainElection;
     const mongooseElection = await MongooseElection.findByIdAndUpdate(id, {
-      status, title, candidates, participants, publicKeys, secretTokens,
+      status, title, candidates, participants, publicKeys, secretTokens, smartContract,
     });
     return new Election(mongooseElection.id, mongooseElection.status, mongooseElection.title, mongooseElection.candidates, mongooseElection.participants,
-      mongooseElection.publicKeys, mongooseElection.secretTokens);
+      mongooseElection.publicKeys, mongooseElection.secretTokens, mongooseElection.smartContract);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async get(electionId) {      
-    const mongooseElection = await MongooseElection.findById(electionId);    
+  async get(electionId) {
+    const mongooseElection = await MongooseElection.findById(electionId);
     return new Election(mongooseElection.id, mongooseElection.status, mongooseElection.title, mongooseElection.candidates, mongooseElection.participants,
       mongooseElection.publicKeys, mongooseElection.secretTokens);
   }

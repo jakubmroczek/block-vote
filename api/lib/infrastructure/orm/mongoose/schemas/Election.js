@@ -28,7 +28,7 @@ const electionSchema = new mongoose.Schema({
   publicKeys: [String],
   // TODO: In the future create a schema for this
   secretTokens: [String],
-  smartContract: [smartContractSchema],
+  smartContract: smartContractSchema,
 });
 
 module.exports = mongoose.model('Election', electionSchema);
