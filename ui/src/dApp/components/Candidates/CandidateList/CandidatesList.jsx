@@ -1,10 +1,26 @@
 import * as React from 'react';
-import { Table } from 'react-bootstrap';
+import { Button, Table, Form } from 'react-bootstrap';
 
-// TODO: Rename to CandidateRow and move it here
-import Candidate from '../Candidate/Candidate.jsx';
-import SendVoteButton from '../../SendVoteButton.jsx'
 import ElectionAPI from '../../../services/electionAPI.js';
+
+function CandidateRow({ index, name, surname, checked, onChange }) {
+  return (
+    <>
+      <tr>
+        <td>{name}</td>
+        <td>{surname}</td>
+        <td>
+          <Form.Check
+            name={index}
+            aria-label="option 1"
+            checked={checked}
+            onChange={onChange}
+          />
+        </td>
+      </tr>
+    </>
+  );
+}
 
 export default class CandidatesList extends React.Component {
   constructor(props) {
@@ -40,17 +56,17 @@ export default class CandidatesList extends React.Component {
 
   handleToggle(index) {
     const { candidates } = this.props;
-    const candidate = candidates[index] !== this.state.selectedCandidate ?  candidates[index] : null;
-    
+    const candidate = candidates[index] !== this.state.selectedCandidate ? candidates[index] : null;
+
     this.setState({
       selectedCandidate: candidate,
     });
   }
 
-  render() {    
+  render() {
     const { candidates } = this.props;
     const rows = candidates.map((candidate, index) => (
-      <Candidate
+      <CandidateRow
         key={index}
         index={index}
         name={candidate.name}
@@ -67,7 +83,9 @@ export default class CandidatesList extends React.Component {
             {rows}
           </tbody>
         </Table>
-        <SendVoteButton onClick={this.onClick} />
+        <Button variant="outline-success" onClick={this.onClick}>
+          Vote
+        </Button>
       </>
     );
   }
