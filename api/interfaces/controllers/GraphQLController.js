@@ -2,6 +2,7 @@ require('dotenv').config();
 const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
 
+const { AuthenticationError } = require('apollo-server-express');
 const auth = require('../../infrastructure/webserver/auth.js');
 
 const { mustBeSignedIn } = auth;
@@ -18,6 +19,7 @@ const RegisterPublicKey = require('../../application/use_cases/RegisterPublicKey
 const SetElectionInRegisteration = require('../../application/use_cases/SetElectionInRegisteration.js');
 const DeployElectionOnBlockchain = require('../../application/use_cases/DeployElectionOnBlockchain.js');
 const FinishElection = require('../../application/use_cases/FinishElection.js');
+const GetUser = require('../../application/use_cases/GetUser.js');
 
 // TODO: Where should I get from this context?
 function getContext({ req }) {
@@ -32,12 +34,21 @@ function getContext({ req }) {
 
 // TODO: Add extra checks so that user can not query election that are not theirs
 function mustOwnElection(resolver) {
-  return (root, args, context) => {
+  return async (root, args, context) => {
     // The election id
     const { id } = args;
-    const { user } = context;
+    const { user , serviceLocator } = context;
 
-    // TODO: Add use case to check if the owner owns the election
+    // TODO: Make it a use case to check if the owner owns the election
+    const { email } = user;
+    const domainuUser = await GetUser(email, serviceLocator);
+
+    // Maybe just look for find , bool return
+    const index = domainuUser.electionIDs.indexOf(id);
+    if (index !== -1) {
+      console.log(domainuUser);
+      throw new AuthenticationError('You must be signed in');
+    }
 
     return resolver(root, args, context);
   };
