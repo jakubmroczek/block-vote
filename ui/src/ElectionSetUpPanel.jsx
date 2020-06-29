@@ -43,8 +43,7 @@ export default class ElectionSetUpPanel extends React.Component {
             }
 }`;
 
-    // const { id } = this.state;
-    const id = '5ef9116d4e0178141690ab13';
+    const { id } = this.state;
     const response = await graphQLFetch(query, { id });
 
     if (response) {

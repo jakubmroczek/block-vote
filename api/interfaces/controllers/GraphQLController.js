@@ -38,7 +38,7 @@ function mustOwnElection(resolver) {
     // The election id
     const { id } = args;
     const { user , serviceLocator } = context;
-    
+
     // TODO: Make it a use case to check if the owner owns the election
     const { email } = user;
     const domainuUser = await GetUser(email, serviceLocator);
@@ -56,7 +56,7 @@ function mustOwnElection(resolver) {
 }
 
 // TODO: Temporal resolvers - move this into a proper place
-async function getElection(_1, { id }, { user, serviceLocator }) {
+async function getElection(_1, { id }, { serviceLocator }) {
   // TODO: What if not found
   const election = await GetElection(id, serviceLocator);
   return election;
@@ -69,7 +69,7 @@ async function listElection(_1, _2, { user, serviceLocator }) {
   return elections;
 }
 
-async function sendRegisterationMail(_1, { id }, { user, serviceLocator }) {
+async function sendRegisterationMail(_1, { id }, { serviceLocator }) {
   // TODO: What if error
   // TODO: shoul this be a domain user?
   const response = await SendRegisterationMail(id, serviceLocator);
@@ -90,30 +90,30 @@ async function createElection(_1, _2, { user, serviceLocator }) {
   return election;
 }
 
-async function updateElection(_1, { id, changes }, { user, serviceLocator }) {
+async function updateElection(_1, { id, changes }, { serviceLocator }) {
   const election = await UpdateElection(id, changes, serviceLocator);
   return election;
 }
 
-async function registerPublicKey(_1, { id, secretToken, publicKey }, { user, serviceLocator }) {
+async function registerPublicKey(_1, { id, secretToken, publicKey }, { serviceLocator }) {
   //   TODO: Error handlin
   const result = await RegisterPublicKey(secretToken, publicKey, id, serviceLocator);
   return result;
 }
 
 // TODO: Rename me!
-async function setElectionInPublicKeyRegisterationStage(_1, { id }, { user, serviceLocator }) {
+async function setElectionInPublicKeyRegisterationStage(_1, { id }, { serviceLocator }) {
   const result = await SetElectionInRegisteration(id, serviceLocator);
   return result;
 }
 
-async function deployElection(_1, { id }, { user, serviceLocator }) {
+async function deployElection(_1, { id }, { serviceLocator }) {
   // TODO: Error handling
   const result = await DeployElectionOnBlockchain(id, serviceLocator);
   return result;
 }
 
-async function finish(_1, { id }, { user, serviceLocator }) {
+async function finish(_1, { id }, { serviceLocator }) {
   // TODO: Error handling
   const result = await FinishElection(id, serviceLocator);  
   return result;
@@ -123,25 +123,25 @@ const resolvers = {
   Query: {
     getElection: mustBeSignedIn(mustOwnElection(getElection)),
 
-    listElection: mustBeSignedIn(mustOwnElection(listElection)),
+    listElection: mustBeSignedIn(listElection),
 
-    sendRegisterPublicKeysMail: mustBeSignedIn(sendRegisterationMail),
+    sendRegisterPublicKeysMail: mustBeSignedIn(mustOwnElection(sendRegisterationMail)),
 
     getVoterElection: listPublicKeyElections,
   },
   Mutation: {
     createElection: mustBeSignedIn(createElection),
 
-    updateElection: mustBeSignedIn(updateElection),
+    updateElection: mustBeSignedIn(mustOwnElection(updateElection)),
 
     // TODO: Make the api name the same as the resolver
     registerPublicKey,
 
-    setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(setElectionInPublicKeyRegisterationStage),
+    setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(mustOwnElection(setElectionInPublicKeyRegisterationStage)),
 
-    deployElection: mustBeSignedIn(deployElection),
+    deployElection: mustBeSignedIn(mustOwnElection(deployElection)),
 
-    finishElection: mustBeSignedIn(finish),
+    finishElection: mustBeSignedIn(mustOwnElection(finish)),
   },
 };
 
