@@ -38,16 +38,17 @@ function mustOwnElection(resolver) {
     // The election id
     const { id } = args;
     const { user , serviceLocator } = context;
-
+    
     // TODO: Make it a use case to check if the owner owns the election
     const { email } = user;
     const domainuUser = await GetUser(email, serviceLocator);
 
     // Maybe just look for find , bool return
     const index = domainuUser.electionIDs.indexOf(id);
-    if (index !== -1) {
+    
+    if (index === -1) {
       console.log(domainuUser);
-      throw new AuthenticationError('You must be signed in');
+      throw new AuthenticationError('User can not read election not owned by them.');
     }
 
     return resolver(root, args, context);
@@ -120,9 +121,9 @@ async function finish(_1, { id }, { user, serviceLocator }) {
 
 const resolvers = {
   Query: {
-    getElection: mustBeSignedIn(getElection),
+    getElection: mustBeSignedIn(mustOwnElection(getElection)),
 
-    listElection: mustBeSignedIn(listElection),
+    listElection: mustBeSignedIn(mustOwnElection(listElection)),
 
     sendRegisterPublicKeysMail: mustBeSignedIn(sendRegisterationMail),
 
