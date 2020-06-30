@@ -14,10 +14,9 @@ module.exports = class extends VoterRepository {
   // TODO: Check if this should not be the voterId
   // eslint-disable-next-line class-methods-use-this
   async findByPublicKey(publicKey) {
-    // TODO: Make this be in lower case by default    
     const filter = { publicKey: publicKey.toLowerCase() };
     //TODO: findOne because support for one.
-    const mongooseVoter = await MongooseVoter.findOne(filter);    
+    const mongooseVoter = await MongooseVoter.findOne(filter);
     return new Voter(mongooseVoter.id, mongooseVoter.publicKey, mongooseVoter.electionIDs);
   }
 };
