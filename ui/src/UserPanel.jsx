@@ -1,5 +1,7 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import {
+  Button, Spinner, Container, Row, Col,
+} from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { withRouter } from 'react-router-dom';
 import graphQLFetch from './graphQLFetch.js';
@@ -48,11 +50,7 @@ function CreateElectionItem({ onElectionCreated }) {
 export default class UserPanel extends React.Component {
   constructor() {
     super();
-
-    this.state = {
-      election: undefined,
-    };
-
+    this.state = {};
     this.read = this.read.bind(this);
   }
 
@@ -73,18 +71,38 @@ export default class UserPanel extends React.Component {
 
     const response = await graphQLFetch(query);
 
+    // TODO: Refactor this, right now there is only one election at a time.
+
     if (response && response.listElection.length >= 1) {
       this.setState({
         election: response.listElection[0],
       });
     } else {
-      const user = this.context;
-      const { username } = user;
-      alert(`Could not fetch Elections for the user ${username}`);
+      this.setState({
+        election: undefined,
+      });
     }
   }
 
   render() {
+    if (!('election' in this.state)) {
+      return (
+        <Container>
+          <Row>
+            <Col>
+              <Spinner animation="border" />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              Connecting to the server. Wait a moment please...
+            </Col>
+          </Row>
+        </Container>
+      );
+    }
+
+
     const { election } = this.state;
 
     if (election === undefined) {
@@ -94,7 +112,8 @@ export default class UserPanel extends React.Component {
     }
 
     const { id, status } = election;
-    //TODO: Refactor this code
+
+    // TODO: Refactor this code
     if (status === 'Finished') {
       return (
         <EditElectionInfo id={id} />
