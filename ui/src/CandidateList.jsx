@@ -337,7 +337,7 @@ export default class CandidateList extends React.Component {
     );
 
     return (
-      <Card className="text-center">
+      <Card className="text-center mt-2 mr-3">
         <Card.Header as="h5">Candidates</Card.Header>
         <Card.Body>
           <CandidateTable

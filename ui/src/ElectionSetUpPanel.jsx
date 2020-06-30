@@ -118,7 +118,7 @@ export default class ElectionSetUpPanel extends React.Component {
         <ElectionTitleForm title={title} update={this.update} />
         <CandidateList candidates={candidates} update={this.update} />
         <ParticipantList participants={participants} update={this.update} />
-        <Button onClick={this.deploy} variant="outline-success">Next</Button>
+        <Button onClick={this.deploy} variant="outline-success" className="mt-2">Next</Button>
       </div>
     );
   }

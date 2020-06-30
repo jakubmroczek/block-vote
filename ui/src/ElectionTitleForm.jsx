@@ -149,7 +149,7 @@ export default class ElectionTitleForm extends React.Component {
 
     if (isTitleEmpty) {
       return (
-        <Card className="text-center">
+        <Card className="text-center mt-2 mr-3">
           <Card.Header as="h5">Title</Card.Header>
           <Card.Body>
             {/* TODO: Create a reusable component */}
@@ -170,7 +170,7 @@ export default class ElectionTitleForm extends React.Component {
       );
     }
     return (
-      <Card className="text-center">
+      <Card className="text-center mt-2 mr-3">
         <Card.Header as="h5">Title</Card.Header>
         <Card.Body>
           <Form name="electionTitle">
