@@ -326,7 +326,7 @@ export default class ParticipantList extends React.Component {
     );
 
     return (
-      <Card className="text-center">
+      <Card className="text-center mt-2 mr-3">
         <Card.Header as="h5">Participants</Card.Header>
         <Card.Body>
           <ParticipantTable participants={participants} update={this.update} remove={this.remove} />
