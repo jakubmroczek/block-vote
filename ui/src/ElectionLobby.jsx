@@ -22,7 +22,7 @@ export default class ElectionLobby extends React.Component {
     };
 
     this.read = this.read.bind(this);
-    this.fetchSmartContract = this.fetchSmartContract.bind(this);
+    this.compileElectionSmartContract = this.compileElectionSmartContract.bind(this);
     this.deployElection = this.deployElection.bind(this);
     this.bytecodeObject = this.bytecodeObject.bind(this);
     this.abi = this.abi.bind(this);
@@ -60,12 +60,10 @@ export default class ElectionLobby extends React.Component {
     }
   }
 
-  async fetchSmartContract() {
-    //TODO: This mutation does not change the state of the application,
-    // maybe it should have a different name
+  async compileElectionSmartContract() {
     const query = `mutation  
-      deployElection($id: ID!) {
-        deployElection(id: $id) {
+    compileElectionSmartContract($id: ID!) {
+      compileElectionSmartContract(id: $id) {
                   title
                   candidates {
                     name
@@ -81,11 +79,11 @@ export default class ElectionLobby extends React.Component {
 
     const { id } = this.props;
     const response = await graphQLFetch(query, { id });
-
+    
     if (response) {
       const {
         smartContract, title, candidates, publicKeys,
-      } = response.deployElection;
+      } = response.compileElectionSmartContract;
       this.setState({
         smartContract, title, candidates, publicKeys,
       });
@@ -161,7 +159,7 @@ export default class ElectionLobby extends React.Component {
   }
 
   async deployElection() {
-    await this.fetchSmartContract();
+    await this.compileElectionSmartContract();
     await this.metaMaskInit();
 
     const account = window.web3.eth.defaultAccount;
