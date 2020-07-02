@@ -7,8 +7,5 @@ export default function deploy(bytecode, abi, title, candidates, publicKeys, acc
       from: account,
     }, (error, transactionHash) => {
       console.log(`Error ${error} Transaction hash ${transactionHash}`);
-    }) // TODO: Error handling
-    .then((newContractInstance) => {
-      return newContractInstance.options.address;
     });
 }
