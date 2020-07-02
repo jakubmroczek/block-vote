@@ -90,5 +90,5 @@ type Mutation {
 
     compileElectionSmartContract(id: ID!) : Election!
 
-    finishElection(id: ID!) : Boolean!
+    finishElection : Boolean!
 }

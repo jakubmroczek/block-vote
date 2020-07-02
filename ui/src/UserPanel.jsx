@@ -73,7 +73,7 @@ export default class UserPanel extends React.Component {
 
     if (response) {
       this.setState({
-        election: response.getElection,
+        election: response.getUserElection,
       });
     } else {
       this.setState({

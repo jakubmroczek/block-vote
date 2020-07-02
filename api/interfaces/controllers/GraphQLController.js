@@ -42,9 +42,9 @@ function mustOwnElection(resolver) {
     // TODO: Make it a use case to check if the owner owns the election
     const { email } = user;
     const domainUser = await GetUser(email, serviceLocator);
-
+1
     const isOnwer = domainUser.electionID === id;
-    if (isOnwer) {
+    if (!isOnwer) {
       console.log(domainUser);
       throw new AuthenticationError('User can not read election not owned by them.');
     }
@@ -110,9 +110,9 @@ async function compileElectionSmartContract(_1, { id }, { serviceLocator }) {
   return result;
 }
 
-async function finish(_1, { id }, { serviceLocator }) {
+async function finishElection(_1, _2, { user, serviceLocator }) {
   // TODO: Error handling
-  const result = await FinishElection(id, serviceLocator);  
+  const result = await FinishElection(user, serviceLocator);
   return result;
 }
 
@@ -138,7 +138,7 @@ const resolvers = {
 
     compileElectionSmartContract: mustBeSignedIn(mustOwnElection(compileElectionSmartContract)),
 
-    finishElection: mustBeSignedIn(mustOwnElection(finish)),
+    finishElection: mustBeSignedIn(finishElection),
   },
 };
 

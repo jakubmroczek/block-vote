@@ -27,6 +27,8 @@ async function queryCandidates(abi, address) {
 }
 
 module.exports = async (user, { userRepository, electionRepository }) => {
+  //TODO: Make all the data layer changes atomic, if one fails, fail them all
+  
   // TODO: Error handling, everything should be atomic
   // TODO: Move to a distinct function
   const { email } = user;
@@ -34,6 +36,8 @@ module.exports = async (user, { userRepository, electionRepository }) => {
   const { electionID } = domainUser;
   domainUser.electionID = null;
   domainUser.finishedElectionIDs.push(electionID);
+  //TODO: Error handling
+  await userRepository.merge(domainUser);
 
   const election = await electionRepository.get(electionID);
   const { smartContract } = election;
