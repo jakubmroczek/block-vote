@@ -68,6 +68,10 @@ input ParticipantUpdateInputs {
 
 type Query {
     getElection(id: ID!) : Election
+
+    # Returns active election owned by the user if have any
+    getElection : Election
+
     listElection : [Election!]!
 
     # id of the election 
