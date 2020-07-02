@@ -33,7 +33,7 @@ function sendEmail(mailOptions) {
 // TODO: Get the candidates from the different repo or different use case.
 module.exports = async (electionID, candidates, { electionRepository }) => {
   // TODO: Introduce better template
-  const html = `<p>The election results: <br> ${candidates} </p>`;
+  const html = `<p>The election hosted on the Ethereum blockchain results: <br> ${candidates} </p>`;
   // TODO: Add info about the elction title
   const subject = 'The election results';
 

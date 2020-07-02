@@ -15,6 +15,7 @@ const transporter = nodemailer.createTransport({
 // TODO: Take this from the UI server / graphql query parameter
 const htmlForm = (link, secretToken) => `
      <p>
+      The voting will be on Ethereum.
       Register your Ethereum public through this link
       <a href="${link}">${link}</a>
       Your very secret token is: ${secretToken} 
