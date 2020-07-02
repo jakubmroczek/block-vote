@@ -51,10 +51,10 @@ export default class SignInItem extends React.Component {
       const body = await response.text();
       const result = JSON.parse(body);
 
-      const { signedIn, email: username } = result;
+      const { signedIn, email } = result;
 
       // TODO: Reorganize this code
-      const user = { signedIn, username };
+      const user = { signedIn, email };
       const { onSucessfulSignIn } = this.props;
       onSucessfulSignIn(user);
     } catch (error) {

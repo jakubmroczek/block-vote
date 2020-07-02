@@ -40,7 +40,7 @@ class LogOutButton extends React.Component {
 
       const { onUserChange } = this.props;
 
-      const user = { signedIn: false, username: '' };
+      const user = { signedIn: false, email: '' };
       onUserChange(user);
     } catch (error) {
       alert(`Error signing out ${error}`);
@@ -86,7 +86,7 @@ export default class NavBar extends React.Component {
         </Navbar.Brand>
         <Nav className="ml-auto">
           <Navbar.Text className="mr-1">
-            {user.username}
+            {user.email}
           </Navbar.Text>
           <LogOutButton onUserChange={this.onUserChange} />
         </Nav>
