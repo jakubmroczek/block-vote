@@ -37,7 +37,6 @@ function compile() {
 
 module.exports = async (electionID, { electionRepository }) => {
   const election = await electionRepository.get(electionID);
-  election.status = 'Deployed';
   election.smartContract = compile();
   const result = await electionRepository.merge(election);
   return result;

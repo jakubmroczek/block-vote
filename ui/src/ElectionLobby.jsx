@@ -61,6 +61,8 @@ export default class ElectionLobby extends React.Component {
   }
 
   async fetchSmartContract() {
+    //TODO: This mutation does not change the state of the application,
+    // maybe it should have a different name
     const query = `mutation  
       deployElection($id: ID!) {
         deployElection(id: $id) {
@@ -124,7 +126,7 @@ export default class ElectionLobby extends React.Component {
     const { bytecode, abi } = sm;
 
     const smartContract = { address, bytecode, abi };
-    const changes = { smartContract };
+    const changes = { status: 'Deployed', smartContract };
     const vars = { id, changes };
     const data = await graphQLFetch(query, vars);
     if (data) {
@@ -167,10 +169,14 @@ export default class ElectionLobby extends React.Component {
     const bytecode = this.bytecodeObject();
     const abi = this.abi();
     const { title, candidates, publicKeys } = this.state;
-
-    // TODO: How to handle success or failure of the deploy
-    const contractAddress = await deploy(bytecode, abi, title, candidates, publicKeys, account, this.web3);
-    await this.update(contractAddress);
+    
+    deploy(bytecode, abi, title, candidates, publicKeys, account, this.web3)
+      .then((newContractInstance) => {
+        const contractAddress = newContractInstance.options.address;
+        this.update(contractAddress);
+      }).error((err) => {
+        console.log(err);
+      });
   }
 
   render() {
