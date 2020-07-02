@@ -60,7 +60,7 @@ export default class ElectionLobby extends React.Component {
     }
   }
 
-  async compileElectionSmartContract() {
+  async compileElectionSmartContract(onSuccessfulFetch) {
     const query = `mutation  
     compileElectionSmartContract($id: ID!) {
       compileElectionSmartContract(id: $id) {
@@ -79,14 +79,14 @@ export default class ElectionLobby extends React.Component {
 
     const { id } = this.props;
     const response = await graphQLFetch(query, { id });
-    
+
     if (response) {
       const {
         smartContract, title, candidates, publicKeys,
       } = response.compileElectionSmartContract;
       this.setState({
         smartContract, title, candidates, publicKeys,
-      });
+      }, onSuccessfulFetch());
     } else {
       alert('getElection call failed');
     }
@@ -159,22 +159,25 @@ export default class ElectionLobby extends React.Component {
   }
 
   async deployElection() {
-    await this.compileElectionSmartContract();
-    await this.metaMaskInit();
+    const onSuccessfulFetch = () => {
+      this.metaMaskInit().then(() => {
+        const account = window.web3.eth.defaultAccount;
 
-    const account = window.web3.eth.defaultAccount;
-
-    const bytecode = this.bytecodeObject();
-    const abi = this.abi();
-    const { title, candidates, publicKeys } = this.state;
-    
-    deploy(bytecode, abi, title, candidates, publicKeys, account, this.web3)
-      .then((newContractInstance) => {
-        const contractAddress = newContractInstance.options.address;
-        this.update(contractAddress);
-      }).error((err) => {
-        console.log(err);
+        const bytecode = this.bytecodeObject();
+        const abi = this.abi();
+        const { title, candidates, publicKeys } = this.state;
+  
+        deploy(bytecode, abi, title, candidates, publicKeys, account, this.web3)
+          .then((newContractInstance) => {
+            const contractAddress = newContractInstance.options.address;
+            this.update(contractAddress);
+          }).error((err) => {
+            console.log(err);
+          });
       });
+    };
+
+    this.compileElectionSmartContract(onSuccessfulFetch);
   }
 
   render() {
