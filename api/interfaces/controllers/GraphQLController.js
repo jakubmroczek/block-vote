@@ -17,7 +17,7 @@ const CreateElection = require('../../application/use_cases/CreateElection.js');
 const UpdateElection = require('../../application/use_cases/UpdateElection.js');
 const RegisterPublicKey = require('../../application/use_cases/RegisterPublicKey.js');
 const SetElectionInRegisteration = require('../../application/use_cases/SetElectionInRegisteration.js');
-const DeployElectionOnBlockchain = require('../../application/use_cases/DeployElectionOnBlockchain.js');
+const CompileElectionSmartContract = require('../../application/use_cases/CompileElectionSmartContract.js');
 const FinishElection = require('../../application/use_cases/FinishElection.js');
 const GetUser = require('../../application/use_cases/GetUser.js');
 
@@ -107,9 +107,9 @@ async function setElectionInPublicKeyRegisterationStage(_1, { id }, { serviceLoc
   return result;
 }
 
-async function deployElection(_1, { id }, { serviceLocator }) {
+async function compileElectionSmartContract(_1, { id }, { serviceLocator }) {
   // TODO: Error handling
-  const result = await DeployElectionOnBlockchain(id, serviceLocator);
+  const result = await CompileElectionSmartContract(id, serviceLocator);
   return result;
 }
 
@@ -139,7 +139,7 @@ const resolvers = {
 
     setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(mustOwnElection(setElectionInPublicKeyRegisterationStage)),
 
-    deployElection: mustBeSignedIn(mustOwnElection(deployElection)),
+    compileElectionSmartContract: mustBeSignedIn(mustOwnElection(compileElectionSmartContract)),
 
     finishElection: mustBeSignedIn(mustOwnElection(finish)),
   },
