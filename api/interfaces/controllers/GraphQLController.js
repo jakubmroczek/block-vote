@@ -9,7 +9,7 @@ const { mustBeSignedIn } = auth;
 
 // Use cases
 const GetElection = require('../../application/use_cases/GetElection.js');
-const ListUserElections = require('../../application/use_cases/ListUserElections.js');
+const GetUserElection = require('../../application/use_cases/GetUserElection.js');
 const SendRegisterationMail = require('../../application/use_cases/SendRegisterationMail.js');
 // TODO: Consider rename, along with the frontend code
 const ListPublicKeyElections = require('../../application/use_cases/ListPublicKeyElections.js');
@@ -62,10 +62,9 @@ async function getElection(_1, { id }, { serviceLocator }) {
   return election;
 }
 
-async function listElection(_1, _2, { user, serviceLocator }) {
-  // TODO: What if not found
+async function getUserElection(_1, _2, { user, serviceLocator }) {
   // TODO: shoul this be a domain user?
-  const elections = await ListUserElections(user, serviceLocator);    
+  const elections = await GetUserElection(user, serviceLocator);
   return elections;
 }
 
@@ -123,7 +122,7 @@ const resolvers = {
   Query: {
     getElection: mustBeSignedIn(mustOwnElection(getElection)),
 
-    listElection: mustBeSignedIn(listElection),
+    getUserElection: mustBeSignedIn(getUserElection),
 
     sendRegisterPublicKeysMail: mustBeSignedIn(mustOwnElection(sendRegisterationMail)),
 

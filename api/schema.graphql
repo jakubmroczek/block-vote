@@ -70,9 +70,7 @@ type Query {
     getElection(id: ID!) : Election
 
     # Returns active election owned by the user if have any
-    getElection : Election
-
-    listElection : [Election!]!
+    getUserElection : Election
 
     # id of the election 
     # Mutation
