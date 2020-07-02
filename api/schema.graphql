@@ -68,7 +68,9 @@ input ParticipantUpdateInputs {
 
 type Query {
     getElection(id: ID!) : Election
-    listElection : [Election!]!
+
+    # Returns active election owned by the user if have any
+    getUserElection : Election
 
     # id of the election 
     # Mutation
@@ -88,5 +90,5 @@ type Mutation {
 
     compileElectionSmartContract(id: ID!) : Election!
 
-    finishElection(id: ID!) : Boolean!
+    finishElection : Boolean!
 }

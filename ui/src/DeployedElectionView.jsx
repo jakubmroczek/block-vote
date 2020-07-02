@@ -6,13 +6,14 @@ import graphQLFetch from './graphQLFetch.js';
 export default function DeployedElectionView({ id }) {
   const onElectionFinish = async () => {
     // TODO: Ask the user if he really wants to do this
+    // TODO: Check if the graph ql query syntax can be shorter
     const query = `mutation 
-        finishElection($id: ID!) {
-            finishElection(id: $id) 
+        finishElection {
+            finishElection
         }`;
 
     const response = await graphQLFetch(query, { id });
-
+    
     if (response) {
       alert('Finished the election success');
     } else {

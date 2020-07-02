@@ -9,7 +9,7 @@ const { mustBeSignedIn } = auth;
 
 // Use cases
 const GetElection = require('../../application/use_cases/GetElection.js');
-const ListUserElections = require('../../application/use_cases/ListUserElections.js');
+const GetUserElection = require('../../application/use_cases/GetUserElection.js');
 const SendRegisterationMail = require('../../application/use_cases/SendRegisterationMail.js');
 // TODO: Consider rename, along with the frontend code
 const ListPublicKeyElections = require('../../application/use_cases/ListPublicKeyElections.js');
@@ -41,13 +41,11 @@ function mustOwnElection(resolver) {
 
     // TODO: Make it a use case to check if the owner owns the election
     const { email } = user;
-    const domainuUser = await GetUser(email, serviceLocator);
-
-    // Maybe just look for find , bool return
-    const index = domainuUser.electionIDs.indexOf(id);
-    
-    if (index === -1) {
-      console.log(domainuUser);
+    const domainUser = await GetUser(email, serviceLocator);
+1
+    const isOnwer = domainUser.electionID === id;
+    if (!isOnwer) {
+      console.log(domainUser);
       throw new AuthenticationError('User can not read election not owned by them.');
     }
 
@@ -62,10 +60,9 @@ async function getElection(_1, { id }, { serviceLocator }) {
   return election;
 }
 
-async function listElection(_1, _2, { user, serviceLocator }) {
-  // TODO: What if not found
+async function getUserElection(_1, _2, { user, serviceLocator }) {
   // TODO: shoul this be a domain user?
-  const elections = await ListUserElections(user, serviceLocator);    
+  const elections = await GetUserElection(user, serviceLocator);
   return elections;
 }
 
@@ -113,9 +110,9 @@ async function compileElectionSmartContract(_1, { id }, { serviceLocator }) {
   return result;
 }
 
-async function finish(_1, { id }, { serviceLocator }) {
+async function finishElection(_1, _2, { user, serviceLocator }) {
   // TODO: Error handling
-  const result = await FinishElection(id, serviceLocator);  
+  const result = await FinishElection(user, serviceLocator);
   return result;
 }
 
@@ -123,7 +120,7 @@ const resolvers = {
   Query: {
     getElection: mustBeSignedIn(mustOwnElection(getElection)),
 
-    listElection: mustBeSignedIn(listElection),
+    getUserElection: mustBeSignedIn(getUserElection),
 
     sendRegisterPublicKeysMail: mustBeSignedIn(mustOwnElection(sendRegisterationMail)),
 
@@ -141,7 +138,7 @@ const resolvers = {
 
     compileElectionSmartContract: mustBeSignedIn(mustOwnElection(compileElectionSmartContract)),
 
-    finishElection: mustBeSignedIn(mustOwnElection(finish)),
+    finishElection: mustBeSignedIn(finishElection),
   },
 };
 

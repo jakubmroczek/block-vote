@@ -5,26 +5,27 @@ const UserRepository = require('../../domain/UserRepository');
 
 module.exports = class extends UserRepository {
   async persist(userEntity) {
-    const { email, electionIDs } = userEntity;
-    const mongooseUser = new MongooseUser({ email, electionIDs });
+    const { email, electionID, finishedElectionIDs } = userEntity;
+    const mongooseUser = new MongooseUser({ email, electionID, finishedElectionIDs });
     await mongooseUser.save();
-    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionIDs);
+    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionID, mongooseUser.finishedElectionIDs);
   }
 
   async merge(userEntity) {
-    const { id, email, electionIDs } = userEntity;
-    const mongooseUser = await MongooseUser.findByIdAndUpdate(id, { email, electionIDs } );
-    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionIDs);
+    const {
+      id, email, electionID, finishedElectionIDs,
+    } = userEntity;
+    const mongooseUser = await MongooseUser.findByIdAndUpdate(id, { email, electionID, finishedElectionIDs });
+    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionID, mongooseUser.finishedElectionIDs);
   }
 
   async findByEmail(email) {
     const mongooseUser = await MongooseUser.findOne({ email });
 
-    //TODO: Maybe better error hanling
+    // TODO: Maybe better error hanling
     if (mongooseUser === null) {
       return null;
     }
-    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionIDs);
+    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionID, mongooseUser.finishedElectionIDs);
   }
-
 };

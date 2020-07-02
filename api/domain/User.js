@@ -1,9 +1,10 @@
 module.exports = class {
 
-  constructor(id = null, email, electionIDs) {
+  constructor(id = null, email, electionID, finishedElectionIDs) {
     this.id = id;
     this.email = email;
-    this.electionIDs = electionIDs;
+    this.electionID = electionID;
+    this.finishedElectionIDs = finishedElectionIDs;
   }
 
 };

@@ -60,7 +60,7 @@ export default class UserPanel extends React.Component {
 
   async read() {
     const query = `query {
-      listElection {
+      getUserElection {
         id
         status
         participants {
@@ -71,15 +71,13 @@ export default class UserPanel extends React.Component {
 
     const response = await graphQLFetch(query);
 
-    // TODO: Refactor this, right now there is only one election at a time.
-
-    if (response && response.listElection.length >= 1) {
+    if (response) {
       this.setState({
-        election: response.listElection[0],
+        election: response.getUserElection,
       });
     } else {
       this.setState({
-        election: undefined,
+        election: null,
       });
     }
   }
@@ -105,7 +103,7 @@ export default class UserPanel extends React.Component {
 
     const { election } = this.state;
 
-    if (election === undefined) {
+    if (election === null) {
       return (
         <CreateElectionItem onElectionCreated={this.read} />
       );
@@ -133,13 +131,10 @@ export default class UserPanel extends React.Component {
       );
     }
 
-    if (status === 'Deployed') {
-      return (
-        <DeployedElectionView id={id} />
-      );
-    }
-
-    // TODO: How should we handle the finished elction - current apporach we do not display them
+    // Election must be deployed, no other option
+    return (
+      <DeployedElectionView id={id} />
+    );
   }
 }
 

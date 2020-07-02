@@ -26,7 +26,19 @@ async function queryCandidates(abi, address) {
   });
 }
 
-module.exports = async (electionID, { electionRepository }) => {
+module.exports = async (user, { userRepository, electionRepository }) => {
+  //TODO: Make all the data layer changes atomic, if one fails, fail them all
+  
+  // TODO: Error handling, everything should be atomic
+  // TODO: Move to a distinct function
+  const { email } = user;
+  const domainUser = await userRepository.findByEmail(email);
+  const { electionID } = domainUser;
+  domainUser.electionID = null;
+  domainUser.finishedElectionIDs.push(electionID);
+  //TODO: Error handling
+  await userRepository.merge(domainUser);
+
   const election = await electionRepository.get(electionID);
   const { smartContract } = election;
   const { abi, address } = smartContract;
@@ -43,7 +55,7 @@ module.exports = async (electionID, { electionRepository }) => {
   // TODO: Is this okay? Can I mix use cases in DDD
   const SendElectionFinishMail = require('./SendElectionFinishMail.js');
 
-  //TODO: Returns nothig, improve error hanlding
+  // TODO: Returns nothig, improve error hanlding
   await SendElectionFinishMail(electionID, candidates, { electionRepository });
 
   return true;
