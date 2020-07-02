@@ -16,7 +16,7 @@ export default class Page extends React.Component {
   constructor() {
     super();
     this.state = {
-      user: { signedIn: false, username: '' },
+      user: { signedIn: false, email: '' },
     };
 
     this.onUserChange = this.onUserChange.bind(this);
