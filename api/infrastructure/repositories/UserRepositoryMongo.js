@@ -5,16 +5,16 @@ const UserRepository = require('../../domain/UserRepository');
 
 module.exports = class extends UserRepository {
   async persist(userEntity) {
-    const { email, electionIDs } = userEntity;
-    const mongooseUser = new MongooseUser({ email, electionIDs });
+    const { email, electionID } = userEntity;
+    const mongooseUser = new MongooseUser({ email, electionID });
     await mongooseUser.save();
-    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionIDs);
+    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionID);
   }
 
   async merge(userEntity) {
-    const { id, email, electionIDs } = userEntity;
-    const mongooseUser = await MongooseUser.findByIdAndUpdate(id, { email, electionIDs } );
-    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionIDs);
+    const { id, email, electionID } = userEntity;
+    const mongooseUser = await MongooseUser.findByIdAndUpdate(id, { email, electionID } );
+    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionID);
   }
 
   async findByEmail(email) {
@@ -24,7 +24,7 @@ module.exports = class extends UserRepository {
     if (mongooseUser === null) {
       return null;
     }
-    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionIDs);
+    return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionID);
   }
 
 };

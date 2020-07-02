@@ -41,13 +41,11 @@ function mustOwnElection(resolver) {
 
     // TODO: Make it a use case to check if the owner owns the election
     const { email } = user;
-    const domainuUser = await GetUser(email, serviceLocator);
+    const domainUser = await GetUser(email, serviceLocator);
 
-    // Maybe just look for find , bool return
-    const index = domainuUser.electionIDs.indexOf(id);
-    
-    if (index === -1) {
-      console.log(domainuUser);
+    const isOnwer = domainUser.electionID === id;
+    if (isOnwer) {
+      console.log(domainUser);
       throw new AuthenticationError('User can not read election not owned by them.');
     }
 

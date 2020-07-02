@@ -16,7 +16,7 @@ module.exports = async (userContext, { userRepository, electionRepository }) => 
   //TODO: Highliht what exact user it is -> not domain level, imporve what is right now.
   const { email } = userContext;
   const user = await userRepository.findByEmail(email);
-  user.electionIDs.push(id);
+  user.electionID = id;
   
   // TODO: Check if success
   await userRepository.merge(user);
