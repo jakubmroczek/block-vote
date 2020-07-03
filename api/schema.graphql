@@ -86,7 +86,7 @@ type Query {
     sendRegisterPublicKeysMail(id: ID!): Boolean!
     
     # TODO: Introduce distinct type for the publicKey
-    listVoterElections(publicKey: String!) : BlockchainElection
+    listVoterElections(publicKey: String!) : [BlockchainElection!]!
 
     # TODO: Introduce distinct type for the publicKey
     getVoterElection(id: ID!) : BlockchainElection

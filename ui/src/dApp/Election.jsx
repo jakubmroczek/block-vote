@@ -1,8 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 
 import { Card } from 'react-bootstrap';
-
 import CandidatesList from './CandidatesList.jsx';
+import ElectionFetching from './ElectionFetching.jsx';
+import ErrorMessage from './ErrorMessage.jsx';
+import ElectionAPI from './electionAPI.js';
 
 function ElectionTitle({ title }) {
   return (
@@ -10,11 +12,100 @@ function ElectionTitle({ title }) {
   );
 }
 
-export default function Election({ title, candidates }) {
-  return (
-    <Card className="text-center">
-      <ElectionTitle title={title} />
-      <CandidatesList candidates={candidates} />
-    </Card>
-  );
+export default class Election extends React.Component {
+  // TODO: Move error to distinc class/function
+  unregisterdVoterErrorTitle = 'Unregistered public key'
+
+  unregisterdVoterErrorMessage = 'Sorry but your public key was not recognized'
+
+  userHasAlreadyVotedErrorTitle = 'Thank you for voting!'
+
+  userHasAlreadyVotedErrorMessage =
+    'You have already voted so you unable to see the list of candites right now. Wait please for the final results publication'
+
+  constructor() {
+    super();
+    this.state = {
+      electionState: '',
+    };
+  }
+
+  componentDidMount() {
+    this.setState({ electionState: 'connectingToBlockchain' });
+    const onFailure = () => {
+      // TODO: add a new flag for the problem
+      this.setState({ electionState: 'unregisteredUser' });
+    };
+
+    const successfulConnectionConditions = [
+      new ElectionAPI().isUserRegistered(onFailure),
+      new ElectionAPI().hasUserAlreadyVoted(onFailure),
+    ];
+
+    // TODO: Error handling
+    Promise.all(successfulConnectionConditions)
+      .then((values) => {
+        const isUserRegistered = values[0];
+        const userVoted = values[1];
+
+        if (!isUserRegistered) {
+          this.setState({ electionState: 'unregisteredUser' });
+        } else if (userVoted) {
+          this.setState({ electionState: 'userHasAlreadyVoted' });
+        } else {
+          // TODO: BEtter error handling
+          new ElectionAPI()
+            .getElection(onFailure)
+            .then((election) => {
+              console.log(election);
+
+              this.setState({
+                electionState: 'connectedToBlockchain',
+                title: election.electionTitle,
+                candidates: election.candidates,
+              });
+            })
+            .catch(error => console.log(error));
+        }
+      })
+      .catch((error) => {
+        console.log('erro in first catch');
+        console.log(error);
+      });
+  }
+
+  render() {
+    // TODO: The name valid is stupid change it
+    // TODO: Handle the MetaMask error
+
+    // TODO: Refactor the state, let it hold a flag indicating wether it is okay and not
+    // move the messages to the reducer
+    // TODO: Handle nulls for titile and candidates
+    const { electionState, title, candidates } = this.state;
+    return (
+      <>
+        {electionState === 'unregisteredUser' && (
+          <ErrorMessage
+            messageTitle={this.unregisterdVoterErrorTitle}
+            message={this.unregisterdVoterErrorMessage}
+          />
+        )}
+        {electionState === 'connectingToBlockchain' && (
+          <ElectionFetching />
+        )}
+        {electionState === 'connectedToBlockchain' && (
+        <Card className="text-center">
+          <ElectionTitle title={title} />
+          <CandidatesList candidates={candidates} />
+        </Card>
+        )}
+        {electionState === 'userHasAlreadyVoted' && (
+          <ErrorMessage
+            messageTitle={this.userHasAlreadyVotedErrorTitle}
+            message={this.userHasAlreadyVotedErrorMessage}
+          />
+        )}
+      </>
+    );
+  }
 }

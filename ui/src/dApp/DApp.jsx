@@ -1,104 +1,79 @@
 import React from 'react';
+import { Container, Row, Col, Spinner } from 'react-bootstrap';
 
-import Election from './Election.jsx';
-import ElectionFetching from './ElectionFetching.jsx';
-import ErrorMessage from './ErrorMessage.jsx';
 import ElectionAPI from './electionAPI.js';
+import ElectionList from './ElectionList.jsx'
+import graphQLFetch from '../graphQLFetch.js';
 
-class App extends React.Component {
-  // TODO: Move error to distinc class/function
-  unregisterdVoterErrorTitle = 'Unregistered public key'
-
-  unregisterdVoterErrorMessage = 'Sorry but your public key was not recognized'
-
-  userHasAlreadyVotedErrorTitle = 'Thank you for voting!'
-
-  userHasAlreadyVotedErrorMessage =
-    'You have already voted so you unable to see the list of candites right now. Wait please for the final results publication'
-
+export default class DApp extends React.Component {
   constructor() {
     super();
-    this.state = {
-      appplicationState: '',
-    };
+    this.state = {}
+  }
+  
+  componentDidMount() {
+    this.read();
   }
 
-  componentDidMount() {
-    this.setState({ appplicationState: 'connectingToBlockchain' });
-    const onFailure = () => {
-      // TODO: add a new flag for the problem
-      this.setState({ appplicationState: 'unregisteredUser' });
-    };
+  async getPublicKey() {
+    const publicKey = await new ElectionAPI().getUserPublicKey();
+    return publicKey;
+  }
 
-    const successfulConnectionConditions = [
-      new ElectionAPI().isUserRegistered(onFailure),
-      new ElectionAPI().hasUserAlreadyVoted(onFailure),
-    ];
+  async read() {
+    const query =  `query listVoterElections($publicKey: String!) {
+      listVoterElections(publicKey: $publicKey) {
+        id 
+        title
+      }
+    }`;
 
-    // TODO: Error handling
-    Promise.all(successfulConnectionConditions)
-      .then((values) => {
-        const isUserRegistered = values[0];
-        const userVoted = values[1];
+    const publicKey = await this.getPublicKey();
 
-        if (!isUserRegistered) {
-          this.setState({ appplicationState: 'unregisteredUser' });
-        } else if (userVoted) {
-          this.setState({ appplicationState: 'userHasAlreadyVoted' });
-        } else {
-          // TODO: BEtter error handling
-          new ElectionAPI()
-            .getElection(onFailure)
-            .then((election) => {
-              console.log(election);
+    const response = await graphQLFetch(query, { publicKey });
 
-              this.setState({
-                appplicationState: 'connectedToBlockchain',
-                title: election.electionTitle,
-                candidates: election.candidates,
-              });
-            })
-            .catch(error => console.log(error));
-        }
+    console.log('response');
+    console.log(response);
+    
+    
+
+    if (response) {
+      this.setState({
+        elections: response.listVoterElections
       })
-      .catch((error) => {
-        console.log('erro in first catch');
-        console.log(error);
-      });
+    } else {
+      alert(`Could not fetch elections for the public key: ${publicKey}`)
+    }
   }
 
   render() {
-    // TODO: The name valid is stupid change it
-    // TODO: Handle the MetaMask error
+    if (!('elections' in this.state)) {
+      return (
+        <Container>
+          <Row>
+            <Col>
+              <Spinner animation="border" />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              Connecting to the server. Wait a moment please...
+            </Col>
+          </Row>
+        </Container>
+      );
+    }
 
-    // TODO: Refactor the state, let it hold a flag indicating wether it is okay and not
-    // move the messages to the reducer
-    // TODO: Handle nulls for titile and candidates
-    const { appplicationState, title, candidates } = this.state;
+    // TODO: Handle empty list scenario
+    // TODO: Handle when the public keys is not found on the public key, is it the same as if the list were empty?
+
+    const { elections } = this.state;
+    console.log(elections);
+
     return (
       <>
-        {appplicationState === 'unregisteredUser' && (
-          <ErrorMessage
-            messageTitle={this.unregisterdVoterErrorTitle}
-            message={this.unregisterdVoterErrorMessage}
-          />
-        )}
-        {appplicationState === 'connectingToBlockchain' && (
-          <ElectionFetching />
-        )}
-        {appplicationState === 'connectedToBlockchain' && (
-          <Election title={title} candidates={candidates} />
-        )}
-        {appplicationState === 'userHasAlreadyVoted' && (
-          <ErrorMessage
-            messageTitle={this.userHasAlreadyVotedErrorTitle}
-            message={this.userHasAlreadyVotedErrorMessage}
-          />
-        )}
+        <ElectionList elections={elections} />
       </>
     );
   }
 }
-
-// TODO: Is this correct?
-export default App;

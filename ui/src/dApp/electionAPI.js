@@ -67,6 +67,11 @@ export default class ElectionAPI {
     this.electionInstance = dapptokenContract;
   }
 
+  async getUserPublicKey() {
+    await this.metaMaskInit();
+    return window.web3.eth.defaultAccount;
+  }
+
   async getElection(onFailure) {
     await this.metaMaskInit();
     const publicKey = window.web3.eth.defaultAccount;
