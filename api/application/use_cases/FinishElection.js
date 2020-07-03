@@ -43,6 +43,7 @@ async function removeElectionFromTheVoters(election, voterRepository) {
       electionIDs.splice(electionIdIndex, 1);
     }
 
+    // TODO: Check if I need to do this, I bet this is a shallow copy so no.
     voter.electionIDs = electionIDs;
 
     await voterRepository.merge(voter);
@@ -56,17 +57,17 @@ module.exports = async (user, { userRepository, voterRepository, electionReposit
   // TODO: Move to a distinct function
   const { email } = user;
   const domainUser = await userRepository.findByEmail(email);
-  const { electionID } = domainUser;  
-  const persistedElectionID = Object.assign('', electionID);  
-
-  domainUser.electionID = null;
-  domainUser.finishedElectionIDs.push(electionID);
-  // TODO: Error handling
-  await userRepository.merge(domainUser);
+  const { electionID } = domainUser;
   
-  const election = await electionRepository.get(persistedElectionID);
+  const election = await electionRepository.get(electionID);
   const { smartContract } = election;
   const { abi, address } = smartContract;
+
+  domainUser.finishedElectionIDs.push(electionID);
+  domainUser.electionID = null;
+
+  // TODO: Error handling
+  await userRepository.merge(domainUser);
 
   // TODO: the candidates should be passed here as a parameter or there should be smoething like blokcchian repository?
   // TODO: Error handling
