@@ -33,7 +33,7 @@ async function removeElectionFromTheVoters(election, voterRepository) {
   // TODO: Should I refactor this?
   for (let index = 0; index < publicKeys.length; index += 1) {
     const publicKey = publicKeys[index];
-    const voter = await voter.findByPublicKey(publicKey);
+    const voter = await voterRepository.findByPublicKey(publicKey);
 
     const { electionIDs } = voter;
 
@@ -56,13 +56,15 @@ module.exports = async (user, { userRepository, voterRepository, electionReposit
   // TODO: Move to a distinct function
   const { email } = user;
   const domainUser = await userRepository.findByEmail(email);
-  const { electionID } = domainUser;
+  const { electionID } = domainUser;  
+  const persistedElectionID = Object.assign('', electionID);  
+
   domainUser.electionID = null;
   domainUser.finishedElectionIDs.push(electionID);
   // TODO: Error handling
   await userRepository.merge(domainUser);
-
-  const election = await electionRepository.get(electionID);
+  
+  const election = await electionRepository.get(persistedElectionID);
   const { smartContract } = election;
   const { abi, address } = smartContract;
 
