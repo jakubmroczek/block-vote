@@ -9,7 +9,9 @@ module.exports = async (publicKey, { voterRepository, electionRepository }) => {
     const id = electionIDs[index];
     const election = await electionRepository.get(id);
 
-    if (election !== null) {
+    // TODO: Magic string 'Deployed', keep it in commons
+    if (election !== null
+      && election.status === 'Deployed') {
       elections.push(election);
     }
   }

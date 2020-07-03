@@ -32,11 +32,6 @@ export default class DApp extends React.Component {
 
     const response = await graphQLFetch(query, { publicKey });
 
-    console.log('response');
-    console.log(response);
-    
-    
-
     if (response) {
       this.setState({
         elections: response.listVoterElections
