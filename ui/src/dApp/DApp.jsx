@@ -1,16 +1,18 @@
 import React from 'react';
-import { Container, Row, Col, Spinner } from 'react-bootstrap';
+import {
+  Container, Row, Col, Spinner,
+} from 'react-bootstrap';
 
 import ElectionAPI from './electionAPI.js';
-import ElectionList from './ElectionList.jsx'
+import ElectionList from './ElectionList.jsx';
 import graphQLFetch from '../graphQLFetch.js';
 
 export default class DApp extends React.Component {
   constructor() {
     super();
-    this.state = {}
+    this.state = {};
   }
-  
+
   componentDidMount() {
     this.read();
   }
@@ -21,7 +23,7 @@ export default class DApp extends React.Component {
   }
 
   async read() {
-    const query =  `query listVoterElections($publicKey: String!) {
+    const query = `query listVoterElections($publicKey: String!) {
       listVoterElections(publicKey: $publicKey) {
         id 
         title
@@ -34,10 +36,10 @@ export default class DApp extends React.Component {
 
     if (response) {
       this.setState({
-        elections: response.listVoterElections
-      })
+        elections: response.listVoterElections,
+      });
     } else {
-      alert(`Could not fetch elections for the public key: ${publicKey}`)
+      alert(`Could not fetch elections for the public key: ${publicKey}`);
     }
   }
 
@@ -66,9 +68,7 @@ export default class DApp extends React.Component {
     const { history } = this.props;
 
     return (
-      <>
-        <ElectionList elections={elections} history={history} />
-      </>
+      <ElectionList elections={elections} history={history} />
     );
   }
 }

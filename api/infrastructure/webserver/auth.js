@@ -17,21 +17,21 @@ const { JWT_SECRET } = process.env;
 function getUser(req) {
   const token = req.cookies.jwt;
   if (!token) {
-    return { signedIn: false };
+    return { isLoggedIn: false };
   }
 
   try {
     const credentials = jwt.verify(token, JWT_SECRET);
     return credentials;
   } catch (error) {
-    return { signedIn: false };
+    return { isLoggedIn: false };
   }
 }
 
 function mustBeSignedIn(resolver) {
   return (root, args, context) => {
     const { user } = context;
-    if (!user || !user.signedIn) {
+    if (!user || !user.isLoggedIn) {
       console.log(user);
       throw new AuthenticationError('You must be signed in');
     }
@@ -80,7 +80,7 @@ routes.post('/signin', async (req, res) => {
   }
   const { given_name: username, name, email } = payload;
   const credentials = {
-    signedIn: true, username, name, email,
+    isLoggedIn: true, username, name, email,
   };
   const token = jwt.sign(credentials, JWT_SECRET);
   res.cookie('jwt', token, { httpOnly: true });

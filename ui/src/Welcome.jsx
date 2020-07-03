@@ -3,7 +3,6 @@ import {
   Button, Figure,
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import SignInItem from './SignInItem.jsx';
 
 function Logo() {
   return (
@@ -18,30 +17,16 @@ function Logo() {
   );
 }
 
-export default class Welcome extends React.Component {
-  constructor() {
-    super();
-    this.onSucessfulSignIn = this.onSucessfulSignIn.bind(this);
-  }
-
-  onSucessfulSignIn(user) {
-    const { history, onUserChange } = this.props;
-    onUserChange(user);
-    history.push('/panel');
-  }
-
-  render() {
-    return (
-      <div>
-        <Logo />
-        <LinkContainer to="/vote">
-          <Button>
-            Vote
-          </Button>
-        </LinkContainer>
-        {' '}
-        <SignInItem onSucessfulSignIn={this.onSucessfulSignIn} />
-      </div>
-    );
-  }
+// TODO: Rename to welcome page
+export default function Welcome() {
+  return (
+    <>
+      <Logo />
+      <LinkContainer to="/vote">
+        <Button>
+          Vote
+        </Button>
+      </LinkContainer>
+    </>
+  );
 }
