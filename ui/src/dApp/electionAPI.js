@@ -34,10 +34,10 @@ export default class ElectionAPI {
 
   // TODO: Make this dependant on the public key
   // eslint-disable-next-line class-methods-use-this
-  async fetchCompiledSmartContract(publicKey) {
+  async fetchCompiledSmartContract(id) {
     const query = `query 
-    getVoterElection($publicKey: String!) {
-      getVoterElection(publicKey: $publicKey) {
+    getVoterElection($id: ID!) {
+      getVoterElection(id: $id) {
         smartContract {
           abi
           address
@@ -45,7 +45,7 @@ export default class ElectionAPI {
       }
     }`;
 
-    const response = await graphQLFetch(query, { publicKey });
+    const response = await graphQLFetch(query, { id });
 
     if (response) {
       return response.getVoterElection;
@@ -67,10 +67,14 @@ export default class ElectionAPI {
     this.electionInstance = dapptokenContract;
   }
 
-  async getElection(onFailure) {
+  async getUserPublicKey() {
     await this.metaMaskInit();
-    const publicKey = window.web3.eth.defaultAccount;
-    const response = await this.fetchCompiledSmartContract(publicKey);
+    return window.web3.eth.defaultAccount;
+  }
+
+  async getElection(id, onFailure) {
+    await this.metaMaskInit();
+    const response = await this.fetchCompiledSmartContract(id);
 
     if (response === undefined) {
       onFailure();
@@ -106,22 +110,21 @@ export default class ElectionAPI {
       });
   }
 
-  async vote(candidate) {
+  async vote(id, candidate) {
     // TODO: Encapsulate this in a function and call only once
     await this.metaMaskInit();
     const publicKey = window.web3.eth.defaultAccount;
-    const response = await this.fetchCompiledSmartContract(publicKey);
+    const response = await this.fetchCompiledSmartContract(id);
     await this.blockchainInit(response);
 
     return this.electionInstance.methods.vote(candidate.index).send({ from: publicKey })
       .catch(error => console.log(error));
   }
 
-  async isUserRegistered(onFailure) {
+  async isUserRegistered(id, onFailure) {
     // TODO: Encapsulate this into distinct function
     await this.metaMaskInit();
-    const publicKey = window.web3.eth.defaultAccount;
-    const response = await this.fetchCompiledSmartContract(publicKey);
+    const response = await this.fetchCompiledSmartContract(id);
 
     if (response === undefined) {
       onFailure();
@@ -134,11 +137,10 @@ export default class ElectionAPI {
     return this.electionInstance.methods.isVoterRegistered(window.web3.eth.defaultAccount).call(result => result);
   }
 
-  async hasUserAlreadyVoted(onFailure) {
+  async hasUserAlreadyVoted(id, onFailure) {
     // TODO: Encapsulate this into distinct function
     await this.metaMaskInit();
-    const publicKey = window.web3.eth.defaultAccount;
-    const response = await this.fetchCompiledSmartContract(publicKey);
+    const response = await this.fetchCompiledSmartContract(id);
 
     if (response === undefined) {
       onFailure();

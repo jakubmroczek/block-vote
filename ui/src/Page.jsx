@@ -5,6 +5,7 @@ import Contents from './Contents.jsx';
 import Welcome from './Welcome.jsx';
 import RegisterPublicKeyPanel from './register/RegisterPublicKeyPanel.jsx';
 import DApp from './dApp/DApp.jsx';
+import Election from './dApp/Election.jsx';
 
 function NotFound() {
   return (
@@ -41,7 +42,8 @@ export default class Page extends React.Component {
       <Switch>
         <Route exact path="/" render={props => <Welcome {...props} onUserChange={this.onUserChange} />} />
         <Route path="/register/:electionID" component={RegisterPublicKeyPanel} />
-        <Route path="/vote" component={DApp} />
+        <Route exact path="/vote" component={DApp} />
+        <Route path="/vote/:electionID" component={Election} />
         <Route component={NotFound} />
       </Switch>
     );

@@ -8,7 +8,6 @@ function isSecretTokenValid(secretToken, election) {
 
 // TODO: electionIDs is a one string, but in the future it wil be an array
 module.exports = async (secretToken, publicKey, id, { voterRepository, electionRepository }) => {
-  const voter = new Voter(null, publicKey, id);  
   const election = await electionRepository.get(id);
 
   // Unsure if this should be in this layer
@@ -26,8 +25,18 @@ module.exports = async (secretToken, publicKey, id, { voterRepository, electionR
 
   await electionRepository.merge(election);
 
-  //TODO: Error handling
-  await voterRepository.persist(voter);
+  // TODO: Is this correct? I mean if the voter does not exist, will we return null?
+  // TODO: Read in DDD if I can reuse a use case here
+  let voter = await voterRepository.findByPublicKey(publicKey);
+
+  if (voter === null) {
+    const electionIDs = [id];
+    voter = new Voter(null, publicKey, electionIDs);  
+    await voterRepository.persist(voter);
+  } else {
+    voter.electionIDs.push(id);
+    await voterRepository.merge(voter);
+  }
 
   return true; 
 };

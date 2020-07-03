@@ -12,7 +12,8 @@ const GetElection = require('../../application/use_cases/GetElection.js');
 const GetUserElection = require('../../application/use_cases/GetUserElection.js');
 const SendRegisterationMail = require('../../application/use_cases/SendRegisterationMail.js');
 // TODO: Consider rename, along with the frontend code
-const ListPublicKeyElections = require('../../application/use_cases/ListPublicKeyElections.js');
+const GetVoterElection = require('../../application/use_cases/GetVoterElection.js');
+const ListVoterElections = require('../../application/use_cases/ListVoterElections.js');
 const CreateElection = require('../../application/use_cases/CreateElection.js');
 const UpdateElection = require('../../application/use_cases/UpdateElection.js');
 const RegisterPublicKey = require('../../application/use_cases/RegisterPublicKey.js');
@@ -73,11 +74,16 @@ async function sendRegisterationMail(_1, { id }, { serviceLocator }) {
   return response;
 }
 
-// TODO: Check if there is no problem with the contexts
-async function listPublicKeyElections(_1, { publicKey }, { serviceLocator }) {
+async function getVoterElection(_1, { id }, { serviceLocator }) {
   // TODO: What if not found
-  const election = await ListPublicKeyElections(publicKey, serviceLocator);  
+  const election = await GetVoterElection(id, serviceLocator);
   return election;
+}
+
+async function listVoterElections(_1, { publicKey }, { serviceLocator }) {
+  // // TODO: What if not found
+  const elections = await ListVoterElections(publicKey, serviceLocator);
+  return elections;
 }
 
 // Mutations
@@ -124,7 +130,9 @@ const resolvers = {
 
     sendRegisterPublicKeysMail: mustBeSignedIn(mustOwnElection(sendRegisterationMail)),
 
-    getVoterElection: listPublicKeyElections,
+    listVoterElections,
+
+    getVoterElection,
   },
   Mutation: {
     createElection: mustBeSignedIn(createElection),

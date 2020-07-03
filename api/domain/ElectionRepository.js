@@ -1,3 +1,4 @@
+//TODO: Delete this whole thing
 module.exports = class {
 
     persist(domainElection) {
@@ -8,6 +9,7 @@ module.exports = class {
       throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
     }
   
+    // TODO: Delete this function as is not implemened
     list(electionIDs) {
         throw new Error('ERR_METHOD_NOT_IMPLEMENTED');
     }
