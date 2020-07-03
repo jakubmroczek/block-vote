@@ -23,10 +23,12 @@ export default class Election extends React.Component {
   userHasAlreadyVotedErrorMessage =
     'You have already voted so you unable to see the list of candites right now. Wait please for the final results publication'
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    const { match: { params: { electionID } } } = this.props;
     this.state = {
       electionState: '',
+      electionID,
     };
   }
 
@@ -37,9 +39,11 @@ export default class Election extends React.Component {
       this.setState({ electionState: 'unregisteredUser' });
     };
 
+    const { electionID } = this.state;
+
     const successfulConnectionConditions = [
-      new ElectionAPI().isUserRegistered(onFailure),
-      new ElectionAPI().hasUserAlreadyVoted(onFailure),
+      new ElectionAPI().isUserRegistered(electionID, onFailure),
+      new ElectionAPI().hasUserAlreadyVoted(electionID, onFailure),
     ];
 
     // TODO: Error handling
@@ -55,7 +59,7 @@ export default class Election extends React.Component {
         } else {
           // TODO: BEtter error handling
           new ElectionAPI()
-            .getElection(onFailure)
+            .getElection(electionID, onFailure)
             .then((election) => {
               console.log(election);
 
@@ -81,7 +85,7 @@ export default class Election extends React.Component {
     // TODO: Refactor the state, let it hold a flag indicating wether it is okay and not
     // move the messages to the reducer
     // TODO: Handle nulls for titile and candidates
-    const { electionState, title, candidates } = this.state;
+    const { electionID, electionState, title, candidates } = this.state;
     return (
       <>
         {electionState === 'unregisteredUser' && (
@@ -96,7 +100,7 @@ export default class Election extends React.Component {
         {electionState === 'connectedToBlockchain' && (
         <Card className="text-center">
           <ElectionTitle title={title} />
-          <CandidatesList candidates={candidates} />
+          <CandidatesList electionID={electionID} candidates={candidates} />
         </Card>
         )}
         {electionState === 'userHasAlreadyVoted' && (

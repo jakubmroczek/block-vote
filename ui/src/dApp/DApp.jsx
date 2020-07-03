@@ -63,11 +63,11 @@ export default class DApp extends React.Component {
     // TODO: Handle when the public keys is not found on the public key, is it the same as if the list were empty?
 
     const { elections } = this.state;
-    console.log(elections);
+    const { history } = this.props;
 
     return (
       <>
-        <ElectionList elections={elections} />
+        <ElectionList elections={elections} history={history} />
       </>
     );
   }

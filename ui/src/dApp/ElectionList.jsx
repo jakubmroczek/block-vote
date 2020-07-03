@@ -1,24 +1,31 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
-import { Card, Table } from 'react-bootstrap';
+import { Card, Table, Button } from 'react-bootstrap';
 
-function ElectionRow({ election }) {
-  const { title } = election;
+function ElectionRow({ election, onElectionRowClick }) {
+  const { id, title } = election;
+  const vote = () => onElectionRowClick(id);
   return (
     <>
       <tr>
         <td>{title}</td>
+        <td>
+          {' '}
+          <Button onClick={vote}>Vote</Button>
+          {' '}
+        </td>
       </tr>
     </>
   );
 }
 
-function ElectionTable({ elections }) {
+function ElectionTable({ elections, onElectionRowClick }) {
   const rows = elections
     .map((election, index) => (
       <ElectionRow
         index={index}
         election={election}
+        onElectionRowClick={onElectionRowClick}
       />
     ));
 
@@ -32,6 +39,16 @@ function ElectionTable({ elections }) {
 }
 
 export default class ElectionList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onElectionRowClick = this.onElectionRowClick.bind(this);
+  }
+
+  onElectionRowClick(electionID) {
+    const { history } = this.props;
+    history.push(`/vote/${electionID}`);
+  }
+
   render() {
     const { elections } = this.props;
 
@@ -41,6 +58,7 @@ export default class ElectionList extends React.Component {
         <Card.Body>
           <ElectionTable
             elections={elections}
+            onElectionRowClick={this.onElectionRowClick}
           />
         </Card.Body>
       </Card>

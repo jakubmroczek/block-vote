@@ -39,6 +39,7 @@ export default class CandidatesList extends React.Component {
 
   onClick() {
     const { selectedCandidate } = this.state;
+    const { electionID } = this.props;
 
     // TODO: should it be comparet in this way?
     if (selectedCandidate !== null) {
@@ -46,7 +47,7 @@ export default class CandidatesList extends React.Component {
       // I must get candidateId somehow
       // TODO: Catch error
       new ElectionAPI()
-        .vote(selectedCandidate)
+        .vote(electionID, selectedCandidate)
         .then(() => {
           window.location.reload(false);
         })
