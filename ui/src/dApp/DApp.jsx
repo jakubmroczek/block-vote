@@ -7,8 +7,6 @@ import ElectionAPI from './electionAPI.js';
 import ElectionList from './ElectionList.jsx';
 import graphQLFetch from '../graphQLFetch.js';
 
-import RawNavbar from '../RawNavbar.jsx';
-
 export default class DApp extends React.Component {
   constructor() {
     super();
@@ -49,7 +47,6 @@ export default class DApp extends React.Component {
     if (!('elections' in this.state)) {
       return (
         <>
-          <RawNavbar />
           <Container>
             <Row>
               <Col>
@@ -73,10 +70,7 @@ export default class DApp extends React.Component {
     const { history } = this.props;
 
     return (
-      <>
-        <RawNavbar />
         <ElectionList elections={elections} history={history} />
-      </>
     );
   }
 }

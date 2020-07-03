@@ -2,8 +2,6 @@ import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import graphQLFetch from '../graphQLFetch.js';
 
-import RawNavBar from '../RawNavBar.jsx';
-
 export default function RegisterPublicKeyPanel(props) {
   const { match: { params: { electionID } } } = props;
 
@@ -48,8 +46,6 @@ export default function RegisterPublicKeyPanel(props) {
   };
 
   return (
-    <>
-      <RawNavBar />
       <Form name="registerPublicKey">
         <Form.Group controlId="secretToken">
           <Form.Label>Secret token</Form.Label>
@@ -72,6 +68,5 @@ export default function RegisterPublicKeyPanel(props) {
           Submit
         </Button>
       </Form>
-    </>
   );
 }

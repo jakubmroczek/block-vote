@@ -3,7 +3,6 @@ import {
   Button, Figure,
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import NavBar from './NavBar.jsx';
 
 function Logo() {
   return (
@@ -18,10 +17,10 @@ function Logo() {
   );
 }
 
-export default function Welcome({ setUser, history }) {
+// TODO: Rename to welcome page
+export default function Welcome() {
   return (
     <>
-      <NavBar setUser={setUser} history={history} />
       <Logo />
       <LinkContainer to="/vote">
         <Button>
