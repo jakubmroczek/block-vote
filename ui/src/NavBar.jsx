@@ -108,11 +108,12 @@ export default class NavBar extends React.Component {
     super(props);
     this.state = { isSignInPopUpVisible: false };
     this.onLogOut = this.onLogOut.bind(this);
+    this.onSignIn = this.onSignIn.bind(this);
     this.showSignInPopUp = this.showSignInPopUp.bind(this);
     this.hideSignInPopUp = this.hideSignInPopUp.bind(this);
   }
 
-  async onLogOut() {
+  async onLogOut() {    
     await initGApi();
 
     const apiEndpoint = window.ENV.UI_AUTH_ENDPOINT;
@@ -125,12 +126,22 @@ export default class NavBar extends React.Component {
       await auth2.signOut();
 
       const user = { isLoggedIn: false, email: null };
-      const { onLogOut: callback } = this.props;
+      const { setUser } = this.props;
+      setUser(user);
 
-      callback(user);
+      const { history } = this.props;
+      history.push('/');
+
     } catch (error) {
       alert(`Error signing out ${error}`);
     }
+  }
+
+  onSignIn(user) {
+    const { setUser } = this.props;
+    setUser(user);
+    const { history } = this.props;
+    history.push('/panel');
   }
 
   showSignInPopUp() {
@@ -147,7 +158,6 @@ export default class NavBar extends React.Component {
 
     const { isSignInPopUpVisible } = this.state;
 
-    const { onSignIn } = this.props;
     return (
       <>
         <Navbar bg="light" expand="lg">
@@ -166,12 +176,12 @@ export default class NavBar extends React.Component {
           <Nav className="ml-auto">
             {
           isLoggedIn
-            ? <LogOutButton onLogout={this.onLogout} user={user} />
+          ? <LogOutButton onLogOut={this.onLogOut} user={user} />
             : <SignInButton onSignIn={this.showSignInPopUp} />
         }
           </Nav>
         </Navbar>
-        <SignInPopUp visible={isSignInPopUpVisible} hide={this.hideSignInPopUp} onSignIn={onSignIn} />
+        <SignInPopUp visible={isSignInPopUpVisible} hide={this.hideSignInPopUp} onSignIn={this.onSignIn} />
       </>
     );
   }

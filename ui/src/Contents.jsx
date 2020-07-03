@@ -5,14 +5,14 @@ import ElectionSetUpPanel from './ElectionSetUpPanel.jsx';
 import UserPanel from './UserPanel.jsx';
 import NavBar from './NavBar.jsx';
 
-const NotFound = () => <h1>Page Not Found</h1>;
+const NotFound = () => <h1>Page Not Found Ziomek</h1>;
 
-export default function Contents({ onUserChange }) {
+export default function Contents({ setUser }) {
   return (
     <>
-      <Route path="/" render={props => <NavBar {...props} onUserChange={onUserChange} />} />
+      <Route path="/" render={props => <NavBar {...props} setUser={setUser} />} />
       <Switch>
-        <Route exact path="/panel" component={UserPanel} />
+        <Route path="/panel" component={UserPanel} />
         <Route path="/panel/edit/:electionID" component={ElectionSetUpPanel} />
         {/* TODO: Think of different path name this one is stupid */}
         <Route component={NotFound} />

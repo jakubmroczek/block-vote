@@ -19,12 +19,13 @@ export default class Page extends React.Component {
     this.state = {
       user: { isLoggedIn: false, email: '' },
     };
-
     this.setUser = this.setUser.bind(this);
   }
 
-  setUser(user) {
-    this.setState({ user });
+  setUser(user) {    
+    this.setState({
+      user,
+    });
   }
 
   render() {
@@ -33,7 +34,7 @@ export default class Page extends React.Component {
       return (
         <>
           <UserContext.Provider value={user}>
-            <Contents onUserChange={this.onUserChange} />
+            <Contents setUser={this.setUser} />
           </UserContext.Provider>
         </>
       );
