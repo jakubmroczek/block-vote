@@ -46,20 +46,18 @@ export default class DApp extends React.Component {
   render() {
     if (!('elections' in this.state)) {
       return (
-        <>
-          <Container>
-            <Row>
-              <Col>
-                <Spinner animation="border" />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                Connecting to the server. Wait a moment please...
-              </Col>
-            </Row>
-          </Container>
-        </>
+        <Container>
+          <Row>
+            <Col>
+              <Spinner animation="border" />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              Connecting to the server. Wait a moment please...
+            </Col>
+          </Row>
+        </Container>
       );
     }
 
@@ -70,7 +68,7 @@ export default class DApp extends React.Component {
     const { history } = this.props;
 
     return (
-        <ElectionList elections={elections} history={history} />
+      <ElectionList elections={elections} history={history} />
     );
   }
 }
