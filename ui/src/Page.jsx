@@ -17,19 +17,19 @@ export default class Page extends React.Component {
   constructor() {
     super();
     this.state = {
-      user: { signedIn: false, email: '' },
+      user: { isLoggedIn: false, email: '' },
     };
 
-    this.onUserChange = this.onUserChange.bind(this);
+    this.setUser = this.setUser.bind(this);
   }
 
-  onUserChange(user) {
+  setUser(user) {
     this.setState({ user });
   }
 
   render() {
     const { user } = this.state;
-    if (user.signedIn) {
+    if (user.isLoggedIn) {
       return (
         <>
           <UserContext.Provider value={user}>
@@ -40,11 +40,13 @@ export default class Page extends React.Component {
     }
     return (
       <Switch>
-        <Route exact path="/" render={props => <Welcome {...props} onUserChange={this.onUserChange} />} />
-        <Route path="/register/:electionID" component={RegisterPublicKeyPanel} />
-        <Route exact path="/vote" component={DApp} />
-        <Route path="/vote/:electionID" component={Election} />
-        <Route component={NotFound} />
+        <UserContext.Provider value={user}>
+          <Route exact path="/" render={props => <Welcome {...props} setUser={this.setUser} />} />
+          <Route path="/register/:electionID" component={RegisterPublicKeyPanel} />
+          <Route exact path="/vote" component={DApp} />
+          <Route path="/vote/:electionID" component={Election} />
+          <Route component={NotFound} />
+        </UserContext.Provider>
       </Switch>
     );
   }

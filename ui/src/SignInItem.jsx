@@ -3,6 +3,7 @@ import {
   Modal, Button,
 } from 'react-bootstrap';
 
+// TODO: Rename to SignInModal
 export default class SignInItem extends React.Component {
   constructor(props) {
     super(props);

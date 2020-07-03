@@ -22,28 +22,33 @@ function Logo() {
 export default class Welcome extends React.Component {
   constructor() {
     super();
-    this.onSucessfulSignIn = this.onSucessfulSignIn.bind(this);
+    this.onSignIn = this.onSignIn.bind(this);
+    this.onLogOut = this.onLogOut.bind(this);
   }
 
-  onSucessfulSignIn(user) {
-    const { history, onUserChange } = this.props;
-    onUserChange(user);
+  onSignIn(user) {
+    const { history, setUser } = this.props;
+    setUser(user);
     history.push('/panel');
   }
 
+  onLogOut(user) {
+    const { history, setUser } = this.props;
+    setUser(user);
+    history.push('/');
+  }
+  
   render() {
     return (
-      <div>
-        <NavBar />
+      <>
+        <NavBar onSignIn={this.onSignIn} onLogOut={this.onLogOut} />
         <Logo />
         <LinkContainer to="/vote">
           <Button>
             Vote
           </Button>
         </LinkContainer>
-        {' '}
-        <SignInItem onSucessfulSignIn={this.onSucessfulSignIn} />
-      </div>
+      </>
     );
   }
 }
