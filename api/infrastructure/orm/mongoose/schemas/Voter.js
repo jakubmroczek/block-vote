@@ -13,8 +13,8 @@ const voterSchema = new mongoose.Schema({
     },
     required: [true, 'Public key is required'],
   },
-  // TODO: Right now it is a mongodb id, in the future it will be an array of ids
-  electionIDs: String,
+  // TODO: Check if I can provide different type here [ID!]!
+  electionIDs: [String],
 });
 
 module.exports = mongoose.model('Voter', voterSchema);
