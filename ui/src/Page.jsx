@@ -43,11 +43,11 @@ export default class Page extends React.Component {
       <Switch>
         <UserContext.Provider value={user}>
           <Route exact path="/" render={props => <Welcome {...props} setUser={this.setUser} />} />
-          <Route path="/register/:electionID" component={RegisterPublicKeyPanel} />
+          <Route exact path="/register/:electionID" component={RegisterPublicKeyPanel} />
           <Route exact path="/vote" component={DApp} />
-          <Route path="/vote/:electionID" component={Election} />
-          <Route component={NotFound} />
+          <Route exact path="/vote/:electionID" component={Election} />
         </UserContext.Provider>
+        <Route component={NotFound} />
       </Switch>
     );
   }
