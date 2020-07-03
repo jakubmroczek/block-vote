@@ -12,8 +12,8 @@ export default function Contents({ setUser }) {
     <>
       <Route path="/" render={props => <NavBar {...props} setUser={setUser} />} />
       <Switch>
-        <Route path="/panel" component={UserPanel} />
         <Route path="/panel/edit/:electionID" component={ElectionSetUpPanel} />
+        <Route path="/panel" component={UserPanel} />
         {/* TODO: Think of different path name this one is stupid */}
         <Route component={NotFound} />
       </Switch>
