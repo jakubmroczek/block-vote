@@ -1,16 +1,20 @@
 import React from 'react';
-import { Container, Row, Col, Spinner } from 'react-bootstrap';
+import {
+  Container, Row, Col, Spinner,
+} from 'react-bootstrap';
 
 import ElectionAPI from './electionAPI.js';
-import ElectionList from './ElectionList.jsx'
+import ElectionList from './ElectionList.jsx';
 import graphQLFetch from '../graphQLFetch.js';
+
+import RawNavbar from '../RawNavbar.jsx';
 
 export default class DApp extends React.Component {
   constructor() {
     super();
-    this.state = {}
+    this.state = {};
   }
-  
+
   componentDidMount() {
     this.read();
   }
@@ -21,7 +25,7 @@ export default class DApp extends React.Component {
   }
 
   async read() {
-    const query =  `query listVoterElections($publicKey: String!) {
+    const query = `query listVoterElections($publicKey: String!) {
       listVoterElections(publicKey: $publicKey) {
         id 
         title
@@ -34,28 +38,31 @@ export default class DApp extends React.Component {
 
     if (response) {
       this.setState({
-        elections: response.listVoterElections
-      })
+        elections: response.listVoterElections,
+      });
     } else {
-      alert(`Could not fetch elections for the public key: ${publicKey}`)
+      alert(`Could not fetch elections for the public key: ${publicKey}`);
     }
   }
 
   render() {
     if (!('elections' in this.state)) {
       return (
-        <Container>
-          <Row>
-            <Col>
-              <Spinner animation="border" />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              Connecting to the server. Wait a moment please...
-            </Col>
-          </Row>
-        </Container>
+        <>
+          <RawNavbar />
+          <Container>
+            <Row>
+              <Col>
+                <Spinner animation="border" />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                Connecting to the server. Wait a moment please...
+              </Col>
+            </Row>
+          </Container>
+        </>
       );
     }
 
@@ -67,6 +74,7 @@ export default class DApp extends React.Component {
 
     return (
       <>
+        <RawNavbar />
         <ElectionList elections={elections} history={history} />
       </>
     );

@@ -3,6 +3,7 @@ import {
   Button, Figure,
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import NavBar from './NavBar.jsx';
 import SignInItem from './SignInItem.jsx';
 
 function Logo() {
@@ -33,6 +34,7 @@ export default class Welcome extends React.Component {
   render() {
     return (
       <div>
+        <NavBar />
         <Logo />
         <LinkContainer to="/vote">
           <Button>
