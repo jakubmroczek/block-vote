@@ -32,6 +32,8 @@ module.exports = {
     }
 
     try {
+      // TODO: Do not catch the exception in this, layer. Maybe rethrow it
+      // The layer above should handle thi
       const { serviceLocator } = request.app;
       const credentials = VerifyAccessToken(token, serviceLocator);
       return credentials;

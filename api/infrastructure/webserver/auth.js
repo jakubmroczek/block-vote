@@ -1,5 +1,5 @@
-const AuthorizationController = require('../../interfaces/AuthorizationController.js')
-const UserController = require('../../interfaces/UserController.js')
+const AuthorizationController = require('../../interfaces/controllers/AuthorizationController.js')
+const UserController = require('../../interfaces/controllers/UserController.js')
 
 // TODO: Find a better place for me!
 // TODO: Adjust me to the new architecture

@@ -22,14 +22,13 @@ const CompileElectionSmartContract = require('../../application/use_cases/Compil
 const FinishElection = require('../../application/use_cases/FinishElection.js');
 const GetUser = require('../../application/use_cases/GetUser.js');
 
+// TODO: Not sure if this should be here
+const AuthorizationController = require('./AuthorizationController.js');
+
 // TODO: Where should I get from this context?
 function getContext({ req }) {
-  const user = auth.getUser(req);
-  // TODO: Fix this username mismatch
-  const { email } = user;
-  user.username = email;
-  const { app } = req;
-  const { serviceLocator } = app;
+  const user = AuthorizationController.verifyAccessToken(req);
+  const { serviceLocator } = req.app;
   return { user, serviceLocator };
 }
 
