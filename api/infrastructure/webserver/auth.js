@@ -1,40 +1,16 @@
+const AuthorizationController = require('../../interfaces/AuthorizationController.js')
+const UserController = require('../../interfaces/UserController.js')
+
 // TODO: Find a better place for me!
 // TODO: Adjust me to the new architecture
 const Router = require('express');
 const bodyParser = require('body-parser');
 
-const GetAccessToken = require('../../application/use_cases/GetAccessToken.js');
-const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken.js');
-const VerifyGoogleOAuth2Token = require('../../application/use_cases/VerifyGoogleOAuth2Token.js');
-
 const { AuthenticationError } = require('apollo-server-express');
-
-const CreateUser = require('../../application/use_cases/CreateUser.js');
 
 const routes = new Router();
 
 routes.use(bodyParser.json());
-
-function getUser(req) {
-  const token = req.cookies.jwt;
-  
-  if (!token) {
-    return { isLoggedIn: false };
-  }
-
-  try {
-    const { app } = req;
-    const { serviceLocator } = app;
-
-    const credentials = VerifyAccessToken(token, serviceLocator);
-
-    return credentials;
-  } catch (error) {
-    // Maybe error is here? causing when client refreshes
-    console.log(error);
-    return { isLoggedIn: false };
-  }
-}
 
 function mustBeSignedIn(resolver) {
   return (root, args, context) => {
@@ -47,59 +23,13 @@ function mustBeSignedIn(resolver) {
   };
 }
 
-// TODO: Move to use cases ?
-// TODO: Add support for email, instead of usernmae
-async function isNewUser(email, { userRepository }) {
-  const user = await userRepository.findByEmail(email);
-  return user === null;
-}
-
-// TODO: Move to usep cases or controller?
-// TODO: Add support for email, instead of usernmae
-// TODO: Get serviceLocator here
-async function createNewUseAccount(email, { userRepository }) {
-  // TODO: Move me to a proper layer
-  // TODO: Error handling?  
-  const domainUser = await CreateUser(email, { userRepository });  
-  return domainUser;
-}
-
-// TODO: I do not like this name
-async function registerIfNewUser(credentials, serviceLocator) {
-  const { email } = credentials;
-  if (await isNewUser(email, serviceLocator)) {
-    // TODO: Handle the database error
-    await createNewUseAccount(email, serviceLocator);
-  }
-}
+routes.post('/user/create', async (req, res) => {
+  //TODO: Should I return something in response?
+  await UserController.createUser(req);
+});
 
 routes.post('/signin', async (req, res) => {
-  const googleToken = req.body.google_token;
-  
-  const { app } = req;
-  const { parent } = app;
-  const { serviceLocator } = parent;
-
-  if (!googleToken) {
-    res.status(400).send({ code: 400, message: 'Missing Token' });
-    return;
-  }
-
-  try {
-    const credentials = await VerifyGoogleOAuth2Token(googleToken, serviceLocator);
-    const token = GetAccessToken(credentials, serviceLocator);
-    res.cookie('jwt', token, { httpOnly: true });
-
-    // TODO: Refactor this code, too many things does happen here
-    // We use the email as the username
-    //! !!! Email is the username
-    await registerIfNewUser(credentials, serviceLocator);
-
-    res.json(credentials);
-  } catch (error) {
-    console.log(error);
-    res.status(403).send('Invalid credentials');
-  }
+  await AuthorizationController.getAccessToken(req, res);
 });
 
 routes.post('/signout', async (req, res) => {
@@ -111,4 +41,4 @@ routes.post('/user', (req, res) => {
   res.send(getUser(req));
 });
 
-module.exports = { routes, getUser, mustBeSignedIn };
+module.exports = { routes, mustBeSignedIn };

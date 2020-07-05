@@ -1,5 +1,5 @@
 const CreateUser = require('../../application/use_cases/CreateUser.js');
-  
+
 module.exports = {
 
   async createUser(request) {
