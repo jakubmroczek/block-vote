@@ -8,7 +8,7 @@ const ElectionSmartContract = require('../../domain/ElectionSmartContract.js');
 module.exports = class {
   // TODO: should abi belong here? should not we redesing it?
   // abi is unparsed
-  async findBySmartContractAddress(address, abi) {
+  async findByAddress(address, abi) {
     let httpProviderURL = process.env.BLOCKCHAIN_HTTP_PROVIDER_URL;
     if (httpProviderURL === undefined) {
       httpProviderURL = 'http://localhost:8545';
@@ -34,8 +34,8 @@ module.exports = class {
       return candidatesArray;
     });
 
-    const title = await contract.methods.getTitle().call((err, titleStr) => titleStr);
+    const title = await contract.methods.getElectionTitle().call((err, titleStr) => titleStr);
 
-    return ElectionSmartContract(address, title, candidates);
+    return new ElectionSmartContract(address, title, candidates);
   }
 };
