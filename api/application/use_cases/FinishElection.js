@@ -1,31 +1,3 @@
-const Web3 = require('web3');
-
-async function queryCandidates(abi, address) {
-  // TODO: Get this from database, when reall support e.g for the ethereum or rinkeby
-  // TODO: The provider should be written at the contract craetion.
-  // TODO: Optional: the user can pass this as a parameter.
-  const web3 = new Web3('http://localhost:8545');
-
-  const contractABI = JSON.parse(abi);
-  const contract = new web3.eth.Contract(contractABI, address);
-
-  // TODO: Only smart contract owner should call this method.
-  return contract.methods.getCandidates().call((err, ethereumCandidates) => {
-    const candidatesArray = [];
-    for (let i = 0; i < ethereumCandidates.length; i += 1) {
-      candidatesArray.push(
-        {
-          name: ethereumCandidates[i].name,
-          surname: ethereumCandidates[i].surname,
-          id: ethereumCandidates[i].id,
-          index: i,
-        },
-      );
-    }
-    return candidatesArray;
-  });
-}
-
 async function removeElectionFromTheVoters(election, voterRepository) {
   const { id, publicKeys } = election;
 
@@ -50,7 +22,7 @@ async function removeElectionFromTheVoters(election, voterRepository) {
   }
 }
 
-module.exports = async (user, { userRepository, voterRepository, electionRepository }) => {
+module.exports = async (user, { userRepository, voterRepository, electionRepository, blockchainRepository }) => {
   // TODO: Make all the data layer changes atomic, if one fails, fail them all
 
   // TODO: Error handling, everything should be atomic
@@ -68,11 +40,7 @@ module.exports = async (user, { userRepository, voterRepository, electionReposit
 
   // TODO: Error handling
   await userRepository.merge(domainUser);
-
-  // TODO: the candidates should be passed here as a parameter or there should be smoething like blokcchian repository?
-  // TODO: Error handling
-  const candidates = await queryCandidates(abi, address);
-
+  
   election.status = 'Finished';
 
   // TODO: Error handling
@@ -85,6 +53,9 @@ module.exports = async (user, { userRepository, voterRepository, electionReposit
   // TODO: Is this okay? Can I mix use cases in DDD
   const SendElectionFinishMail = require('./SendElectionFinishMail.js');
 
+  const electionSmartContract = await blockchainRepository.findByAddress(address, abi);
+  const { candidates } = electionSmartContract;
+  
   // TODO: Returns nothig, improve error hanlding
   await SendElectionFinishMail(electionID, candidates, { electionRepository });
 
