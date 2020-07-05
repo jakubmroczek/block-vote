@@ -28,7 +28,7 @@ const AuthorizationController = require('./AuthorizationController.js');
 // TODO: Where should I get from this context?
 function getContext({ req }) {
   const user = AuthorizationController.verifyAccessToken(req);
-  const { serviceLocator } = req.app;
+  const { serviceLocator } = req.server;
   return { user, serviceLocator };
 }
 

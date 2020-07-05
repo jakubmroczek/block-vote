@@ -21,8 +21,6 @@ module.exports = class extends UserRepository {
 
   async findByEmail(email) {
     const mongooseUser = await MongooseUser.findOne({ email });
-
-    // TODO: Maybe better error hanling
     if (mongooseUser === null) {
       return null;
     }
