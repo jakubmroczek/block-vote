@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+
 // Remove this, use constants
 require('dotenv').config();
 
@@ -30,20 +31,9 @@ function sendEmail(mailOptions) {
   });
 }
 
-// TODO: Get the candidates from the different repo or different use case.
-module.exports = async (electionID, candidates, { electionRepository }) => {
-  // TODO: Introduce better template
-  const html = `<p>The election hosted on the Ethereum blockchain results: <br> ${candidates} </p>`;
-  // TODO: Add info about the elction title
-  const subject = 'The election results';
-
-  const election = await electionRepository.get(electionID);
-  const { participants } = election;
-
-  participants.forEach((p) => {
-    const mail = mailTemplate(p.email, subject, html);
-    sendEmail(mail);
-  });
+module.exports = async (to, subject, content) => {
+  const mail = mailTemplate(to, subject, content);
+  sendEmail(mail);
 
   // TODO; Error handling
   return true;

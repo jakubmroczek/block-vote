@@ -51,13 +51,13 @@ module.exports = async (user, { userRepository, voterRepository, electionReposit
   await removeElectionFromTheVoters(election, voterRepository);
 
   // TODO: Is this okay? Can I mix use cases in DDD
-  const SendElectionFinishMail = require('./SendElectionFinishMail.js');
+  const SendFinishMail = require('./SendFinishMail.js');
 
   const electionSmartContract = await blockchainRepository.findByAddress(address, abi);
   const { candidates } = electionSmartContract;
   
   // TODO: Returns nothig, improve error hanlding
-  await SendElectionFinishMail(electionID, candidates, { electionRepository });
+  await SendFinishMail(electionID, candidates, { electionRepository });
 
   return true;
 };
