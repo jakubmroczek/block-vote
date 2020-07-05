@@ -38,7 +38,7 @@ function mustOwnElection(resolver) {
   return async (root, args, context) => {
     // The election id
     const { id } = args;
-    const { user , serviceLocator } = context;
+    const { user, serviceLocator } = context;
 
     // TODO: Make it a use case to check if the owner owns the election
     const { email } = user;

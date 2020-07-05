@@ -2,7 +2,10 @@
 // TODO: Adjust me to the new architecture
 const Router = require('express');
 const bodyParser = require('body-parser');
-const { OAuth2Client } = require('google-auth-library');
+
+const GetAccessToken = require('../../application/use_cases/GetAccessToken.js');
+const VerifyGoogleOAuth2Token = require('../../application/use_cases/VerifyGoogleOAuth2Token.js');
+
 const jwt = require('jsonwebtoken');
 const { AuthenticationError } = require('apollo-server-express');
 
@@ -57,43 +60,40 @@ async function createNewUseAccount(email, { userRepository }) {
 }
 
 // TODO: I do not like this name
-async function registerIfNewUser(username, serviceLocator) {
-  if (await isNewUser(username, serviceLocator)) {
+async function registerIfNewUser(credentials, serviceLocator) {
+  const { email } = credentials;
+  if (await isNewUser(email, serviceLocator)) {
     // TODO: Handle the database error
-    await createNewUseAccount(username, serviceLocator);
+    await createNewUseAccount(email, serviceLocator);
   }
 }
 
 routes.post('/signin', async (req, res) => {
   const googleToken = req.body.google_token;
+  
+  const { app } = req;
+  const { parent } = app;
+  const { serviceLocator } = parent;
+
   if (!googleToken) {
     res.status(400).send({ code: 400, message: 'Missing Token' });
     return;
   }
-  const client = new OAuth2Client();
-  let payload;
+
   try {
-    const ticket = await client.verifyIdToken({ idToken: googleToken });
-    payload = ticket.getPayload();
+    const credentials = await VerifyGoogleOAuth2Token(googleToken, serviceLocator);
+    const token = GetAccessToken(credentials);
+    res.cookie('jwt', token, { httpOnly: true });
+
+    // TODO: Refactor this code, too many things does happen here
+    // We use the email as the username
+    //! !!! Email is the username
+    await registerIfNewUser(credentials, serviceLocator);
+
+    res.json(credentials);
   } catch (error) {
     res.status(403).send('Invalid credentials');
   }
-  const { given_name: username, name, email } = payload;
-  const credentials = {
-    isLoggedIn: true, username, name, email,
-  };
-  const token = jwt.sign(credentials, JWT_SECRET);
-  res.cookie('jwt', token, { httpOnly: true });
-
-  // TODO: Refactor this code, too many things does happen here
-  // We use the email as the username
-  //! !!! Email is the username
-  const { app } = req;
-  const { parent } = app;
-  const { serviceLocator } = parent;
-  await registerIfNewUser(email, serviceLocator);
-
-  res.json(credentials);
 });
 
 routes.post('/signout', async (req, res) => {
