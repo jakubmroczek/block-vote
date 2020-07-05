@@ -1,10 +1,13 @@
 const Web3 = require('web3');
+require('dotenv').config();
 
 async function queryCandidates(abi, address) {
-  // TODO: Get this from database, when reall support e.g for the ethereum or rinkeby
-  // TODO: The provider should be written at the contract craetion.
-  // TODO: Optional: the user can pass this as a parameter.
-  const web3 = new Web3('http://localhost:8545');
+  let httpProviderURL = process.env.BLOCKCHAIN_HTTP_PROVIDER_URL;  
+  if (httpProviderURL === undefined) {
+    httpProviderURL = 'http://localhost:8545';
+  }
+
+  const web3 = new Web3(httpProviderURL);
 
   const contractABI = JSON.parse(abi);
   const contract = new web3.eth.Contract(contractABI, address);
