@@ -3,10 +3,6 @@ const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
 
 const { AuthenticationError } = require('apollo-server-express');
-const auth = require('../../infrastructure/webserver/auth.js');
-
-const { mustBeSignedIn } = auth;
-
 // Use cases
 const GetElection = require('../../application/use_cases/GetElection.js');
 const GetUserElection = require('../../application/use_cases/GetUserElection.js');
@@ -22,32 +18,47 @@ const CompileElectionSmartContract = require('../../application/use_cases/Compil
 const FinishElection = require('../../application/use_cases/FinishElection.js');
 const GetUser = require('../../application/use_cases/GetUser.js');
 
-// TODO: Not sure if this should be here
-const AuthorizationController = require('./AuthorizationController.js');
+const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken.js');
 
-// TODO: Where should I get from this context?
 function getContext({ req }) {
-  console.log(req.headers)
-  const user = AuthorizationController.verifyAccessToken(req);
-  const { serviceLocator } = req.app;
-  return { user, serviceLocator };
+  const token = req.cookies.jwt;
+
+  if (!token) {
+    // TODO: Maybe I should throw exception here
+    return { isLoggedIn: false };
+  }
+
+  try {
+    const { serviceLocator } = req.app;
+    const user = VerifyAccessToken(token, serviceLocator);
+    return { user, serviceLocator };
+  } catch (error) {
+    // TODO: Maybe I should throw exception here
+    return { isLoggedIn: false };
+  }
+}
+function mustBeSignedIn(resolver) {
+  return (root, args, context) => {
+    const { user } = context;
+    if (!user || !user.isLoggedIn) {
+      console.log(user);
+      throw new AuthenticationError('You must be signed in');
+    }
+    return resolver(root, args, context);
+  };
 }
 
-// TODO: Add extra checks so that user can not query election that are not theirs
 function mustOwnElection(resolver) {
   return async (root, args, context) => {
-    // The election id
     const { id } = args;
     const { user, serviceLocator } = context;
 
-    // TODO: Make it a use case to check if the owner owns the election
     const { email } = user;
     const domainUser = await GetUser(email, serviceLocator);
-1
+
     const isOnwer = domainUser.electionID === id;
     if (!isOnwer) {
-      console.log(domainUser);
-      throw new AuthenticationError('User can not read election not owned by them.');
+      throw new AuthenticationError(`Election ${id} is not owned by ${email}, thus they can not read/update it.`);
     }
 
     return resolver(root, args, context);
