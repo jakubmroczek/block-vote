@@ -21,6 +21,9 @@ function buildBeans() {
   const VoterRepositoryMongo = require('../repositories/VoterRepositoryMongo.js')
   beans.voterRepository = new VoterRepositoryMongo();
 
+  const BlockchainRepositoryEthereum = require('../repositories/BlockchainRepositoryEthereum.js')
+  beans.blockchainRepository = new BlockchainRepositoryEthereum();
+
   return beans;
 }
 
