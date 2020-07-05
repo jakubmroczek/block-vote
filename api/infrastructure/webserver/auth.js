@@ -4,9 +4,9 @@ const Router = require('express');
 const bodyParser = require('body-parser');
 
 const GetAccessToken = require('../../application/use_cases/GetAccessToken.js');
+const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken.js');
 const VerifyGoogleOAuth2Token = require('../../application/use_cases/VerifyGoogleOAuth2Token.js');
 
-const jwt = require('jsonwebtoken');
 const { AuthenticationError } = require('apollo-server-express');
 
 const CreateUser = require('../../application/use_cases/CreateUser.js');
@@ -15,18 +15,23 @@ const routes = new Router();
 
 routes.use(bodyParser.json());
 
-const { JWT_SECRET } = process.env;
-
 function getUser(req) {
   const token = req.cookies.jwt;
+  
   if (!token) {
     return { isLoggedIn: false };
   }
 
   try {
-    const credentials = jwt.verify(token, JWT_SECRET);
+    const { app } = req;
+    const { serviceLocator } = app;
+
+    const credentials = VerifyAccessToken(token, serviceLocator);
+
     return credentials;
   } catch (error) {
+    // Maybe error is here? causing when client refreshes
+    console.log(error);
     return { isLoggedIn: false };
   }
 }
@@ -92,7 +97,7 @@ routes.post('/signin', async (req, res) => {
 
     res.json(credentials);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(403).send('Invalid credentials');
   }
 });
