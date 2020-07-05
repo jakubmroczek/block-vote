@@ -82,7 +82,7 @@ routes.post('/signin', async (req, res) => {
 
   try {
     const credentials = await VerifyGoogleOAuth2Token(googleToken, serviceLocator);
-    const token = GetAccessToken(credentials);
+    const token = GetAccessToken(credentials, serviceLocator);
     res.cookie('jwt', token, { httpOnly: true });
 
     // TODO: Refactor this code, too many things does happen here
@@ -92,6 +92,7 @@ routes.post('/signin', async (req, res) => {
 
     res.json(credentials);
   } catch (error) {
+    console.log(error)
     res.status(403).send('Invalid credentials');
   }
 });
