@@ -1,7 +1,6 @@
 
 const Router = require('express');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const AuthorizationController = require('../../interfaces/controllers/AuthorizationController.js');
 
 const routes = new Router();
@@ -20,7 +19,6 @@ routes.post('/user', (request, response) => {
 });
 
 const register = (server) => {
-  server.use(cookieParser());
   server.use('/auth', routes);
 };
 

@@ -8,7 +8,7 @@ module.exports = {
 
   async signIn(request, response) {
     const googleToken = request.body.google_token;
-    const { serviceLocator } = request.server.parent;
+    const { serviceLocator } = request.app.parent;
 
     if (!googleToken) {
       response.status(400).send({ code: 400, message: 'Missing Token' });
@@ -49,7 +49,8 @@ module.exports = {
     try {
       // TODO: Do not catch the exception in this, layer. Maybe rethrow it
       // The layer above should handle thi
-      const { serviceLocator } = request.server;
+      console.log(request);
+      const { serviceLocator } = request.app;
       const credentials = VerifyAccessToken(token, serviceLocator);
       return credentials;
     } catch (error) {
@@ -70,7 +71,7 @@ module.exports = {
     try {
       // TODO: Do not catch the exception in this, layer. Maybe rethrow it
       // The layer above should handle thi
-      const { serviceLocator } = request.server;
+      const { serviceLocator } = request.app;
       const credentials = VerifyAccessToken(token, serviceLocator);
       response.send(credentials);
     } catch (error) {

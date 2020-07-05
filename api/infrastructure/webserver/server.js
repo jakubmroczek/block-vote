@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 
 // TODO: Export this an an anonymous function
 const { installHandler } = require('../../interfaces/controllers/GraphQLController.js');
@@ -8,7 +9,8 @@ const Authorization = require('../../interfaces/routes/authorization.js');
 
 const createServer = async () => {
   const server = express();
-  
+  server.use(cookieParser());
+
   // TODO: Rename to register
   installHandler(server);
   Authorization.register(server);
