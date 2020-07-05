@@ -34,7 +34,7 @@ module.exports = class {
       return candidatesArray;
     });
 
-    const title = await contract.methods.getElectionTitle().call((err, titleStr) => titleStr);
+    const title = await contract.methods.getTitle().call((err, titleStr) => titleStr);
 
     return new ElectionSmartContract(address, title, candidates);
   }

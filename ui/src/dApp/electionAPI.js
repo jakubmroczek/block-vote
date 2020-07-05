@@ -88,7 +88,7 @@ export default class ElectionAPI {
     const candidates = this.electionInstance.methods.getCandidates().call();
 
     // TODO: Error handling
-    const electionTitle = this.electionInstance.methods.getElectionTitle().call();
+    const electionTitle = this.electionInstance.methods.getTitle().call();
 
     return Promise.all([candidates, electionTitle])
       .then((values) => {

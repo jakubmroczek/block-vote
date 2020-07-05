@@ -49,7 +49,7 @@ contract Election {
     return  m_candidates;
   }
 
-  function getElectionTitle() public view returns(string memory) {
+  function getTitle() public view returns(string memory) {
     return  m_title;
   }
 
