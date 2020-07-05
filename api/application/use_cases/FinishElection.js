@@ -1,34 +1,3 @@
-const Web3 = require('web3');
-require('dotenv').config();
-
-async function queryCandidates(abi, address) {
-  let httpProviderURL = process.env.BLOCKCHAIN_HTTP_PROVIDER_URL;  
-  if (httpProviderURL === undefined) {
-    httpProviderURL = 'http://localhost:8545';
-  }
-
-  const web3 = new Web3(httpProviderURL);
-
-  const contractABI = JSON.parse(abi);
-  const contract = new web3.eth.Contract(contractABI, address);
-
-  // TODO: Only smart contract owner should call this method.
-  return contract.methods.getCandidates().call((err, ethereumCandidates) => {
-    const candidatesArray = [];
-    for (let i = 0; i < ethereumCandidates.length; i += 1) {
-      candidatesArray.push(
-        {
-          name: ethereumCandidates[i].name,
-          surname: ethereumCandidates[i].surname,
-          id: ethereumCandidates[i].id,
-          index: i,
-        },
-      );
-    }
-    return candidatesArray;
-  });
-}
-
 async function removeElectionFromTheVoters(election, voterRepository) {
   const { id, publicKeys } = election;
 
