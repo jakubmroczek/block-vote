@@ -1,5 +1,3 @@
-'use strict';
-
 const constants = require('./constants');
 const environment = require('./environment');
 const JwtAccessTokenManager = require('../security/JwtAccessTokenManager');

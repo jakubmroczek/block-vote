@@ -1,8 +1,7 @@
 const Election = require('../../domain/Election.js');
 const MongooseElection = require('../orm/mongoose/schemas/Election.js');
-const ElectionRepository = require('../../domain/ElectionRepository.js');
 
-module.exports = class extends ElectionRepository {
+module.exports = class {
   // eslint-disable-next-line class-methods-use-this
   async persist(domainElection) {
     const {
