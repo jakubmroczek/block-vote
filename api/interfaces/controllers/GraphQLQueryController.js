@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-const { AuthenticationError } = require('apollo-server-express');
 
 // Use cases
 const GetElection = require('../../application/use_cases/GetElection.js');
@@ -9,35 +8,7 @@ const SendRegisterationMail = require('../../application/use_cases/SendRegistera
 // TODO: Consider rename, along with the frontend code
 const GetVoterElection = require('../../application/use_cases/GetVoterElection.js');
 const ListVoterElections = require('../../application/use_cases/ListVoterElections.js');
-const GetUser = require('../../application/use_cases/GetUser.js');
-
-function _mustBeSignedIn(resolver) {
-  return (root, args, context) => {
-    const { user } = context;
-    if (!user || !user.isLoggedIn) {
-      console.log(user);
-      throw new AuthenticationError('You must be signed in');
-    }
-    return resolver(root, args, context);
-  };
-}
-
-function _mustOwnElection(resolver) {
-  return async (root, args, context) => {
-    const { id } = args;
-    const { user, serviceLocator } = context;
-
-    const { email } = user;
-    const domainUser = await GetUser(email, serviceLocator);
-
-    const isOnwer = domainUser.electionID === id;
-    if (!isOnwer) {
-      throw new AuthenticationError(`Election ${id} is not owned by ${email}, thus they can not read/update it.`);
-    }
-
-    return resolver(root, args, context);
-  };
-}
+const { mustBeSignedIn, mustOwnElection } = require('../../infrastructure/security/GraphQLAuthentication.js');
 
 async function _getElection(_1, { id }, { serviceLocator }) {
   // TODO: What if not found
@@ -71,10 +42,10 @@ async function _listVoterElections(_1, { publicKey }, { serviceLocator }) {
 }
 
 module.exports = {
-  getElection: _mustBeSignedIn(_mustOwnElection(_getElection)),
-  getUserElection: _mustBeSignedIn(_getUserElection),
+  getElection: mustBeSignedIn(mustOwnElection(_getElection)),
+  getUserElection: mustBeSignedIn(_getUserElection),
   // TODO: This should be rather moved to plain REST
-  sendRegisterPublicKeysMail: _mustBeSignedIn(_mustOwnElection(_sendRegisterPublicKeysMail)),
+  sendRegisterPublicKeysMail: mustBeSignedIn(mustOwnElection(_sendRegisterPublicKeysMail)),
   getVoterElection: _getVoterElection,
   listVoterElections: _listVoterElections,
 };
