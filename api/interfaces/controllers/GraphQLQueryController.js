@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const { AuthenticationError } = require('apollo-server-express');
 
 // Use cases
@@ -50,57 +51,30 @@ async function _getUserElection(_1, _2, { user, serviceLocator }) {
   return elections;
 }
 
-async  function sendRegisterationMail(_1, { id }, { serviceLocator }) {
+async function _sendRegisterPublicKeysMail(_1, { id }, { serviceLocator }) {
 // TODO: What if error
 // TODO: shoul this be a domain user?
   const response = await SendRegisterationMail(id, serviceLocator);
   return response;
 }
 
-async  function getVoterElection(_1, { id }, { serviceLocator }) {
+async function _getVoterElection(_1, { id }, { serviceLocator }) {
 // TODO: What if not found
   const election = await GetVoterElection(id, serviceLocator);
   return election;
 }
 
-async function listVoterElections(_1, { publicKey }, { serviceLocator }) {
+async function _listVoterElections(_1, { publicKey }, { serviceLocator }) {
 // // TODO: What if not found
   const elections = await ListVoterElections(publicKey, serviceLocator);
   return elections;
 }
 
 module.exports = {
-
-  async getElection(_1, { id }, { serviceLocator }) {
-    // TODO: What if not found
-    const election = await GetElection(id, serviceLocator);
-    return election;
-  },
-
-
-  async  getUserElection(_1, _2, { user, serviceLocator }) {
-  // TODO: shoul this be a domain user?
-    const elections = await GetUserElection(user, serviceLocator);
-    return elections;
-  },
-
-  async  sendRegisterationMail(_1, { id }, { serviceLocator }) {
-  // TODO: What if error
-  // TODO: shoul this be a domain user?
-    const response = await SendRegisterationMail(id, serviceLocator);
-    return response;
-  },
-
-  async  getVoterElection(_1, { id }, { serviceLocator }) {
-  // TODO: What if not found
-    const election = await GetVoterElection(id, serviceLocator);
-    return election;
-  },
-
-  async  listVoterElections(_1, { publicKey }, { serviceLocator }) {
-  // // TODO: What if not found
-    const elections = await ListVoterElections(publicKey, serviceLocator);
-    return elections;
-  },
-
+  getElection: _mustBeSignedIn(_mustOwnElection(_getElection)),
+  getUserElection: _mustBeSignedIn(_getUserElection),
+  // TODO: This should be rather moved to plain REST
+  sendRegisterPublicKeysMail: _mustBeSignedIn(_mustOwnElection(_sendRegisterPublicKeysMail)),
+  getVoterElection: _getVoterElection,
+  listVoterElections: _listVoterElections,
 };

@@ -10,18 +10,19 @@ const GraphQLMutation = require('../controllers/GraphQLMutationController.js');
 
 function getContext({ req }) {
   const token = req.cookies.jwt;
+  const { serviceLocator } = req.app;
 
   if (!token) {
     // TODO: Maybe I should throw exception here
-    return { isLoggedIn: false };
+    return { isLoggedIn: false, serviceLocator };
   }
 
   try {
-    const { serviceLocator } = req.app;
     const user = VerifyAccessToken(token, serviceLocator);
     return { user, serviceLocator };
   } catch (error) {
     // TODO: Maybe I should throw exception here
+    // TODO: How should I handle this errror, ?
     return { isLoggedIn: false };
   }
 }
