@@ -2,6 +2,23 @@ const GetUser = require('../../application/use_cases/GetUser.js');
 const CreateUser = require('../../application/use_cases/CreateUser.js');
 const GetAccessToken = require('../../application/use_cases/GetAccessToken.js');
 const VerifyGoogleOAuth2Token = require('../../application/use_cases/VerifyGoogleOAuth2Token.js');
+const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken.js');
+
+//TODO: Make this a use-case
+// eslint-disable-next-line no-underscore-dangle
+function _getUser(request, serviceLocator) {
+  const token = request.cookies.jwt;
+  if (!token) {
+    return { signedIn: false };
+  }
+
+  try {
+    const user = VerifyAccessToken(token, serviceLocator);
+    return user;
+  } catch (error) {
+    return { signedIn: false, email: '' };
+  }
+}
 
 module.exports = {
 
@@ -35,6 +52,11 @@ module.exports = {
   signOut(request, response) {
     response.clearCookie('jwt');
     response.json({ status: 'ok' });
+  },
+
+  getUser(request, response) {
+    const { serviceLocator } = request.app.parent;
+    response.send(_getUser(request, serviceLocator));
   },
 
 };

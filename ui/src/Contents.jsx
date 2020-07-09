@@ -18,6 +18,8 @@ export default class Contents extends React.Component {
     const user = this.context;
     const { isLoggedIn } = user;
     const { setUser } = this.props;
+
+    // TODO: Force going to / if not logged and in panel man!!
     return (
       <>
         <Route path="/" render={props => <NavBar {...props} setUser={setUser} />} />
