@@ -2,24 +2,19 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 
 // TODO: Export this an an anonymous function
-const { installHandler } = require('../../interfaces/controllers/GraphQLController.js');
-
-// TODO: Move this to a proper place, right now it is because I do not have a better idea.
-const auth = require('../webserver/auth.js');
+const GraphQL = require('../../interfaces/routes/graphql.js');
+const Authorization = require('../../interfaces/routes/authorization.js');
 
 const createServer = async () => {
-  const app = express();
-  app.use(cookieParser());
-  
-  app.use('/auth', auth.routes);
+  const server = express();
+  server.use(cookieParser());
 
-  // Register custom plugins
-  // graohql plugins
-  installHandler(app);
+  GraphQL.register(server);
+  Authorization.register(server);
 
-  app.serviceLocator = require('../../infrastructure/config/service-locator');
+  server.serviceLocator = require('../../infrastructure/config/service-locator');
 
-  return app;
+  return server;
 };
 
 module.exports = createServer;
