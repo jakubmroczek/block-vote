@@ -103,6 +103,8 @@ export default class ElectionSetUpPanel extends React.Component {
       // TODO: Error handling - what is mails were not send?
       const { history } = this.props;
       history.push('/panel/lobby');
+
+      // TODO: How should we apporach this?
     } else {
       alert('Could not go with the election to the further stage');
     }
