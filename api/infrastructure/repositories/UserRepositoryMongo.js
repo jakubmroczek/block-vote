@@ -1,9 +1,8 @@
 /* eslint-disable class-methods-use-this */
 const User = require('../../domain/User');
 const MongooseUser = require('../orm/mongoose/schemas/User');
-const UserRepository = require('../../domain/UserRepository');
 
-module.exports = class extends UserRepository {
+module.exports = class {
   async persist(userEntity) {
     const { email, electionID, finishedElectionIDs } = userEntity;
     const mongooseUser = new MongooseUser({ email, electionID, finishedElectionIDs });
