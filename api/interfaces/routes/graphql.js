@@ -5,8 +5,8 @@ const { ApolloServer } = require('apollo-server-express');
 const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken.js');
 
 // TODO: Move this to the controllers
-const GraphQLQuery = require('./GraphQLQuery.js');
-const GraphQLMutation = require('./GraphQLMutation.js');
+const GraphQLQuery = require('../controllers/GraphQLQueryController.js');
+const GraphQLMutation = require('../controllers/GraphQLMutationController.js');
 
 function getContext({ req }) {
   const token = req.cookies.jwt;

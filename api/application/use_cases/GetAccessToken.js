@@ -1,3 +1,1 @@
-module.exports = (credentials, { accessTokenManager }) => {
-  return accessTokenManager.generate(credentials);
-};
+module.exports = (credentials, { accessTokenManager }) => accessTokenManager.generate(credentials);
