@@ -1,5 +1,5 @@
 # BlockVote
-Application created for my engineering thesis.
+Application created for my engineering thesis.  
 It aims to ease creation of voting smart contracts for the Ethereum platform.
 
 # Code quality
