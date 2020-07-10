@@ -8,6 +8,7 @@ function generateSecretTokens(quantity) {
   const secretTokens = [];
   while (i > 0) {
     const secretToken = generator.generate({
+      // TODO: Move this to constatnt: SECRET_TOKEN_LENGTH
       length: 32,
       numbers: true,
     });

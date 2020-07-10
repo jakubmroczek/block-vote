@@ -30,6 +30,32 @@ const publicKeyScalarType = new GraphQLScalarType({
 });
 
 
+const secretTokenScalarType = new GraphQLScalarType({
+  name: 'SecretToken',
+  description: 'Secret token, unique for each election\'s participant, allowing them to register their Ethereum public key',
+  serialize(value) { return String(value); },
+  parseValue(value) {
+    //TODO 32 use it from constnats
+    const regex = RegExp('^[a-zA-Z0-9]{32}$');
+    if (regex.test(value)) {
+      return value;
+    }
+    throw new Error(`Provided secret token ${value} is malformed.`);
+  },
+  parseLiteral(ast) {
+    if (ast.kind === Kind.STRING) {
+      const regex = RegExp('^[a-zA-Z0-9]{32}$');
+      const { value } = ast;
+
+      if (regex.test(value)) {
+        return value;
+      }
+    }
+    throw new Error(`Provided secret token ${ast.value} is malformed.`);
+  },
+});
+
+
 const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken.js');
 
 // TODO: Move this to the controllers
@@ -57,6 +83,7 @@ function getContext({ req }) {
 
 const resolvers = {
   PublicKey: publicKeyScalarType,
+  SecretToken: secretTokenScalarType, 
   Query: GraphQLQuery,
   Mutation: GraphQLMutation,
 };

@@ -7,7 +7,7 @@ export default function RegisterPublicKeyPanel(props) {
 
   const register = async (secretToken, publicKey) => {
     const query = `mutation 
-        registerPublicKey($id: ID!, $secretToken: String!, $publicKey: PublicKey!) {
+        registerPublicKey($id: ID!, $secretToken: SecretToken!, $publicKey: PublicKey!) {
             registerPublicKey(id: $id, secretToken: $secretToken, publicKey: $publicKey) 
     }`;
 
