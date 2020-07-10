@@ -1,3 +1,5 @@
+scalar PublicKey
+
 type Candidate {
     id: ID!
     name: String!
@@ -7,7 +9,6 @@ type Candidate {
 type Participant {
     id: ID!    
     email: String!
-    secretToken: String
 }
 
 enum Status {
@@ -53,7 +54,7 @@ type Election {
     candidates: [Candidate!]!
     participants: [Participant!]!
     smartContract: SmartContract
-    publicKeys: [String!]
+    publicKeys: [PublicKey!]
 }
 
 input CandidateInputs {
@@ -79,10 +80,9 @@ type Query {
     # Gets user from the cookie
     getUserElection : Election
 
-    # TODO: Introduce distinct type for the publicKey
-    listVoterElections(publicKey: String!) : [DeployedElection!]!
+    listVoterElections(publicKey: PublicKey!) : [DeployedElection!]!
 
-    # TODO: Introduce distinct type for the publicKey
+    # id election id
     getVoterElection(id: ID!) : DeployedElection
 }
 
@@ -90,7 +90,7 @@ type Mutation {
     createElection : Election!
     updateElection(id: ID!, changes: ElectionUpdateInputs!) : Election!
 
-    registerPublicKey(id: ID!, secretToken: String!, publicKey: String!) : Boolean!
+    registerPublicKey(id: ID!, secretToken: String!, publicKey: PublicKey!) : Boolean!
 
     # TODO: This should be done in by updateElection 
     setElectionIntoPublicKeyWaitingStage(id: ID!) : Election!

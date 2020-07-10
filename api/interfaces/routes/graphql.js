@@ -1,6 +1,34 @@
 const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
+const { GraphQLScalarType, Kind } = require('graphql');
 const environment = require('../../infrastructure/config/environment.js');
+
+// TODO: Where shold I put this
+
+const publicKeyScalarType = new GraphQLScalarType({
+  name: 'PublicKey',
+  description: 'Ethereum public key, which must consists of `0x` prefix and 40 characters.',
+  serialize(value) { return String(value); },
+  parseValue(value) {
+    const regex = RegExp('^0x[a-fA-F0-9]{40}$');
+    if (regex.test(value)) {
+      return value;
+    }
+    throw new Error(`The provided public key ${value} is malformed.`);
+  },
+  parseLiteral(ast) {
+    if (ast.kind === Kind.STRING) {
+      const regex = RegExp('^0x[a-fA-F0-9]{40}$');
+      const { value } = ast;
+
+      if (regex.test(value)) {
+        return value;
+      }
+    }
+    throw new Error(`The provided public key ${ast.value} is malformed.`);
+  },
+});
+
 
 const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken.js');
 
@@ -28,6 +56,7 @@ function getContext({ req }) {
 }
 
 const resolvers = {
+  PublicKey: publicKeyScalarType,
   Query: GraphQLQuery,
   Mutation: GraphQLMutation,
 };
