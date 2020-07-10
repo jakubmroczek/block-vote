@@ -88,8 +88,8 @@ export default class ElectionSetUpPanel extends React.Component {
 
   // setElectionIntoWaitingForPublicKeysStage
   async deploy() {
-    const query = `mutation setElectionIntoPublicKeyWaitingStage($id: ID!) {
-      setElectionIntoPublicKeyWaitingStage(id: $id) {
+    const query = `mutation startPublicKeyRegistration($id: ID!) {
+      startPublicKeyRegistration(id: $id) {
         status
       }
     }`;

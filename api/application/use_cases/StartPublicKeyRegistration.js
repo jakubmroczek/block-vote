@@ -3,6 +3,7 @@ const generator = require('generate-password');
 // TODO: Should this be a distinct use_case or not?
 
 // Ensures that there is no conflicts between tokens
+// TODO: Move this to own use case
 function generateSecretTokens(quantity) {
   let i = quantity;
   const secretTokens = [];

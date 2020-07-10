@@ -93,10 +93,9 @@ type Mutation {
 
     registerPublicKey(id: ID!, secretToken: SecretToken!, publicKey: PublicKey!) : Boolean!
 
-    # TODO: This should be done in by updateElection 
-    setElectionIntoPublicKeyWaitingStage(id: ID!) : Election!
+    startPublicKeyRegistration(id: ID!) : Election!
 
-    # id of the election 
+    # id of the electioen 
     sendRegisterPublicKeysMail(id: ID!): Boolean!
 
     compileElectionSmartContract(id: ID!) : Election!
