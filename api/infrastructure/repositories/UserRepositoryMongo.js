@@ -15,6 +15,11 @@ module.exports = class {
       id, email, electionID, finishedElectionIDs,
     } = userEntity;
     const mongooseUser = await MongooseUser.findByIdAndUpdate(id, { email, electionID, finishedElectionIDs });
+
+    if (mongooseUser === null) {
+      throw Error(`Failed to update the user: ${userEntity}`);
+    }
+    
     return new User(mongooseUser.id, mongooseUser.email, mongooseUser.electionID, mongooseUser.finishedElectionIDs);
   }
 
