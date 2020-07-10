@@ -42,13 +42,12 @@ export default class ElectionLobby extends React.Component {
   async read() {
     const query = `query 
     getUserElection {
-      getUserElection {
-              publicKeys
-            }
+      getUserElection  {
+        publicKeys
+      }
 }`;
 
-    const { id } = this.props;
-    const response = await graphQLFetch(query, { id });
+    const response = await graphQLFetch(query);
 
     if (response) {
       const { publicKeys } = response.getUserElection;
@@ -63,30 +62,41 @@ export default class ElectionLobby extends React.Component {
   async compileElectionSmartContract(onSuccessfulFetch) {
     const query = `mutation  
     compileElectionSmartContract {
-      compileElectionSmartContract {
-                  title
-                  candidates {
-                    name
-                    surname
-                  }
-                  publicKeys
-                  smartContract {
-                    bytecode
-                    abi
-                  }
-              }
+      compileElectionSmartContract 
     }`;
 
     const { id } = this.props;
     const response = await graphQLFetch(query, { id });
 
     if (response) {
-      const {
-        smartContract, title, candidates, publicKeys,
-      } = response.compileElectionSmartContract;
-      this.setState({
-        smartContract, title, candidates, publicKeys,
-      }, onSuccessfulFetch());
+      const getQuery = `query 
+    getUserElection {
+      getUserElection  {
+        title
+        candidates {
+          name
+          surname
+        }
+        publicKeys
+        smartContract {
+          bytecode
+          abi
+        } 
+      }
+}`;
+
+      const getResponse = await graphQLFetch(getQuery);
+
+      if (getResponse) {
+        const {
+          smartContract, title, candidates, publicKeys,
+        } = getResponse.getUserElection;
+        this.setState({
+          smartContract, title, candidates, publicKeys,
+        }, onSuccessfulFetch());
+      } else {
+        alert('getUserElection call failed');
+      }
     } else {
       alert('compileElectionSmartContract call failed');
     }
@@ -156,7 +166,7 @@ export default class ElectionLobby extends React.Component {
       this.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
     }
     this.web3 = new Web3(this.web3Provider);
-}
+  }
 
   async deployElection() {
     const onSuccessfulFetch = () => {
@@ -166,7 +176,7 @@ export default class ElectionLobby extends React.Component {
         const bytecode = this.bytecodeObject();
         const abi = this.abi();
         const { title, candidates, publicKeys } = this.state;
-  
+
         deploy(bytecode, abi, title, candidates, publicKeys, account, this.web3)
           .then((newContractInstance) => {
             const contractAddress = newContractInstance.options.address;

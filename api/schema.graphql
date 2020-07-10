@@ -95,8 +95,7 @@ type Mutation {
 
     startPublicKeyRegistration : Boolean!
 
-    # TODO: Change the return type to bool
-    compileElectionSmartContract : Election!
+    compileElectionSmartContract : Boolean!
 
     finishElection : Boolean!
 }

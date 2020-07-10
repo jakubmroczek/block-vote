@@ -39,9 +39,11 @@ async function _startPublicKeyRegistration(_1, _2, { user, serviceLocator }) {
 async function _compileElectionSmartContract(_1, _2, { user, serviceLocator }) {
   const election = await GetUserElection(user, serviceLocator);
   const { id } = election;
+  
   // TODO: Error handling
-  const result = await CompileElectionSmartContract(id, serviceLocator);
-  return result;
+  await CompileElectionSmartContract(id, serviceLocator);
+  
+  return true;
 }
 
 async function _finishElection(_1, _2, { user, serviceLocator }) {
@@ -55,6 +57,6 @@ module.exports = {
   updateElection: mustBeSignedIn(mustOwnElection(_updateElection)),
   registerPublicKey: _registerPublicKey,
   startPublicKeyRegistration: mustBeSignedIn(_startPublicKeyRegistration),
-  compileElectionSmartContract: mustBeSignedIn(mustOwnElection(_compileElectionSmartContract)),
+  compileElectionSmartContract: mustBeSignedIn(_compileElectionSmartContract),
   finishElection: mustBeSignedIn(_finishElection),
 };
