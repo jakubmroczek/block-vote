@@ -5,6 +5,7 @@ import {
 
 import ElectionAPI from './electionAPI.js';
 import ElectionList from './ElectionList.jsx';
+import ReturnHomeButton from './ReturnHomeButton.jsx';
 import graphQLFetch from '../graphQLFetch.js';
 
 export default class DApp extends React.Component {
@@ -66,6 +67,9 @@ export default class DApp extends React.Component {
               Connecting to the server. Wait a moment please...
             </Col>
           </Row>
+          <Row>
+            <ReturnHomeButton />
+          </Row>
         </Container>
       );
     }
@@ -79,6 +83,9 @@ export default class DApp extends React.Component {
           <Card.Header as="h5">
             Oooops! Did not found MetMask plugin. Please install it.
           </Card.Header>
+          <Card.Footer>
+            <ReturnHomeButton />
+          </Card.Footer>
         </Card>
       );
     };

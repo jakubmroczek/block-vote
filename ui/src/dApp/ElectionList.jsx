@@ -1,6 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import { Card, Table, Button } from 'react-bootstrap';
+import ReturnHomeButton from './ReturnHomeButton.jsx';
 
 function ElectionRow({ election, onElectionRowClick }) {
   const { id, title } = election;
@@ -60,6 +61,9 @@ export default class ElectionList extends React.Component {
             {' '}
             {publicKey}
           </Card.Header>
+          <Card.Footer>
+            <ReturnHomeButton />
+          </Card.Footer>
         </Card>
       );
     }
@@ -73,6 +77,9 @@ export default class ElectionList extends React.Component {
             onElectionRowClick={this.onElectionRowClick}
           />
         </Card.Body>
+        <Card.Footer>
+          <ReturnHomeButton />
+        </Card.Footer>
       </Card>
     );
   }
