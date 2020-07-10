@@ -50,7 +50,19 @@ export default class ElectionList extends React.Component {
   }
 
   render() {
-    const { elections } = this.props;
+    const { elections, publicKey } = this.props;
+
+    if (elections.length === 0) {
+      return (
+        <Card className="text-center mt-2 mr-3">
+          <Card.Header as="h5">
+            No elections found for the public key:
+            {' '}
+            {publicKey}
+          </Card.Header>
+        </Card>
+      );
+    }
 
     return (
       <Card className="text-center mt-2 mr-3">

@@ -1,8 +1,12 @@
 module.exports = async (publicKey, { voterRepository, electionRepository }) => {
-  //TODO: What if voter was not found
   const voter = await voterRepository.findByPublicKey(publicKey);
-  const { electionIDs } = voter;
   const elections = [];
+
+  if (voter === null) {
+    return elections;
+  }
+
+  const { electionIDs } = voter;
 
   // TODO: Add this functionalitites to the repositroy
   for (let index = 0; index < electionIDs.length; index += 1) {
