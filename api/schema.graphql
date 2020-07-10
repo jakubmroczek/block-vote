@@ -93,7 +93,8 @@ type Mutation {
 
     registerPublicKey(id: ID!, secretToken: SecretToken!, publicKey: PublicKey!) : Boolean!
 
-    startPublicKeyRegistration(id: ID!) : Election!
+    # TODO: The is is not needed as we get it form cookies
+    startPublicKeyRegistration : Election!
 
     # id of the electioen 
     sendRegisterPublicKeysMail(id: ID!): Boolean!
