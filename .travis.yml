@@ -1,4 +1,9 @@
 language: node_js:
+addons:
+  sonarcloud:
+    organization: "jakubmroczek"
+    token:
+      secure: $SONAR_TOKEN
 node_js:
   - "12.10"
 before_install:
