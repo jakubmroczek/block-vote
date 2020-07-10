@@ -24,8 +24,7 @@ module.exports = (() => {
     },
 
     mail: {
-      // TODO: Movet this to constants
-      service: 'gmail',
+      service: constants.SUPPORTED_MAIL_SERVICE.GMAIL,
       user: process.env.GMAIL_USER,
       password: process.env.GMAIL_PASSWORD,
     },
