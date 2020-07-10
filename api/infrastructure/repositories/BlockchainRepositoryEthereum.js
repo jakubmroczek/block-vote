@@ -1,15 +1,15 @@
 /* eslint-disable class-methods-use-this */
-
-// TODO: All constants should be taken from the bootstrap
-require('dotenv').config();
 const Web3 = require('web3');
+const environment = require('../config/environment.js');
 const ElectionSmartContract = require('../../domain/ElectionSmartContract.js');
 
 module.exports = class {
   // TODO: should abi belong here? should not we redesing it?
   // abi is unparsed
   async findByAddress(address, abi) {
-    let httpProviderURL = process.env.BLOCKCHAIN_HTTP_PROVIDER_URL;
+    let httpProviderURL = environment.blockchain.httpProvider.url;
+    
+    // TODO: Remove this, or how to handle this
     if (httpProviderURL === undefined) {
       httpProviderURL = 'http://localhost:8545';
     }

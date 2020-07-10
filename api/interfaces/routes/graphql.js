@@ -1,6 +1,6 @@
-require('dotenv').config();
 const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
+const environment = require('../../infrastructure/config/environment.js');
 
 const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken.js');
 
@@ -44,7 +44,7 @@ const server = new ApolloServer({
 });
 
 function register(app) {
-  const enableCors = (process.env.ENABLE_CORS || 'true') === 'true';
+  const enableCors = (environment.server.enableCors || 'true') === 'true';
   console.log('CORS setting:', enableCors);
   server.applyMiddleware({ app, path: '/graphql', cors: enableCors });
 }
