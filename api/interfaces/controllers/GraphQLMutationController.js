@@ -28,9 +28,12 @@ async function _registerPublicKey(_1, { id, secretToken, publicKey }, { serviceL
 async function _startPublicKeyRegistration(_1, _2, { user, serviceLocator }) {
   const election = await GetUserElection(user, serviceLocator);
   const { id } = election;
-  const result = await StartPublicKeyRegistration(id, serviceLocator);
+  
+  // TODO: Error handling
+  await StartPublicKeyRegistration(id, serviceLocator);
   await SendRegisterationMail(id, serviceLocator);
-  return result;
+
+  return true;
 }
 
 async function _compileElectionSmartContract(_1, { id }, { serviceLocator }) {

@@ -93,8 +93,7 @@ type Mutation {
 
     registerPublicKey(id: ID!, secretToken: SecretToken!, publicKey: PublicKey!) : Boolean!
 
-    # TODO: Change the return type to bool
-    startPublicKeyRegistration : Election!
+    startPublicKeyRegistration : Boolean!
 
     # TODO: id should be taken from the cookies
     # TODO: Change the return type to bool
