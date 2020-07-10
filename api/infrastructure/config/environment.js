@@ -1,5 +1,4 @@
-'use strict';
-
+require('dotenv').config();
 const constants = require('./constants');
 
 /**
@@ -7,20 +6,41 @@ const constants = require('./constants');
  * `process.env` instruction in any other file or module.
  */
 module.exports = (() => {
-
   const environment = {
     database: {
       dialect: constants.SUPPORTED_DATABASE.MONGO,
-      //TODO: Add this to constants?
-      url: process.env.DATABASE_URI 
-    }
+      url: process.env.DB_URL,
+    },
+
+    server: {
+      port: process.env.API_SERVER_PORT,
+      enableCors: process.env.ENABLE_CORS,
+    },
+
+    frontend: {
+      server: {
+        url: process.env.UI_VOTING_ENDPOINT,
+      },
+    },
+
+    mail: {
+      service: constants.SUPPORTED_MAIL_SERVICE.GMAIL,
+      user: process.env.GMAIL_USER,
+      password: process.env.GMAIL_PASSWORD,
+    },
+
+    blockchain: {
+      httpProvider: {
+        url: process.env.BLOCKCHAIN_HTTP_PROVIDER_URL,
+      },
+    },
   };
 
   if (process.env.NODE_ENV === 'test') {
-    //TODO: Looks that I deleted the IN_MEMORY db
+    // TODO: Looks that I deleted the IN_MEMORY db
     environment.database = {
-      driver: constants.SUPPORTED_DATABASE.IN_MEMORY
-    }
+      driver: constants.SUPPORTED_DATABASE.IN_MEMORY,
+    };
   }
 
   return environment;

@@ -1,4 +1,5 @@
 const SendMail = require('./SendMail.js');
+const environment = require('../../infrastructure/config/environment.js');
 
 const htmlTemplate = (link, secretToken) => `
      <p>
@@ -15,8 +16,7 @@ module.exports = async (electionID, { electionRepository }) => {
 
   const { id: _id, participants, secretTokens } = election;
 
-  // TODO: Take this from constnst.js
-  const link = process.env.UI_VOTING_ENDPOINT + _id;
+  const link = environment.frontend.server.url + _id;
 
   if (participants.length !== secretTokens.length) {
     // TODO: Handle the error if there is not enough public keys

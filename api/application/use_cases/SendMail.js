@@ -1,20 +1,16 @@
 const nodemailer = require('nodemailer');
+const environment = require('../../infrastructure/config/environment.js');
 
-// Remove this, use constants
-require('dotenv').config();
-
-// TODO: Get this from the constants
 const transporter = nodemailer.createTransport({
-
-  service: 'gmail',
+  service: environment.mail.service,
   auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASSWORD,
+    user: environment.mail.user,
+    pass: environment.mail.password,
   },
 });
 
 const mailTemplate = (to, subject, html) => ({
-  from: process.env.GMAIL_USER,
+  from: environment.mail.user,
   to,
   subject,
   html,
