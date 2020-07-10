@@ -54,19 +54,6 @@ export default class ElectionSetUpPanel extends React.Component {
     }
   }
 
-  async mailUsers() {
-    const query = `mutation sendRegisterPublicKeysMail($id: ID!) {
-      sendRegisterPublicKeysMail(id: $id) 
-    }`;
-
-    const { id } = this.state;
-
-    const response = await graphQLFetch(query, { id });
-    if (!response.sendRegisterPublicKeysMail) {
-      alert('Could not send notifications mails');
-    }
-  }
-
   async update(changes) {
     const query = `mutation 
         updateElection($id: ID!, $changes: ElectionUpdateInputs!) {
@@ -99,8 +86,6 @@ export default class ElectionSetUpPanel extends React.Component {
     const response = await graphQLFetch(query, vars);
 
     if (response) {
-      await this.mailUsers();
-      // TODO: Error handling - what is mails were not send?
       const { history } = this.props;
       history.push('/panel/lobby');
 

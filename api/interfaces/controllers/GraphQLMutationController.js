@@ -25,17 +25,11 @@ async function _registerPublicKey(_1, { id, secretToken, publicKey }, { serviceL
   return result;
 }
 
-async function _sendRegisterPublicKeysMail(_1, { id }, { serviceLocator }) {
-  // TODO: What if error
-  // TODO: shoul this be a domain user?
-  const response = await SendRegisterationMail(id, serviceLocator);
-  return response;
-}
-
 async function _startPublicKeyRegistration(_1, _2, { user, serviceLocator }) {
   const election = await GetUserElection(user, serviceLocator);
   const { id } = election;
   const result = await StartPublicKeyRegistration(id, serviceLocator);
+  await SendRegisterationMail(id, serviceLocator);
   return result;
 }
 
@@ -55,8 +49,6 @@ module.exports = {
   createElection: mustBeSignedIn(_createElection),
   updateElection: mustBeSignedIn(mustOwnElection(_updateElection)),
   registerPublicKey: _registerPublicKey,
-  // TODO: This should be rather moved to plain REST
-  sendRegisterPublicKeysMail: mustBeSignedIn(mustOwnElection(_sendRegisterPublicKeysMail)),
   startPublicKeyRegistration: mustBeSignedIn(_startPublicKeyRegistration),
   compileElectionSmartContract: mustBeSignedIn(mustOwnElection(_compileElectionSmartContract)),
   finishElection: mustBeSignedIn(_finishElection),

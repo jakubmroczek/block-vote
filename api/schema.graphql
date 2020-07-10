@@ -93,12 +93,11 @@ type Mutation {
 
     registerPublicKey(id: ID!, secretToken: SecretToken!, publicKey: PublicKey!) : Boolean!
 
-    # TODO: The is is not needed as we get it form cookies
+    # TODO: Change the return type to bool
     startPublicKeyRegistration : Election!
 
-    # id of the electioen 
-    sendRegisterPublicKeysMail(id: ID!): Boolean!
-
+    # TODO: id should be taken from the cookies
+    # TODO: Change the return type to bool
     compileElectionSmartContract(id: ID!) : Election!
 
     finishElection : Boolean!
