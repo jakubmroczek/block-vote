@@ -25,9 +25,7 @@ export default class ElectionAPI {
       // Legacy dapp browsers...
       this.web3Provider = window.web3.currentProvider;
     } else {
-      // If no injected web3 instance is detected, fall back to Ganache
-      // TODO: This should be removed from production code
-      this.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
+      throw Error('MetaMask plugin not found in browser.');
     }
     this.web3 = new Web3(this.web3Provider);
   }

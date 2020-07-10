@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Container, Row, Col, Spinner,
+  Container, Row, Col, Spinner, Card,
 } from 'react-bootstrap';
 
 import ElectionAPI from './electionAPI.js';
@@ -10,7 +10,9 @@ import graphQLFetch from '../graphQLFetch.js';
 export default class DApp extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      isMetaMaskInstalled: true,
+    };
   }
 
   componentDidMount() {
@@ -30,16 +32,23 @@ export default class DApp extends React.Component {
       }
     }`;
 
-    const publicKey = await this.getPublicKey();
+    try {
+      const publicKey = await this.getPublicKey();
+      const response = await graphQLFetch(query, { publicKey });
 
-    const response = await graphQLFetch(query, { publicKey });
-
-    if (response) {
+      if (response) {
+        this.setState({
+          publicKey,
+          elections: response.listVoterElections,
+        });
+      } else {
+        alert(`Could not fetch elections for the public key: ${publicKey}`);
+      }
+    } catch (err) {
       this.setState({
-        elections: response.listVoterElections,
+        elections: [],
+        isMetaMaskInstalled: false,
       });
-    } else {
-      alert(`Could not fetch elections for the public key: ${publicKey}`);
     }
   }
 
@@ -61,14 +70,24 @@ export default class DApp extends React.Component {
       );
     }
 
-    // TODO: Handle empty list scenario
-    // TODO: Handle when the public keys is not found on the public key, is it the same as if the list were empty?
+    const { isMetaMaskInstalled } = this.state;
 
-    const { elections } = this.state;
+    // TODO: More detailed error log.
+    if (!isMetaMaskInstalled) {
+      return (
+        <Card className="text-center mt-2 mr-3">
+          <Card.Header as="h5">
+            Oooops! Did not found MetMask plugin. Please install it.
+          </Card.Header>
+        </Card>
+      );
+    };
+    
+    const { elections, publicKey } = this.state;
     const { history } = this.props;
 
     return (
-      <ElectionList elections={elections} history={history} />
+      <ElectionList elections={elections} publicKey={publicKey} history={history} />
     );
   }
 }
