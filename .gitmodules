@@ -1,0 +1,6 @@
+[submodule "block-vote-back-end"]
+	path = block-vote-back-end
+	url = https://github.com/jakubmroczek/block-vote-back-end.git
+[submodule "block-vote-front-end"]
+	path = block-vote-front-end
+	url = https://github.com/jakubmroczek/block-vote-front-end.git
