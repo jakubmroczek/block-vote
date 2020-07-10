@@ -31,8 +31,8 @@ export default class ElectionSetUpPanel extends React.Component {
 
   async read() {
     const query = `query 
-    getElection($id: ID!) {
-            getElection(id: $id) {
+    getUserElection {
+      getUserElection {
                 title
                 candidates {
                   name surname
@@ -47,10 +47,10 @@ export default class ElectionSetUpPanel extends React.Component {
     const response = await graphQLFetch(query, { id });
 
     if (response) {
-      const { title, candidates, participants } = response.getElection;
+      const { title, candidates, participants } = response.getUserElection;
       this.setState({ title, candidates, participants });
     } else {
-      alert('getElection call failed');
+      alert('getUserElection call failed');
     }
   }
 

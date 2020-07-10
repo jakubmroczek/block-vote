@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
 // Use cases
-const GetElection = require('../../application/use_cases/GetElection.js');
 const GetUserElection = require('../../application/use_cases/GetUserElection.js');
 const SendRegisterationMail = require('../../application/use_cases/SendRegisterationMail.js');
 
@@ -9,12 +8,6 @@ const SendRegisterationMail = require('../../application/use_cases/SendRegistera
 const GetVoterElection = require('../../application/use_cases/GetVoterElection.js');
 const ListVoterElections = require('../../application/use_cases/ListVoterElections.js');
 const { mustBeSignedIn, mustOwnElection } = require('../../infrastructure/security/GraphQLAuthentication.js');
-
-async function _getElection(_1, { id }, { serviceLocator }) {
-  // TODO: What if not found
-  const election = await GetElection(id, serviceLocator);
-  return election;
-}
 
 async function _getUserElection(_1, _2, { user, serviceLocator }) {
 // TODO: shoul this be a domain user?
@@ -42,7 +35,6 @@ async function _listVoterElections(_1, { publicKey }, { serviceLocator }) {
 }
 
 module.exports = {
-  getElection: mustBeSignedIn(mustOwnElection(_getElection)),
   getUserElection: mustBeSignedIn(_getUserElection),
   // TODO: This should be rather moved to plain REST
   sendRegisterPublicKeysMail: mustBeSignedIn(mustOwnElection(_sendRegisterPublicKeysMail)),

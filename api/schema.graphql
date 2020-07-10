@@ -38,7 +38,6 @@ type SmartContract {
     address: String
 }
 
-# TODO: Think about different name, add comment here
 # Information about Election that smar contract was successfuly deployed on blockchain
 type DeployedElection {
     id: ID!
@@ -76,14 +75,12 @@ input ParticipantUpdateInputs {
 }
 
 type Query {
-    # TODO: Check if I need this function of getUserElection is sufficient
-    getElection(id: ID!) : Election
-
     # Returns active election owned by the user if have any
+    # Gets user from the cookie
     getUserElection : Election
 
     # id of the election 
-    # Mutation
+    # TODO: Move to Mutation
     sendRegisterPublicKeysMail(id: ID!): Boolean!
     
     # TODO: Introduce distinct type for the publicKey

@@ -41,8 +41,8 @@ export default class ElectionLobby extends React.Component {
   // TODO: Keep this in a one place
   async read() {
     const query = `query 
-    getElection($id: ID!) {
-            getElection(id: $id) {
+    getUserElection {
+      getUserElection {
               publicKeys
             }
 }`;
@@ -51,12 +51,12 @@ export default class ElectionLobby extends React.Component {
     const response = await graphQLFetch(query, { id });
 
     if (response) {
-      const { publicKeys } = response.getElection;
+      const { publicKeys } = response.getUserElection;
       this.setState({
         registeredUserNumber: publicKeys.length,
       });
     } else {
-      alert('getElection call failed');
+      alert('getUserElection call failed');
     }
   }
 
@@ -88,7 +88,7 @@ export default class ElectionLobby extends React.Component {
         smartContract, title, candidates, publicKeys,
       }, onSuccessfulFetch());
     } else {
-      alert('getElection call failed');
+      alert('compileElectionSmartContract call failed');
     }
   }
 
@@ -156,7 +156,7 @@ export default class ElectionLobby extends React.Component {
       this.web3Provider = new Web3.providers.HttpProvider('http://localhost:8545');
     }
     this.web3 = new Web3(this.web3Provider);
-  }
+}
 
   async deployElection() {
     const onSuccessfulFetch = () => {
