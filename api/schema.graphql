@@ -79,10 +79,6 @@ type Query {
     # Gets user from the cookie
     getUserElection : Election
 
-    # id of the election 
-    # TODO: Move to Mutation
-    sendRegisterPublicKeysMail(id: ID!): Boolean!
-    
     # TODO: Introduce distinct type for the publicKey
     listVoterElections(publicKey: String!) : [DeployedElection!]!
 
@@ -96,7 +92,11 @@ type Mutation {
 
     registerPublicKey(id: ID!, secretToken: String!, publicKey: String!) : Boolean!
 
+    # TODO: This should be done in by updateElection 
     setElectionIntoPublicKeyWaitingStage(id: ID!) : Election!
+
+    # id of the election 
+    sendRegisterPublicKeysMail(id: ID!): Boolean!
 
     compileElectionSmartContract(id: ID!) : Election!
 

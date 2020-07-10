@@ -5,6 +5,7 @@ const RegisterPublicKey = require('../../application/use_cases/RegisterPublicKey
 const SetElectionInRegisteration = require('../../application/use_cases/SetElectionInRegisteration.js');
 const CompileElectionSmartContract = require('../../application/use_cases/CompileElectionSmartContract.js');
 const FinishElection = require('../../application/use_cases/FinishElection.js');
+const SendRegisterationMail = require('../../application/use_cases/SendRegisterationMail.js');
 const { mustBeSignedIn, mustOwnElection } = require('../../infrastructure/security/GraphQLAuthentication.js');
 
 async function _createElection(_1, _2, { user, serviceLocator }) {
@@ -21,6 +22,13 @@ async function _registerPublicKey(_1, { id, secretToken, publicKey }, { serviceL
   //   TODO: Error handlin
   const result = await RegisterPublicKey(secretToken, publicKey, id, serviceLocator);
   return result;
+}
+
+async function _sendRegisterPublicKeysMail(_1, { id }, { serviceLocator }) {
+  // TODO: What if error
+  // TODO: shoul this be a domain user?
+  const response = await SendRegisterationMail(id, serviceLocator);
+  return response;
 }
 
 // TODO: Rename me!
@@ -45,6 +53,8 @@ module.exports = {
   createElection: mustBeSignedIn(_createElection),
   updateElection: mustBeSignedIn(mustOwnElection(_updateElection)),
   registerPublicKey: _registerPublicKey,
+  // TODO: This should be rather moved to plain REST
+  sendRegisterPublicKeysMail: mustBeSignedIn(mustOwnElection(_sendRegisterPublicKeysMail)),
   setElectionIntoPublicKeyWaitingStage: mustBeSignedIn(mustOwnElection(_setElectionInPublicKeyRegisterationStage)),
   compileElectionSmartContract: mustBeSignedIn(mustOwnElection(_compileElectionSmartContract)),
   finishElection: mustBeSignedIn(_finishElection),

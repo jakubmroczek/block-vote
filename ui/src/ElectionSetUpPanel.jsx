@@ -55,7 +55,7 @@ export default class ElectionSetUpPanel extends React.Component {
   }
 
   async mailUsers() {
-    const query = `query sendRegisterPublicKeysMail($id: ID!) {
+    const query = `mutation sendRegisterPublicKeysMail($id: ID!) {
       sendRegisterPublicKeysMail(id: $id) 
     }`;
 
