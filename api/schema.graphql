@@ -39,7 +39,8 @@ type SmartContract {
 }
 
 # TODO: Think about different name, add comment here
-type BlockchainElection {
+# Information about Election that smar contract was successfuly deployed on blockchain
+type DeployedElection {
     id: ID!
     title: String!
     candidates: [Candidate!]!
@@ -86,10 +87,10 @@ type Query {
     sendRegisterPublicKeysMail(id: ID!): Boolean!
     
     # TODO: Introduce distinct type for the publicKey
-    listVoterElections(publicKey: String!) : [BlockchainElection!]!
+    listVoterElections(publicKey: String!) : [DeployedElection!]!
 
     # TODO: Introduce distinct type for the publicKey
-    getVoterElection(id: ID!) : BlockchainElection
+    getVoterElection(id: ID!) : DeployedElection
 }
 
 type Mutation {
