@@ -5,6 +5,7 @@ import CandidatesList from './CandidatesList.jsx';
 import ElectionFetching from './ElectionFetching.jsx';
 import ErrorMessage from './ErrorMessage.jsx';
 import ElectionAPI from './electionAPI.js';
+import ReturnHomeButton from './ReturnHomeButton.jsx';
 
 function ElectionTitle({ title }) {
   return (
@@ -86,29 +87,59 @@ export default class Election extends React.Component {
     // TODO: Refactor the state, let it hold a flag indicating wether it is okay and not
     // move the messages to the reducer
     // TODO: Handle nulls for titile and candidates
-    const { electionID, electionState, title, candidates } = this.state;
+    const {
+      electionID, electionState, title, candidates,
+    } = this.state;
     return (
       <>
         {electionState === 'unregisteredUser' && (
-          <ErrorMessage
-            messageTitle={this.unregisterdVoterErrorTitle}
-            message={this.unregisterdVoterErrorMessage}
-          />
+          <Card className="text-center">
+            <Card.Header>
+              <ErrorMessage
+                messageTitle={this.unregisterdVoterErrorTitle}
+                message={this.unregisterdVoterErrorMessage}
+              />
+            </Card.Header>
+            <Card.Footer>
+              <ReturnHomeButton />
+            </Card.Footer>
+          </Card>
         )}
         {electionState === 'connectingToBlockchain' && (
-          <ElectionFetching />
+          <Card className="text-center">
+            <Card.Header>
+              <ElectionFetching />
+            </Card.Header>
+            <Card.Footer>
+              <ReturnHomeButton />
+            </Card.Footer>
+          </Card>
         )}
         {electionState === 'connectedToBlockchain' && (
         <Card className="text-center">
-          <ElectionTitle title={title} />
-          <CandidatesList electionID={electionID} candidates={candidates} />
+          <Card.Header>
+            <ElectionTitle title={title} />
+          </Card.Header>
+          <Card.Body>
+            <CandidatesList electionID={electionID} candidates={candidates} />
+          </Card.Body>
+          <Card.Footer>
+            <ReturnHomeButton />
+          </Card.Footer>
         </Card>
         )}
         {electionState === 'userHasAlreadyVoted' && (
-          <ErrorMessage
-            messageTitle={this.userHasAlreadyVotedErrorTitle}
-            message={this.userHasAlreadyVotedErrorMessage}
-          />
+          <Card className="text-center">
+            <Card.Header>
+              <ErrorMessage
+                messageTitle={this.userHasAlreadyVotedErrorTitle}
+                message={this.userHasAlreadyVotedErrorMessage}
+              />
+            </Card.Header>
+            <Card.Footer>
+              <ReturnHomeButton />
+            </Card.Footer>
+          </Card>
         )}
       </>
     );
