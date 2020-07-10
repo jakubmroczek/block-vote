@@ -36,7 +36,9 @@ async function _startPublicKeyRegistration(_1, _2, { user, serviceLocator }) {
   return true;
 }
 
-async function _compileElectionSmartContract(_1, { id }, { serviceLocator }) {
+async function _compileElectionSmartContract(_1, _2, { user, serviceLocator }) {
+  const election = await GetUserElection(user, serviceLocator);
+  const { id } = election;
   // TODO: Error handling
   const result = await CompileElectionSmartContract(id, serviceLocator);
   return result;

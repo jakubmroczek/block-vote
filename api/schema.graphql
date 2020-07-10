@@ -95,9 +95,8 @@ type Mutation {
 
     startPublicKeyRegistration : Boolean!
 
-    # TODO: id should be taken from the cookies
     # TODO: Change the return type to bool
-    compileElectionSmartContract(id: ID!) : Election!
+    compileElectionSmartContract : Election!
 
     finishElection : Boolean!
 }

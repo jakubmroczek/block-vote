@@ -62,8 +62,8 @@ export default class ElectionLobby extends React.Component {
 
   async compileElectionSmartContract(onSuccessfulFetch) {
     const query = `mutation  
-    compileElectionSmartContract($id: ID!) {
-      compileElectionSmartContract(id: $id) {
+    compileElectionSmartContract {
+      compileElectionSmartContract {
                   title
                   candidates {
                     name
