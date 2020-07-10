@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
 const environment = require('../../infrastructure/config/environment.js');
-
+const { publicKeyScalarType, secretTokenScalarType } = require('./types/scalarTypes.js');
 const VerifyAccessToken = require('../../application/use_cases/VerifyAccessToken.js');
 
 // TODO: Move this to the controllers
@@ -28,6 +28,8 @@ function getContext({ req }) {
 }
 
 const resolvers = {
+  PublicKey: publicKeyScalarType,
+  SecretToken: secretTokenScalarType, 
   Query: GraphQLQuery,
   Mutation: GraphQLMutation,
 };

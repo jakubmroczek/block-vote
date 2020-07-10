@@ -23,7 +23,7 @@ export default class DApp extends React.Component {
   }
 
   async read() {
-    const query = `query listVoterElections($publicKey: String!) {
+    const query = `query listVoterElections($publicKey: PublicKey!) {
       listVoterElections(publicKey: $publicKey) {
         id 
         title

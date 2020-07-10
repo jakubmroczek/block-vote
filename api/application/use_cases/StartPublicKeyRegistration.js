@@ -3,11 +3,13 @@ const generator = require('generate-password');
 // TODO: Should this be a distinct use_case or not?
 
 // Ensures that there is no conflicts between tokens
+// TODO: Move this to own use case
 function generateSecretTokens(quantity) {
   let i = quantity;
   const secretTokens = [];
   while (i > 0) {
     const secretToken = generator.generate({
+      // TODO: Move this to constatnt: SECRET_TOKEN_LENGTH
       length: 32,
       numbers: true,
     });

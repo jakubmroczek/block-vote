@@ -41,54 +41,64 @@ export default class ElectionLobby extends React.Component {
   // TODO: Keep this in a one place
   async read() {
     const query = `query 
-    getElection($id: ID!) {
-            getElection(id: $id) {
-              publicKeys
-            }
+    getUserElection {
+      getUserElection  {
+        publicKeys
+      }
 }`;
 
-    const { id } = this.props;
-    const response = await graphQLFetch(query, { id });
+    const response = await graphQLFetch(query);
 
     if (response) {
-      const { publicKeys } = response.getElection;
+      const { publicKeys } = response.getUserElection;
       this.setState({
         registeredUserNumber: publicKeys.length,
       });
     } else {
-      alert('getElection call failed');
+      alert('getUserElection call failed');
     }
   }
 
   async compileElectionSmartContract(onSuccessfulFetch) {
     const query = `mutation  
-    compileElectionSmartContract($id: ID!) {
-      compileElectionSmartContract(id: $id) {
-                  title
-                  candidates {
-                    name
-                    surname
-                  }
-                  publicKeys
-                  smartContract {
-                    bytecode
-                    abi
-                  }
-              }
+    compileElectionSmartContract {
+      compileElectionSmartContract 
     }`;
 
     const { id } = this.props;
     const response = await graphQLFetch(query, { id });
 
     if (response) {
-      const {
-        smartContract, title, candidates, publicKeys,
-      } = response.compileElectionSmartContract;
-      this.setState({
-        smartContract, title, candidates, publicKeys,
-      }, onSuccessfulFetch());
+      const getQuery = `query 
+    getUserElection {
+      getUserElection  {
+        title
+        candidates {
+          name
+          surname
+        }
+        publicKeys
+        smartContract {
+          bytecode
+          abi
+        } 
+      }
+}`;
+
+      const getResponse = await graphQLFetch(getQuery);
+
+      if (getResponse) {
+        const {
+          smartContract, title, candidates, publicKeys,
+        } = getResponse.getUserElection;
+        this.setState({
+          smartContract, title, candidates, publicKeys,
+        }, onSuccessfulFetch());
+      } else {
+        alert('getUserElection call failed');
+      }
     } else {
-      alert('getElection call failed');
+      alert('compileElectionSmartContract call failed');
     }
   }
 
@@ -166,7 +176,7 @@ export default class ElectionLobby extends React.Component {
         const bytecode = this.bytecodeObject();
         const abi = this.abi();
         const { title, candidates, publicKeys } = this.state;
-  
+
         deploy(bytecode, abi, title, candidates, publicKeys, account, this.web3)
           .then((newContractInstance) => {
             const contractAddress = newContractInstance.options.address;

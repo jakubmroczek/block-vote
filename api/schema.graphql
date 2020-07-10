@@ -1,3 +1,6 @@
+scalar PublicKey
+scalar SecretToken
+
 type Candidate {
     id: ID!
     name: String!
@@ -7,7 +10,6 @@ type Candidate {
 type Participant {
     id: ID!    
     email: String!
-    secretToken: String
 }
 
 enum Status {
@@ -38,8 +40,8 @@ type SmartContract {
     address: String
 }
 
-# TODO: Think about different name, add comment here
-type BlockchainElection {
+# Information about Election that smar contract was successfuly deployed on blockchain
+type DeployedElection {
     id: ID!
     title: String!
     candidates: [Candidate!]!
@@ -53,7 +55,7 @@ type Election {
     candidates: [Candidate!]!
     participants: [Participant!]!
     smartContract: SmartContract
-    publicKeys: [String!]
+    publicKeys: [PublicKey!]
 }
 
 input CandidateInputs {
@@ -75,32 +77,25 @@ input ParticipantUpdateInputs {
 }
 
 type Query {
-    # TODO: Check if I need this function of getUserElection is sufficient
-    getElection(id: ID!) : Election
-
     # Returns active election owned by the user if have any
+    # Gets user from the cookie
     getUserElection : Election
 
-    # id of the election 
-    # Mutation
-    sendRegisterPublicKeysMail(id: ID!): Boolean!
-    
-    # TODO: Introduce distinct type for the publicKey
-    listVoterElections(publicKey: String!) : [BlockchainElection!]!
+    listVoterElections(publicKey: PublicKey!) : [DeployedElection!]!
 
-    # TODO: Introduce distinct type for the publicKey
-    getVoterElection(id: ID!) : BlockchainElection
+    # id election id
+    getVoterElection(id: ID!) : DeployedElection
 }
 
 type Mutation {
     createElection : Election!
     updateElection(id: ID!, changes: ElectionUpdateInputs!) : Election!
 
-    registerPublicKey(id: ID!, secretToken: String!, publicKey: String!) : Boolean!
+    registerPublicKey(id: ID!, secretToken: SecretToken!, publicKey: PublicKey!) : Boolean!
 
-    setElectionIntoPublicKeyWaitingStage(id: ID!) : Election!
+    startPublicKeyRegistration : Boolean!
 
-    compileElectionSmartContract(id: ID!) : Election!
+    compileElectionSmartContract : Boolean!
 
     finishElection : Boolean!
 }

@@ -58,6 +58,7 @@ export default class Election extends React.Component {
           this.setState({ electionState: 'userHasAlreadyVoted' });
         } else {
           // TODO: BEtter error handling
+          // TODO: Rename the getElection to getDeployedElection or getSmartContract
           new ElectionAPI()
             .getElection(electionID, onFailure)
             .then((election) => {
